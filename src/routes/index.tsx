@@ -1,29 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Navbar } from "@/components/site/Navbar";
+import { Hero } from "@/components/site/Hero";
+import { About } from "@/components/site/About";
+import { Events } from "@/components/site/Events";
+import { Gallery } from "@/components/site/Gallery";
+import { Stats } from "@/components/site/Stats";
+import { News } from "@/components/site/News";
+import { Contact } from "@/components/site/Contact";
+import { Footer } from "@/components/site/Footer";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title: "Trinquai & Compagnie — Le quartier se vit ensemble" },
+      { name: "description", content: "Association d'habitants du quartier Trinquai : événements, entraide, jardin partagé et moments conviviaux entre voisins." },
+      { property: "og:title", content: "Trinquai & Compagnie" },
+      { property: "og:description", content: "Le quartier se vit ensemble — événements, entraide et convivialité." },
     ],
   }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="min-h-dvh bg-background text-foreground">
+      <Navbar />
+      <Hero />
+      <About />
+      <Events />
+      <Gallery />
+      <Stats />
+      <News />
+      <Contact />
+      <Footer />
+    </main>
   );
 }
