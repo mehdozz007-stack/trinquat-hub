@@ -9,4 +9,7 @@ export default defineConfig({
     react(),
     tsConfigPaths(),
   ],
+  server: {
+    port: 5173,
+  },
 });
