@@ -3,10 +3,8 @@ import { Navbar } from "@/components/site/Navbar";
 import { Hero } from "@/components/site/Hero";
 import { About } from "@/components/site/About";
 import { Events } from "@/components/site/Events";
-import { Gallery } from "@/components/site/Gallery";
 import { Stats } from "@/components/site/Stats";
 import { News } from "@/components/site/News";
-import { Contact } from "@/components/site/Contact";
 import { Footer } from "@/components/site/Footer";
 
 export const Route = createFileRoute("/")({
@@ -28,10 +26,8 @@ function Index() {
       <Hero />
       <About />
       <Events />
-      <Gallery />
       <Stats />
       <News />
-      <Contact />
       <Footer />
     </main>
   );
