@@ -1,4 +1,5 @@
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Link } from "@tanstack/react-router";
 import { useRef } from "react";
 import { ArrowRight, Calendar } from "lucide-react";
 import logo from "@/assets/logo.png";
@@ -99,20 +100,20 @@ export function Hero() {
           transition={{ delay: 0.7, duration: 0.8 }}
           className="mt-10 flex flex-col sm:flex-row items-center gap-4"
         >
-          <a
-            href="#about"
+          <Link
+            to="/association"
             className="group inline-flex items-center gap-2 rounded-full bg-foreground px-7 py-3.5 text-sm font-semibold text-background shadow-elegant transition-transform hover:-translate-y-0.5"
           >
             Découvrir l'association
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </a>
-          <a
-            href="#events"
+          </Link>
+          <Link
+            to="/evenements"
             className="group inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-background/60 px-7 py-3.5 text-sm font-semibold text-foreground backdrop-blur transition-colors hover:bg-background"
           >
             <Calendar className="h-4 w-4" />
             Voir les événements
-          </a>
+          </Link>
         </motion.div>
       </motion.div>
 
