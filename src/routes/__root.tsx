@@ -75,10 +75,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Trinquai & Compagnie — Le quartier se vit ensemble" },
       { name: "description", content: "Association d'habitants du quartier Trinquai : événements, entraide, jardin partagé et moments conviviaux entre voisins." },
       { name: "author", content: "Trinquai & Compagnie" },
-      { property: "og:title", content: "Trinquai & Compagnie" },
-      { property: "og:description", content: "Le quartier se vit ensemble — association d'habitants, événements et entraide de voisinage." },
+      { property: "og:title", content: "Trinquai & Compagnie — Le quartier se vit ensemble" },
+      { property: "og:description", content: "Association d'habitants du quartier Trinquai : événements, entraide, jardin partagé et moments conviviaux entre voisins." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Trinquai & Compagnie — Le quartier se vit ensemble" },
+      { name: "twitter:description", content: "Association d'habitants du quartier Trinquai : événements, entraide, jardin partagé et moments conviviaux entre voisins." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d0b370a8-46fc-4315-8103-79fad17a579a/id-preview-e7c686f3--cdccd3db-b5e1-4b11-b46b-09b879d2a5fc.lovable.app-1780040092069.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d0b370a8-46fc-4315-8103-79fad17a579a/id-preview-e7c686f3--cdccd3db-b5e1-4b11-b46b-09b879d2a5fc.lovable.app-1780040092069.png" },
     ],
     links: [
       {
