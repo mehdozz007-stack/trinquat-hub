@@ -4,7 +4,7 @@ export function PageHeader({ eyebrow, title, lead }: { eyebrow: string; title: R
   return (
     <section className="relative pt-40 pb-20 md:pt-48 md:pb-28 overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-gradient-hero opacity-70" />
-      <div className="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-b from-transparent to-background" />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-32 bg-linear-to-b from-transparent to-background" />
       <div className="mx-auto max-w-5xl px-6 lg:px-10 text-center">
         <motion.span
           initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}

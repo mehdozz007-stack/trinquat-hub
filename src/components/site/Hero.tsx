@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { useRef } from "react";
-import { ArrowRight, Calendar } from "lucide-react";
+import { ArrowRight, Calendar, Facebook, Instagram, Mail } from "lucide-react";
 import logo from "@/assets/logo.png";
 import hero from "@/assets/hero-bg.jpg";
 
@@ -9,7 +9,7 @@ export function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.9], [1, 0.4]);
 
   return (
     <section id="home" ref={ref} className="relative isolate min-h-dvh overflow-hidden">
@@ -22,8 +22,8 @@ export function Hero() {
           width={1920}
           height={1280}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/30 to-background" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-primary/15 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-b from-background/40 via-background/30 to-background" />
+        <div className="absolute inset-0 bg-linear-to-tr from-primary/15 via-transparent to-transparent" />
       </motion.div>
 
       {/* Floating particles */}
@@ -50,18 +50,26 @@ export function Hero() {
         ))}
       </div>
 
-      <motion.div style={{ opacity }} className="relative mx-auto flex min-h-dvh max-w-6xl flex-col items-center justify-center px-6 pt-28 pb-20 text-center">
+      <motion.div style={{ opacity }} className="relative mx-auto flex min-h-dvh max-w-6xl flex-col items-center rounded-xl justify-center px-6 pt-28 pb-20 text-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-10"
+          className="mb-10 relative"
         >
           <img
             src={logo}
-            alt="Trinquai & Compagnie"
-            className="mx-auto h-32 w-auto md:h-44 lg:h-52 drop-shadow-[0_10px_40px_rgba(103,176,33,0.25)]"
+            alt="Trinquat & Compagnie"
+            className="h-32 w-auto md:h-34 lg:h-42 rounded-xl drop-shadow-[0_10px_40px_rgba(103,176,33,0.25)]"
           />
+          <div className="absolute -right-4 -bottom-4 flex flex-col gap-3">
+            {[Facebook, Instagram].map((Icon, i) => (
+              <a key={i} href="#" aria-label="Réseau social"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/30 bg-background/60 text-foreground transition-all hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground backdrop-blur">
+                <Icon className="h-4 w-4" />
+              </a>
+            ))}
+          </div>
         </motion.div>
 
         <motion.div
@@ -90,7 +98,7 @@ export function Hero() {
           transition={{ delay: 0.5, duration: 0.8 }}
           className="mt-8 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed"
         >
-          Trinquai & Compagnie rassemble les familles et voisins autour d'événements,
+          Trinquat & Compagnie rassemble les familles et voisins autour d'événements,
           d'entraide et de moments simples. Une communauté vivante, à l'ombre des grands arbres.
         </motion.p>
 
@@ -117,7 +125,7 @@ export function Hero() {
         </motion.div>
       </motion.div>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-background" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-linear-to-b from-transparent to-background" />
     </section>
   );
 }

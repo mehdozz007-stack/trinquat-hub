@@ -64,7 +64,7 @@
 :root {
   --radius: 0.75rem;
 
-  /* Trinquai brand palette */
+  /* Trinquat brand palette */
   --background: oklch(0.985 0.008 95);      /* warm off-white */
   --foreground: oklch(0.18 0.02 140);        /* deep near-black with green hint */
   --card: oklch(0.995 0.004 95);

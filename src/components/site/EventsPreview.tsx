@@ -3,7 +3,6 @@ import { Link } from "@tanstack/react-router";
 import { Calendar, MapPin, ArrowUpRight } from "lucide-react";
 import imgFete from "@/assets/event-fete.jpg";
 import imgRepas from "@/assets/event-repas.jpg";
-import imgJardin from "@/assets/event-jardin.jpg";
 
 const events = [
   {
@@ -16,34 +15,31 @@ const events = [
     date: "Chaque 1er dimanche", title: "Repas partagé", place: "Maison de quartier",
     desc: "Chacun apporte un plat à partager. Un rituel devenu incontournable.",
   },
-  {
-    img: imgJardin, badge: "Hebdomadaire",
-    date: "Samedis matin", title: "Jardinage collectif", place: "Jardin partagé",
-    desc: "Plantation, désherbage, récolte. Une bouffée d'air et de nouvelles recettes.",
-  },
 ];
 
-const more = [
-  { date: "5 Mai", label: "Vide-grenier de printemps" },
-  { date: "12 Mai", label: "Atelier compost & jardinage" },
-  { date: "26 Mai", label: "Cinéma en plein air" },
-  { date: "2 Juin", label: "Atelier créatif enfants" },
-];
-
-export function Events() {
+export function EventsPreview() {
   return (
-    <section id="events" className="relative bg-secondary/40 py-12 md:py-20">
+    <section id="events-preview" className="relative bg-secondary/40 py-12 md:py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16">
           <Reveal>
             <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">Agenda</span>
             <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-              Nos événements <span className="italic text-gradient">au quartier</span>.
+              Les rendez-vous<br/> du <span className="italic text-gradient">quartier</span>.
             </h2>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <Link
+              to="/evenements"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-primary-deep hover:text-primary"
+            >
+              Voir tous les événements
+              <ArrowUpRight className="h-4 w-4" />
+            </Link>
           </Reveal>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2">
           {events.map((e, i) => (
             <Reveal key={e.title} delay={i * 0.08}>
               <article className="group relative h-full overflow-hidden rounded-3xl bg-card border border-border/70 transition-all duration-500 hover:-translate-y-1 hover:shadow-elegant">
@@ -73,25 +69,6 @@ export function Events() {
             </Reveal>
           ))}
         </div>
-
-        <Reveal delay={0.2}>
-          <div className="mt-12 rounded-3xl border border-border/70 bg-card p-8 md:p-10">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <div>
-                <h3 className="text-xl font-semibold">Et aussi ce printemps...</h3>
-                <p className="text-sm text-muted-foreground mt-1">Le calendrier complet de l'association.</p>
-              </div>
-              <ul className="grid sm:grid-cols-2 gap-x-10 gap-y-2 text-sm">
-                {more.map((m) => (
-                  <li key={m.label} className="flex items-baseline gap-3 border-b border-dashed border-border/70 py-2">
-                    <span className="font-mono text-xs uppercase tracking-wider text-primary-deep w-16">{m.date}</span>
-                    <span className="text-foreground">{m.label}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </Reveal>
       </div>
     </section>
   );

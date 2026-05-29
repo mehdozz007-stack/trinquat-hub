@@ -25,7 +25,7 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="py-28 md:py-40">
+    <section id="contact" className="py-12 md:py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="grid gap-14 lg:grid-cols-2 lg:gap-20 items-start">
           <Reveal>
@@ -44,7 +44,7 @@ export function Contact() {
                 </span>
                 <div>
                   <p className="text-sm font-semibold">Par email</p>
-                  <a href="mailto:bonjour@trinquai.fr" className="text-muted-foreground hover:text-foreground">bonjour@trinquai.fr</a>
+                  <a href="mailto:contact@trinquatetcompagnie.fr" className="text-muted-foreground hover:text-foreground">contact@trinquatetcompagnie.fr</a>
                 </div>
               </li>
               <li className="flex items-start gap-4">
@@ -52,8 +52,8 @@ export function Contact() {
                   <MapPin className="h-5 w-5" />
                 </span>
                 <div>
-                  <p className="text-sm font-semibold">Maison de quartier</p>
-                  <p className="text-muted-foreground">Place Trinquai — Tous les samedis 10h-12h</p>
+                  <p className="text-sm font-semibold">Maison pour tous Boris Vian</p>
+                  <p className="text-muted-foreground">Tous les samedis 10h-12h</p>
                 </div>
               </li>
             </ul>
@@ -95,7 +95,7 @@ export function Contact() {
                       <label className="block text-sm font-medium mb-2">Message</label>
                       <textarea
                         name="message" rows={5}
-                        placeholder="Bonjour Trinquai !"
+                        placeholder="Bonjour Trinquat !"
                         className={`w-full rounded-xl border bg-background/60 px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 ${errors.message ? "border-destructive" : "border-border"}`}
                       />
                       {errors.message && <p className="mt-1.5 text-xs text-destructive">{errors.message}</p>}

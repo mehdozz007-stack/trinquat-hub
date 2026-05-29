@@ -21,17 +21,14 @@ const photos = [
 export function Gallery() {
   const [open, setOpen] = useState<number | null>(null);
   return (
-    <section id="gallery" className="py-28 md:py-40">
+    <section id="gallery" className="py-12 md:py-20 bg-secondary/40">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <Reveal>
           <div className="max-w-2xl">
             <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">Galerie</span>
             <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-              <span className="italic text-gradient">Souvenirs</span> partagés.
+              Nos<span className="italic text-gradient"> photos</span> souvenirs.
             </h2>
-            <p className="mt-6 text-muted-foreground text-lg">
-              Quelques instants capturés au fil des saisons, par les habitants eux-mêmes.
-            </p>
           </div>
         </Reveal>
 
@@ -46,7 +43,7 @@ export function Gallery() {
                   src={p.src} alt={p.alt} loading="lazy"
                   className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-linear-to-t from-foreground/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </button>
             </Reveal>
           ))}
@@ -57,7 +54,7 @@ export function Gallery() {
         {open !== null && (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-foreground/85 p-6 backdrop-blur-xl"
+            className="fixed inset-0 z-100 flex items-center justify-center bg-foreground/85 p-6 backdrop-blur-xl"
             onClick={() => setOpen(null)}
           >
             <motion.img

@@ -1,18 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/site/Navbar";
 import { Hero } from "@/components/site/Hero";
-import { About } from "@/components/site/About";
-import { Events } from "@/components/site/Events";
-import { Stats } from "@/components/site/Stats";
-import { News } from "@/components/site/News";
+import { Values } from "@/components/site/Values";
+import { EventsPreview } from "@/components/site/EventsPreview";
+import { ActualitesPreview } from "@/components/site/ActualitesPreview";
 import { Footer } from "@/components/site/Footer";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Trinquai & Compagnie — Le quartier se vit ensemble" },
-      { name: "description", content: "Association d'habitants du quartier Trinquai : événements, entraide, jardin partagé et moments conviviaux entre voisins." },
-      { property: "og:title", content: "Trinquai & Compagnie" },
+      { title: "Trinquat & Compagnie — Le quartier se vit ensemble" },
+      { name: "description", content: "Association d'habitants du quartier Trinquat : événements, entraide, jardin partagé et moments conviviaux entre voisins." },
+      { property: "og:title", content: "Trinquat & Compagnie" },
       { property: "og:description", content: "Le quartier se vit ensemble — événements, entraide et convivialité." },
     ],
   }),
@@ -24,10 +23,9 @@ function Index() {
     <main className="min-h-dvh bg-background text-foreground">
       <Navbar />
       <Hero />
-      <About />
-      <Events />
-      <Stats />
-      <News />
+      <Values />
+      <EventsPreview />
+      <ActualitesPreview />
       <Footer />
     </main>
   );

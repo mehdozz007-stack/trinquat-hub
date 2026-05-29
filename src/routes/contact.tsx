@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { Contact } from "@/components/site/Contact";
+import { FAQ } from "@/components/site/FAQ";
 import { PageHeader } from "@/components/site/PageHeader";
 
 export const Route = createFileRoute("/contact")({
@@ -27,6 +28,7 @@ function ContactPage() {
         lead="Une question, une idée, l'envie d'aider sur un événement ? On répond toujours."
       />
       <Contact />
+      <FAQ />
       <Footer />
     </main>
   );

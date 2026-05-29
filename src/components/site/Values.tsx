@@ -10,32 +10,23 @@ const values = [
   { icon: Leaf, title: "Écologie", text: "Composteur collectif, troc, et initiatives pour un quartier plus durable." },
 ];
 
-export function About() {
+export function Values() {
   return (
-    <section id="about" className="relative py-12 md:py-20">
+    <section id="values" className="relative py-12 md:py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-20">
           <div className="lg:col-span-5">
             <Reveal>
               <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">
-                Qui sommes-nous
+                Nos valeurs
               </span>
               <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-                Une <span className="italic text-gradient">grande famille</span><br />
-                à l'ombre des arbres.
+                Ce qui nous <span className="italic text-gradient">rassemble</span>.
               </h2>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-                Trinquat & Compagnie est née de l'envie partagée de quelques voisins :
-                redonner au quartier son âme. Depuis, nous organisons fêtes, ateliers,
-                repas et chantiers participatifs — toujours avec simplicité et bonne humeur.
-              </p>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-                L'association est ouverte à toutes et tous. Une cotisation symbolique,
-                une envie de partager, et le quartier devient un peu plus le vôtre.
+                Trinquat & Compagnie repose sur des valeurs simples mais fortes : la solidarité, le respect de la nature, et la convivialité. Chaque action reflète notre engagement envers le quartier et ses habitants.
               </p>
             </Reveal>
           </div>

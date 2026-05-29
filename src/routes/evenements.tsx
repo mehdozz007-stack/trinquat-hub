@@ -7,9 +7,9 @@ import { PageHeader } from "@/components/site/PageHeader";
 export const Route = createFileRoute("/evenements")({
   head: () => ({
     meta: [
-      { title: "Événements — Trinquai & Compagnie" },
+      { title: "Événements — Trinquat & Compagnie" },
       { name: "description", content: "Fête du quartier, repas partagés, jardinage collectif, ateliers enfants : tous les événements de l'association." },
-      { property: "og:title", content: "Événements — Trinquai & Compagnie" },
+      { property: "og:title", content: "Événements — Trinquat & Compagnie" },
       { property: "og:description", content: "L'agenda du quartier : fêtes, ateliers, repas et jardinage." },
     ],
     links: [{ rel: "canonical", href: "/evenements" }],
@@ -23,8 +23,8 @@ function EvenementsPage() {
       <Navbar />
       <PageHeader
         eyebrow="Agenda"
-        title={<>Les rendez-vous du <span className="italic text-gradient">quartier</span>.</>}
-        lead="Toute l'année, des moments à vivre ensemble — fêtes, ateliers, jardinage et repas partagés."
+        title={<>Les rendez-vous <span className="italic text-gradient">du quartier</span>.</>}
+        lead="Toute l'année, des moments à vivre ensemble : fêtes, ateliers, jardinage et repas partagés."
       />
       <Events />
       <Footer />

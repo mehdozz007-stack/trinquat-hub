@@ -8,9 +8,9 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 lg:px-10 py-16">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
-            <img src={logo} alt="Trinquai & Compagnie" className="h-16 w-auto" />
+            <img src={logo} alt="Trinquat & Compagnie" className="h-16 w-auto rounded-md" />
             <p className="mt-6 max-w-sm text-sm text-muted-foreground leading-relaxed">
-              Association d'habitants du quartier Trinquai. Nous croyons qu'un quartier
+              Association d'habitants. Nous croyons qu'un quartier
               vivant naît de petits gestes partagés.
             </p>
             <div className="mt-6 flex gap-3">
@@ -33,14 +33,14 @@ export function Footer() {
           <div className="md:col-span-4">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground/80">Nous trouver</h3>
             <p className="mt-5 text-sm text-muted-foreground leading-relaxed">
-              Maison de quartier — Place Trinquai<br/>
+              Avenue Pond du Trinquat<br/>
               Permanence le samedi 10h-12h<br/>
-              <a href="mailto:bonjour@trinquai.fr" className="text-foreground underline-offset-4 hover:underline">bonjour@trinquai.fr</a>
+              <a href="mailto:contact@trinquatetcompagnie.fr" className="text-foreground underline-offset-4 hover:underline">contact@trinquatetcompagnie.fr</a>
             </p>
           </div>
         </div>
         <div className="mt-12 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-t border-border/70 pt-6 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} Trinquai & Compagnie — Tous droits réservés.</p>
+          <p>© {new Date().getFullYear()} Trinquat & Compagnie — Tous droits réservés.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-foreground">Mentions légales</a>
             <a href="#" className="hover:text-foreground">Politique de confidentialité</a>

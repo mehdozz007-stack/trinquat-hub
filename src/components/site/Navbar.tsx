@@ -5,6 +5,7 @@ import logo from "@/assets/logo.png";
 import { Menu, X } from "lucide-react";
 
 const links = [
+  { to: "/", label: "Accueil" },
   { to: "/association", label: "L'association" },
   { to: "/evenements", label: "Événements" },
   { to: "/galerie", label: "Galerie" },
@@ -24,19 +25,12 @@ export function Navbar() {
 
   return (
     <motion.header
-      initial={{ y: -40, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "backdrop-blur-xl bg-background/75 border-b border-border/60"
-          : "bg-transparent"
-      }`}
+      className={`fixed inset-x-0 top-0 z-50 backdrop-blur-sm bg-background/75 border-b border-border/60 transition-all duration-500`}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 lg:px-10">
         <Link to="/" className="flex items-center gap-3 group">
-          <img src={logo} alt="Trinquai & Compagnie" className="h-10 w-auto md:h-12 transition-transform group-hover:scale-[1.02]" />
-          <span className="sr-only">Trinquai & Compagnie</span>
+          <img src={logo} alt="Trinquat & Compagnie" className="h-10 w-auto md:h-12 rounded-md transition-transform group-hover:scale-[1.02]" />
+          <span className="sr-only">Trinquat & Compagnie</span>
         </Link>
         <ul className="hidden md:flex items-center gap-1">
           {links.map((l) => (
