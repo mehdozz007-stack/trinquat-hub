@@ -1,4 +1,5 @@
 import { Reveal } from "./Reveal";
+import { Link } from "@tanstack/react-router";
 import { Calendar, MapPin, ArrowUpRight } from "lucide-react";
 import imgFete from "@/assets/event-fete.jpg";
 import imgRepas from "@/assets/event-repas.jpg";
@@ -69,10 +70,10 @@ export function Events() {
                   </div>
                   <h3 className="mt-4 text-2xl font-semibold leading-tight">{e.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{e.desc}</p>
-                  <a href="#contact" className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-deep group/link">
+                  <Link to="/contact" className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-deep group/link">
                     Je participe
                     <ArrowUpRight className="h-4 w-4 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
-                  </a>
+                  </Link>
                 </div>
               </article>
             </Reveal>
