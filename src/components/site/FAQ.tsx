@@ -10,7 +10,7 @@ const faqs = [
   },
   {
     question: "Quel est le coût de la cotisation ?",
-    answer: "La cotisation est vraiment symbolique : 10€ pour l'année. C'est avant tout un symbole d'engagement envers l'association. Les plus généreux peuvent contribuer davantage bien sûr !",
+    answer: "La cotisation est vraiment symbolique : 5€ pour l'année. C'est avant tout un symbole d'engagement envers l'association. Les plus généreux peuvent contribuer davantage bien sûr !",
   },
   {
     question: "Je travaille le samedi, comment faire ?",
@@ -34,7 +34,7 @@ export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="py-12 md:py-20 bg-secondary/50">
+    <section className="py-12 md:py-20">
       <div className="mx-auto max-w-3xl px-6 lg:px-10">
         <Reveal>
           <div className="text-center mb-12">

@@ -25,7 +25,7 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="py-12 md:py-20">
+    <section id="contact" className="py-12 md:py-20  bg-secondary/50">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="grid gap-14 lg:grid-cols-2 lg:gap-20 items-start">
           <Reveal>
@@ -35,7 +35,7 @@ export function Contact() {
             </h2>
             <p className="mt-8 text-lg text-muted-foreground leading-relaxed max-w-md">
               Une question, une idée, l'envie d'aider sur un événement ? Écrivez-nous,
-              nous répondons toujours — c'est promis.
+              nous répondons toujours, c'est promis !
             </p>
             <ul className="mt-10 space-y-5">
               <li className="flex items-start gap-4">

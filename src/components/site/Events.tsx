@@ -38,7 +38,7 @@ export function Events() {
           <Reveal>
             <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">Agenda</span>
             <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-              Nos événements <span className="italic text-gradient">au quartier</span>.
+              Nos <span className="italic text-gradient">événements</span>  au quartier.
             </h2>
           </Reveal>
         </div>

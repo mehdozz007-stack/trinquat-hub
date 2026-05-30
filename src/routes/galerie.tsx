@@ -7,9 +7,9 @@ import { PageHeader } from "@/components/site/PageHeader";
 export const Route = createFileRoute("/galerie")({
   head: () => ({
     meta: [
-      { title: "Galerie — Trinquai & Compagnie" },
-      { name: "description", content: "Souvenirs et photos des événements de l'association Trinquai & Compagnie au fil des saisons." },
-      { property: "og:title", content: "Galerie — Trinquai & Compagnie" },
+      { title: "Galerie — Trinquat & Compagnie" },
+      { name: "description", content: "Souvenirs et photos des événements de l'association Trinquat & Compagnie au fil des saisons." },
+      { property: "og:title", content: "Galerie — Trinquat & Compagnie" },
       { property: "og:description", content: "Souvenirs partagés du quartier, en images." },
     ],
     links: [{ rel: "canonical", href: "/galerie" }],
