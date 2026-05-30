@@ -30,6 +30,7 @@ function AssociationPage() {
       />
       <About />
       <Stats />
+      <JoinSection />
       <Footer />
     </main>
   );
