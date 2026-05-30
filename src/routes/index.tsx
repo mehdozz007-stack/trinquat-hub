@@ -5,6 +5,7 @@ import { Values } from "@/components/site/Values";
 import { EventsPreview } from "@/components/site/EventsPreview";
 import { ActualitesPreview } from "@/components/site/ActualitesPreview";
 import { JoinSection } from "@/components/site/JoinSection";
+import { Newsletter } from "@/components/site/Newsletter";
 import { Footer } from "@/components/site/Footer";
 
 export const Route = createFileRoute("/")({
@@ -28,6 +29,7 @@ function Index() {
       <EventsPreview />
       <ActualitesPreview />
       <JoinSection />
+      <Newsletter />
       <Footer />
     </main>
   );
