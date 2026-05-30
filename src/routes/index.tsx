@@ -27,6 +27,7 @@ function Index() {
       <Values />
       <EventsPreview />
       <ActualitesPreview />
+      <JoinSection />
       <Footer />
     </main>
   );
