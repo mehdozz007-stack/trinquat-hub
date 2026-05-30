@@ -4,6 +4,7 @@ import { Footer } from "@/components/site/Footer";
 import { About } from "@/components/site/About";
 import { Stats } from "@/components/site/Stats";
 import { PageHeader } from "@/components/site/PageHeader";
+import { JoinSection } from "@/components/site/JoinSection";
 
 export const Route = createFileRoute("/association")({
   head: () => ({
