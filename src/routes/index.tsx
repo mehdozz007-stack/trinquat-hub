@@ -4,6 +4,7 @@ import { Hero } from "@/components/site/Hero";
 import { Values } from "@/components/site/Values";
 import { EventsPreview } from "@/components/site/EventsPreview";
 import { ActualitesPreview } from "@/components/site/ActualitesPreview";
+import { JoinSection } from "@/components/site/JoinSection";
 import { Footer } from "@/components/site/Footer";
 
 export const Route = createFileRoute("/")({
