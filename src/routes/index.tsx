@@ -29,6 +29,7 @@ function Index() {
       <EventsPreview />
       <ActualitesPreview />
       <JoinSection />
+      <Newsletter />
       <Footer />
     </main>
   );
