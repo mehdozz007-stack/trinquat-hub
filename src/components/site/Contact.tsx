@@ -31,7 +31,7 @@ export function Contact() {
           <Reveal>
             <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">Contact</span>
             <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-              Envie de nous <span className="italic text-gradient">rejoindre</span> ?
+              Envie de nous <span className="text-gradient">rejoindre</span> ?
             </h2>
             <p className="mt-8 text-lg text-muted-foreground leading-relaxed max-w-md">
               Une question, une idée, l'envie d'aider sur un événement ? Écrivez-nous,

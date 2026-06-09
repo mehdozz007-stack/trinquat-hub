@@ -24,7 +24,7 @@ function ContactPage() {
       <Navbar />
       <PageHeader
         eyebrow="Contact"
-        title={<>Envie de nous <span className="italic text-gradient">rejoindre</span> ?</>}
+        title={<>Envie de nous <span className="text-gradient">rejoindre</span> ?</>}
         lead="Une question, une idée, l'envie d'aider sur un événement ? On répond toujours."
       />
       <Contact />

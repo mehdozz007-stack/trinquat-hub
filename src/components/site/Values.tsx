@@ -21,7 +21,7 @@ export function Values() {
                 Nos valeurs
               </span>
               <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-                Ce qui nous <span className="italic text-gradient">rassemble</span>.
+                Ce qui nous <span className="text-gradient">rassemble</span>.
               </h2>
             </Reveal>
             <Reveal delay={0.1}>

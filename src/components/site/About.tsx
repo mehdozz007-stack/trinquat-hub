@@ -21,7 +21,7 @@ export function About() {
                 Qui sommes-nous
               </span>
               <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-                Une <span className="italic text-gradient">grande famille</span><br />
+                Une <span className="text-gradient">grande famille</span><br />
                 à l'ombre des arbres.
               </h2>
             </Reveal>

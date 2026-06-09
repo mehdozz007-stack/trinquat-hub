@@ -40,7 +40,7 @@ export function FAQ() {
           <div className="text-center mb-12">
             <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">FAQ</span>
             <h2 className="mt-6 text-3xl md:text-4xl lg:text-5xl font-medium leading-[1.1]">
-              Questions <span className="italic text-gradient">fréquentes</span>
+              Questions <span className="text-gradient">fréquentes</span>
             </h2>
             <p className="mt-4 text-muted-foreground max-w-lg mx-auto">
               Les réponses aux questions que vous vous posez sur Trinquat & Compagnie.

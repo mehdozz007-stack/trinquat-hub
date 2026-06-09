@@ -27,7 +27,7 @@ export function Gallery() {
           <div className="max-w-2xl">
             <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">Galerie</span>
             <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-              Nos<span className="italic text-gradient"> photos</span> souvenirs.
+              Nos<span className="text-gradient"> photos</span> souvenirs.
             </h2>
           </div>
         </Reveal>

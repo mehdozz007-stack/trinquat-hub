@@ -23,7 +23,7 @@ function ActualitesPage() {
       <Navbar />
       <PageHeader
         eyebrow="Actualités"
-        title={<>Les <span className="italic text-gradient">dernières</span> nouvelles.</>}
+        title={<>Les <span className="text-gradient">dernières</span> nouvelles.</>}
         lead="Restez au courant des projets, événements et bonnes nouvelles du quartier."
       />
       <News />

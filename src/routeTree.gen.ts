@@ -15,6 +15,16 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AssociationRouteImport } from './routes/association'
 import { Route as ActualitesRouteImport } from './routes/actualites'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminNewsletterRouteImport } from './routes/admin.newsletter'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as ApiNewsletterSubscribeRouteImport } from './routes/api/newsletter/subscribe'
+import { Route as ApiAdminMeRouteImport } from './routes/api/admin/me'
+import { Route as ApiAdminLogoutRouteImport } from './routes/api/admin/logout'
+import { Route as ApiAdminLoginRouteImport } from './routes/api/admin/login'
+import { Route as ApiAdminBootstrapRouteImport } from './routes/api/admin/bootstrap'
+import { Route as ApiAdminSubscribersIndexRouteImport } from './routes/api/admin/subscribers/index'
+import { Route as ApiAdminSubscribersExportRouteImport } from './routes/api/admin/subscribers/export'
+import { Route as ApiAdminSubscribersIdRouteImport } from './routes/api/admin/subscribers/$id'
 
 const GalerieRoute = GalerieRouteImport.update({
   id: '/galerie',
@@ -46,6 +56,58 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminNewsletterRoute = AdminNewsletterRouteImport.update({
+  id: '/admin/newsletter',
+  path: '/admin/newsletter',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiNewsletterSubscribeRoute = ApiNewsletterSubscribeRouteImport.update({
+  id: '/api/newsletter/subscribe',
+  path: '/api/newsletter/subscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminMeRoute = ApiAdminMeRouteImport.update({
+  id: '/api/admin/me',
+  path: '/api/admin/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminLogoutRoute = ApiAdminLogoutRouteImport.update({
+  id: '/api/admin/logout',
+  path: '/api/admin/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminLoginRoute = ApiAdminLoginRouteImport.update({
+  id: '/api/admin/login',
+  path: '/api/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminBootstrapRoute = ApiAdminBootstrapRouteImport.update({
+  id: '/api/admin/bootstrap',
+  path: '/api/admin/bootstrap',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminSubscribersIndexRoute =
+  ApiAdminSubscribersIndexRouteImport.update({
+    id: '/api/admin/subscribers/',
+    path: '/api/admin/subscribers/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAdminSubscribersExportRoute =
+  ApiAdminSubscribersExportRouteImport.update({
+    id: '/api/admin/subscribers/export',
+    path: '/api/admin/subscribers/export',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAdminSubscribersIdRoute = ApiAdminSubscribersIdRouteImport.update({
+  id: '/api/admin/subscribers/$id',
+  path: '/api/admin/subscribers/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +116,16 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/evenements': typeof EvenementsRoute
   '/galerie': typeof GalerieRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/newsletter': typeof AdminNewsletterRoute
+  '/api/admin/bootstrap': typeof ApiAdminBootstrapRoute
+  '/api/admin/login': typeof ApiAdminLoginRoute
+  '/api/admin/logout': typeof ApiAdminLogoutRoute
+  '/api/admin/me': typeof ApiAdminMeRoute
+  '/api/newsletter/subscribe': typeof ApiNewsletterSubscribeRoute
+  '/api/admin/subscribers/$id': typeof ApiAdminSubscribersIdRoute
+  '/api/admin/subscribers/export': typeof ApiAdminSubscribersExportRoute
+  '/api/admin/subscribers/': typeof ApiAdminSubscribersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +134,16 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/evenements': typeof EvenementsRoute
   '/galerie': typeof GalerieRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/newsletter': typeof AdminNewsletterRoute
+  '/api/admin/bootstrap': typeof ApiAdminBootstrapRoute
+  '/api/admin/login': typeof ApiAdminLoginRoute
+  '/api/admin/logout': typeof ApiAdminLogoutRoute
+  '/api/admin/me': typeof ApiAdminMeRoute
+  '/api/newsletter/subscribe': typeof ApiNewsletterSubscribeRoute
+  '/api/admin/subscribers/$id': typeof ApiAdminSubscribersIdRoute
+  '/api/admin/subscribers/export': typeof ApiAdminSubscribersExportRoute
+  '/api/admin/subscribers': typeof ApiAdminSubscribersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +153,16 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/evenements': typeof EvenementsRoute
   '/galerie': typeof GalerieRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/newsletter': typeof AdminNewsletterRoute
+  '/api/admin/bootstrap': typeof ApiAdminBootstrapRoute
+  '/api/admin/login': typeof ApiAdminLoginRoute
+  '/api/admin/logout': typeof ApiAdminLogoutRoute
+  '/api/admin/me': typeof ApiAdminMeRoute
+  '/api/newsletter/subscribe': typeof ApiNewsletterSubscribeRoute
+  '/api/admin/subscribers/$id': typeof ApiAdminSubscribersIdRoute
+  '/api/admin/subscribers/export': typeof ApiAdminSubscribersExportRoute
+  '/api/admin/subscribers/': typeof ApiAdminSubscribersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +173,16 @@ export interface FileRouteTypes {
     | '/contact'
     | '/evenements'
     | '/galerie'
+    | '/admin/login'
+    | '/admin/newsletter'
+    | '/api/admin/bootstrap'
+    | '/api/admin/login'
+    | '/api/admin/logout'
+    | '/api/admin/me'
+    | '/api/newsletter/subscribe'
+    | '/api/admin/subscribers/$id'
+    | '/api/admin/subscribers/export'
+    | '/api/admin/subscribers/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +191,16 @@ export interface FileRouteTypes {
     | '/contact'
     | '/evenements'
     | '/galerie'
+    | '/admin/login'
+    | '/admin/newsletter'
+    | '/api/admin/bootstrap'
+    | '/api/admin/login'
+    | '/api/admin/logout'
+    | '/api/admin/me'
+    | '/api/newsletter/subscribe'
+    | '/api/admin/subscribers/$id'
+    | '/api/admin/subscribers/export'
+    | '/api/admin/subscribers'
   id:
     | '__root__'
     | '/'
@@ -97,6 +209,16 @@ export interface FileRouteTypes {
     | '/contact'
     | '/evenements'
     | '/galerie'
+    | '/admin/login'
+    | '/admin/newsletter'
+    | '/api/admin/bootstrap'
+    | '/api/admin/login'
+    | '/api/admin/logout'
+    | '/api/admin/me'
+    | '/api/newsletter/subscribe'
+    | '/api/admin/subscribers/$id'
+    | '/api/admin/subscribers/export'
+    | '/api/admin/subscribers/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +228,16 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   EvenementsRoute: typeof EvenementsRoute
   GalerieRoute: typeof GalerieRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminNewsletterRoute: typeof AdminNewsletterRoute
+  ApiAdminBootstrapRoute: typeof ApiAdminBootstrapRoute
+  ApiAdminLoginRoute: typeof ApiAdminLoginRoute
+  ApiAdminLogoutRoute: typeof ApiAdminLogoutRoute
+  ApiAdminMeRoute: typeof ApiAdminMeRoute
+  ApiNewsletterSubscribeRoute: typeof ApiNewsletterSubscribeRoute
+  ApiAdminSubscribersIdRoute: typeof ApiAdminSubscribersIdRoute
+  ApiAdminSubscribersExportRoute: typeof ApiAdminSubscribersExportRoute
+  ApiAdminSubscribersIndexRoute: typeof ApiAdminSubscribersIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -152,6 +284,76 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/newsletter': {
+      id: '/admin/newsletter'
+      path: '/admin/newsletter'
+      fullPath: '/admin/newsletter'
+      preLoaderRoute: typeof AdminNewsletterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/newsletter/subscribe': {
+      id: '/api/newsletter/subscribe'
+      path: '/api/newsletter/subscribe'
+      fullPath: '/api/newsletter/subscribe'
+      preLoaderRoute: typeof ApiNewsletterSubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/me': {
+      id: '/api/admin/me'
+      path: '/api/admin/me'
+      fullPath: '/api/admin/me'
+      preLoaderRoute: typeof ApiAdminMeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/logout': {
+      id: '/api/admin/logout'
+      path: '/api/admin/logout'
+      fullPath: '/api/admin/logout'
+      preLoaderRoute: typeof ApiAdminLogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/login': {
+      id: '/api/admin/login'
+      path: '/api/admin/login'
+      fullPath: '/api/admin/login'
+      preLoaderRoute: typeof ApiAdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/bootstrap': {
+      id: '/api/admin/bootstrap'
+      path: '/api/admin/bootstrap'
+      fullPath: '/api/admin/bootstrap'
+      preLoaderRoute: typeof ApiAdminBootstrapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/subscribers/': {
+      id: '/api/admin/subscribers/'
+      path: '/api/admin/subscribers'
+      fullPath: '/api/admin/subscribers/'
+      preLoaderRoute: typeof ApiAdminSubscribersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/subscribers/export': {
+      id: '/api/admin/subscribers/export'
+      path: '/api/admin/subscribers/export'
+      fullPath: '/api/admin/subscribers/export'
+      preLoaderRoute: typeof ApiAdminSubscribersExportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/subscribers/$id': {
+      id: '/api/admin/subscribers/$id'
+      path: '/api/admin/subscribers/$id'
+      fullPath: '/api/admin/subscribers/$id'
+      preLoaderRoute: typeof ApiAdminSubscribersIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -162,17 +364,17 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   EvenementsRoute: EvenementsRoute,
   GalerieRoute: GalerieRoute,
+  AdminLoginRoute: AdminLoginRoute,
+  AdminNewsletterRoute: AdminNewsletterRoute,
+  ApiAdminBootstrapRoute: ApiAdminBootstrapRoute,
+  ApiAdminLoginRoute: ApiAdminLoginRoute,
+  ApiAdminLogoutRoute: ApiAdminLogoutRoute,
+  ApiAdminMeRoute: ApiAdminMeRoute,
+  ApiNewsletterSubscribeRoute: ApiNewsletterSubscribeRoute,
+  ApiAdminSubscribersIdRoute: ApiAdminSubscribersIdRoute,
+  ApiAdminSubscribersExportRoute: ApiAdminSubscribersExportRoute,
+  ApiAdminSubscribersIndexRoute: ApiAdminSubscribersIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

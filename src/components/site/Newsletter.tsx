@@ -1,18 +1,54 @@
 import { useState } from "react";
 import { Reveal } from "./Reveal";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle, Mail } from "lucide-react";
+import { Send, CheckCircle, Mail, AlertCircle } from "lucide-react";
 
 export function Newsletter() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "success">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [message, setMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
-    setStatus("success");
-    setEmail("");
-    setTimeout(() => setStatus("idle"), 4000);
+
+    setStatus("loading");
+    setMessage("");
+
+    try {
+      const res = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setStatus("error");
+        setMessage(data.error || "Erreur lors de l'inscription.");
+        setTimeout(() => {
+          setStatus("idle");
+          setMessage("");
+        }, 4000);
+        return;
+      }
+
+      setStatus("success");
+      setMessage("Merci ! Vous êtes bien inscrit·e à la newsletter.");
+      setEmail("");
+      setTimeout(() => {
+        setStatus("idle");
+        setMessage("");
+      }, 4000);
+    } catch (err) {
+      setStatus("error");
+      setMessage("Erreur serveur. Veuillez réessayer.");
+      setTimeout(() => {
+        setStatus("idle");
+        setMessage("");
+      }, 4000);
+    }
   };
 
   return (
@@ -38,7 +74,7 @@ export function Newsletter() {
               </motion.div>
 
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-[1.1]">
-                Restez <span className="italic text-gradient">informé·e</span>
+                Restez <span className="text-gradient">informé·e</span>
               </h2>
               <p className="mt-5 max-w-lg text-base leading-relaxed text-muted-foreground">
                 Recevez chaque mois les actualités du quartier, les prochains événements
@@ -63,11 +99,11 @@ export function Newsletter() {
                   </div>
                   <button
                     type="submit"
-                    disabled={status === "success"}
+                    disabled={status !== "idle"}
                     className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-leaf px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-glow hover:-translate-y-0.5 disabled:opacity-80"
                   >
                     <Send className="h-4 w-4" />
-                    S'inscrire
+                    {status === "loading" ? "Inscription..." : "S'inscrire"}
                   </button>
                 </div>
 
@@ -81,7 +117,19 @@ export function Newsletter() {
                       className="absolute -bottom-12 left-0 right-0 flex items-center justify-center gap-2 text-sm font-medium text-primary-deep"
                     >
                       <CheckCircle className="h-4 w-4" />
-                      Merci ! Vous êtes bien inscrit·e à la newsletter.
+                      {message}
+                    </motion.div>
+                  )}
+                  {status === "error" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                      className="absolute -bottom-12 left-0 right-0 flex items-center justify-center gap-2 text-sm font-medium text-red-600"
+                    >
+                      <AlertCircle className="h-4 w-4" />
+                      {message}
                     </motion.div>
                   )}
                 </AnimatePresence>

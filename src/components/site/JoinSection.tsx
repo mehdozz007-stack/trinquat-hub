@@ -23,7 +23,7 @@ const perks = [
 
 const floatingIcons = [
   { Icon: Flower, top: "10%", left: "15%", delay: 0, duration: 6 },
-  { Icon: Leaf, top: "75%", left: "55%", delay: 0.5, duration: 8 },
+  { Icon: Leaf, top: "75%", left: "25%", delay: 0.5, duration: 8 },
   { Icon: Heart, top: "35%", right: "12%", delay: 1, duration: 7 },
   { Icon: Sparkles, top: "60%", right: "8%", delay: 1.5, duration: 6.5 },
   { Icon: Clover, top: "25%", left: "50%", delay: 0.8, duration: 7.5 },
