@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { serializeLogoutCookie } from "@/server/auth.server";
+// Server-only imports - commented out for client-only build
+// import { serializeLogoutCookie } from "@/server/auth.server";
 
 export const Route = createFileRoute("/api/admin/logout")({
   server: {

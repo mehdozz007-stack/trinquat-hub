@@ -1,17 +1,19 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import tsConfigPaths from "vite-tsconfig-paths";
-import tailwindcss from "@tailwindcss/vite";
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+import tsConfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
   plugins: [
-    TanStackRouterVite(),
-    tailwindcss(),
     react(),
+    tailwindcss(),
     tsConfigPaths(),
   ],
   server: {
     port: 5173,
   },
-});
+  optimizeDeps: {
+    exclude: ['jose', 'bcryptjs', '@tanstack/start-server-core', '@tanstack/react-start'],
+    include: ['react', 'react-dom', '@tanstack/react-router', '@tanstack/react-query'],
+  },
+})

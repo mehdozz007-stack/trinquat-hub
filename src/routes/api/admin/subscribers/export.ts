@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getDB } from "@/server/db.server";
-import { requireAdmin } from "@/server/auth.server";
+// Server-only imports - commented out for client-only build
+// import { getDB } from "@/server/db.server";
+// import { requireAdmin } from "@/server/auth.server";
 
 export const Route = createFileRoute("/api/admin/subscribers/export")({
   server: {

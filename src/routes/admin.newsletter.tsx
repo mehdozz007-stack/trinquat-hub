@@ -4,6 +4,7 @@ import {
   Download, Trash2, LogOut, Mail, Search, Users, ShieldCheck, ShieldAlert,
   PenSquare, Send, Save, FileText, Eye, Calendar, CheckCircle2, Clock, X,
 } from "lucide-react";
+import { getAdminSession, logoutAdmin } from "../lib/auth.client";
 
 export const Route = createFileRoute("/admin/newsletter")({
   head: () => ({
@@ -19,6 +20,18 @@ type Subscriber = { id: string; email: string; is_active: boolean; created_at: s
 type AdminSession = { id: string; email: string; role: string };
 type Tab = "compose" | "history" | "subscribers";
 
+// Mock data for demo
+const MOCK_SUBSCRIBERS: Subscriber[] = [
+  { id: "1", email: "marie.dupont@example.com", is_active: true, created_at: "2024-01-15T10:30:00Z" },
+  { id: "2", email: "jean.martin@example.com", is_active: true, created_at: "2024-02-20T14:45:00Z" },
+  { id: "3", email: "sophie.bernard@example.com", is_active: true, created_at: "2024-03-05T09:15:00Z" },
+  { id: "4", email: "pierre.richard@example.com", is_active: false, created_at: "2024-01-10T11:20:00Z" },
+  { id: "5", email: "anne.thomas@example.com", is_active: true, created_at: "2024-04-12T16:30:00Z" },
+  { id: "6", email: "luc.fournier@example.com", is_active: true, created_at: "2024-03-22T13:45:00Z" },
+];
+
+const MOCK_ADMIN: AdminSession = { id: "admin-1", email: "admin@trinquat.local", role: "admin" };
+
 function AdminNewsletter() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -33,15 +46,16 @@ function AdminNewsletter() {
     let mounted = true;
     (async () => {
       try {
-        const res = await fetch("/api/admin/me");
-        if (!res.ok) {
-          navigate({ to: "/admin/login" });
-          return;
+        const session = getAdminSession();
+        if (mounted) {
+          if (session) {
+            setAdmin({ id: session.id, email: session.email, role: session.role });
+          } else {
+            navigate({ to: "/admin/login" });
+          }
         }
-        const { id, email, role } = await res.json();
-        if (mounted) setAdmin({ id, email, role });
       } catch {
-        navigate({ to: "/admin/login" });
+        if (mounted) navigate({ to: "/admin/login" });
       } finally {
         if (mounted) setCheckingSession(false);
       }
@@ -49,20 +63,18 @@ function AdminNewsletter() {
     return () => { mounted = false; };
   }, [navigate]);
 
-  // Load subscribers
+  // Load subscribers - using mock data
   useEffect(() => {
     if (!admin) return;
     let mounted = true;
     (async () => {
       setSubsLoading(true);
       try {
-        const res = await fetch("/api/admin/subscribers?limit=1000");
-        if (res.ok) {
-          const data = await res.json();
-          if (mounted) setSubs(data.subscribers || []);
-        }
+        // Simulate API call with mock data
+        await new Promise(resolve => setTimeout(resolve, 400));
+        if (mounted) setSubs(MOCK_SUBSCRIBERS);
       } catch {
-        if (mounted) setSubs([]);
+        if (mounted) setSubs(MOCK_SUBSCRIBERS);
       } finally {
         if (mounted) setSubsLoading(false);
       }
@@ -76,7 +88,8 @@ function AdminNewsletter() {
   }, [checkingSession]);
 
   const handleLogout = async () => {
-    await fetch("/api/admin/logout", { method: "POST" });
+    logoutAdmin();
+    setAdmin(null);
     navigate({ to: "/admin/login" });
   };
 
@@ -172,14 +185,11 @@ function Subscribers({ subs, setSubs, loading }: { subs: Subscriber[]; setSubs: 
     if (!confirm(`Supprimer ${email} ?`)) return;
     setActionLoading(id);
     try {
-      const res = await fetch(`/api/admin/subscribers/${id}`, { method: "DELETE" });
-      if (res.ok) {
-        setSubs((prev) => prev.filter((s) => s.id !== id));
-      } else {
-        alert("Erreur lors de la suppression");
-      }
+      // Simulate deletion
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setSubs((prev) => prev.filter((s) => s.id !== id));
     } catch {
-      alert("Erreur réseau");
+      alert("Erreur lors de la suppression");
     } finally {
       setActionLoading(null);
     }
@@ -188,18 +198,11 @@ function Subscribers({ subs, setSubs, loading }: { subs: Subscriber[]; setSubs: 
   const toggleActive = async (s: Subscriber) => {
     setActionLoading(s.id);
     try {
-      const res = await fetch(`/api/admin/subscribers/${s.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ is_active: !s.is_active }),
-      });
-      if (res.ok) {
-        setSubs((prev) => prev.map((p) => (p.id === s.id ? { ...p, is_active: !s.is_active } : p)));
-      } else {
-        alert("Erreur lors de la mise à jour");
-      }
+      // Simulate update
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setSubs((prev) => prev.map((p) => (p.id === s.id ? { ...p, is_active: !s.is_active } : p)));
     } catch {
-      alert("Erreur réseau");
+      alert("Erreur lors de la mise à jour");
     } finally {
       setActionLoading(null);
     }
@@ -207,20 +210,27 @@ function Subscribers({ subs, setSubs, loading }: { subs: Subscriber[]; setSubs: 
 
   const exportCSV = async () => {
     try {
-      const res = await fetch("/api/admin/subscribers/export");
-      if (res.ok) {
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `newsletter_${new Date().toISOString().slice(0, 10)}.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
-      } else {
-        alert("Erreur lors de l'export");
-      }
+      // Generate CSV from current data
+      const headers = ["Email", "Statut", "Inscrit le"];
+      const rows = filtered.map(s => [
+        s.email,
+        s.is_active ? "Actif" : "Désactivé",
+        new Date(s.created_at).toLocaleDateString("fr-FR")
+      ]);
+      
+      const csv = [headers, ...rows]
+        .map(row => row.map(cell => `"${cell}"`).join(","))
+        .join("\n");
+      
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `newsletter_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
     } catch {
-      alert("Erreur réseau");
+      alert("Erreur lors de l'export");
     }
   };
 

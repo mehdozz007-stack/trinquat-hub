@@ -92,7 +92,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.9 }}
-          className="mt-6 text-5xl md:text-7xl lg:text-[5.5rem] font-medium leading-[1.05] text-foreground"
+          className="mt-6 text-5xl md:text-7xl lg:text-[5.5rem] font-normal leading-[1.05] text-foreground"
         >
           Le quartier <span className="italic text-gradient">se vit</span>
           <br /> ensemble.
