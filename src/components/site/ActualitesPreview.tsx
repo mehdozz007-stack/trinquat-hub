@@ -19,7 +19,7 @@ export function ActualitesPreview() {
           <Reveal>
             <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">Actualités</span>
             <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-              Les <span className="italic text-gradient">dernières nouvelles</span>.
+              Les <span className="text-gradient">dernières nouvelles</span>.
             </h2>
           </Reveal>
           <Reveal delay={0.1}>

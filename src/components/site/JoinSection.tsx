@@ -1,13 +1,13 @@
 import { Reveal } from "./Reveal";
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { HeartHandshake, CalendarDays, TreePine, ArrowRight } from "lucide-react";
+import { HeartHandshake, CalendarDays, TreePine, ArrowRight, Flower, Leaf, Heart, Sparkles, Clover } from "lucide-react";
 
 const perks = [
   {
     icon: HeartHandshake,
     title: "Cotisation symbolique",
-    text: "20€ par an seulement — un petit geste pour un grand impact dans le quartier.",
+    text: "5€ par an seulement, un petit geste pour un grand impact dans le quartier.",
   },
   {
     icon: CalendarDays,
@@ -21,9 +21,17 @@ const perks = [
   },
 ];
 
+const floatingIcons = [
+  { Icon: Flower, top: "10%", left: "15%", delay: 0, duration: 6 },
+  { Icon: Leaf, top: "75%", left: "25%", delay: 0.5, duration: 8 },
+  { Icon: Heart, top: "35%", right: "12%", delay: 1, duration: 7 },
+  { Icon: Sparkles, top: "60%", right: "8%", delay: 1.5, duration: 6.5 },
+  { Icon: Clover, top: "25%", left: "50%", delay: 0.8, duration: 7.5 },
+];
+
 export function JoinSection() {
   return (
-    <section className="relative py-16 md:py-24 overflow-hidden">
+    <section className="relative py-12 md:py-20 overflow-hidden bg-secondary/70">
       <div className="absolute inset-0 -z-10 bg-gradient-hero opacity-60" />
       <div className="absolute inset-0 -z-10 grain" />
 
@@ -33,6 +41,28 @@ export function JoinSection() {
             <div className="lg:col-span-2 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-leaf opacity-90" />
               <div className="absolute inset-0 grain" />
+
+              {/* Floating Icons */}
+              {floatingIcons.map((item, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute opacity-30 hover:opacity-50 transition-opacity"
+                  style={{
+                    top: item.top,
+                    ...(item.left ? { left: item.left } : { right: item.right }),
+                  }}
+                  animate={{ y: [0, -20, 0] }}
+                  transition={{
+                    duration: item.duration,
+                    delay: item.delay,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <item.Icon className="h-8 w-8 text-primary-foreground" strokeWidth={1.5} />
+                </motion.div>
+              ))}
+
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -45,18 +75,20 @@ export function JoinSection() {
                 </span>
                 <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-medium leading-[1.1]">
                   Adhérez à{" "}
-                  <span className="italic font-[var(--font-display)]">l'association</span>
+                  <span className="italic font-(var(--font-display))">l'association</span>
                 </h2>
                 <p className="mt-6 text-base leading-relaxed opacity-90 max-w-xs">
-                  Rejoignez les 200+ habitants qui font vivre le quartier. Chaque voisin apporte sa pierre à l'édifice.
+                  Rejoignez les 100+ habitants qui font vivre le quartier. Chaque voisin apporte sa pierre à l'édifice.
                 </p>
-                <Link
-                  to="/contact"
-                  className="mt-8 inline-flex w-fit items-center gap-2 rounded-full bg-primary-foreground/15 border border-primary-foreground/25 px-6 py-3.5 text-sm font-semibold backdrop-blur-sm transition-all hover:bg-primary-foreground/25 hover:-translate-y-0.5"
+
+                <a href="https://www.helloasso.com/associations/trinquat-et-compagnie/adhesions/adhesion-trinquat-et-compagnie-2026"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-8 inline-flex w-fit self-center items-center gap-2 rounded-full bg-primary-foreground/15 border border-primary-foreground/25 px-6 py-3.5 text-sm font-semibold backdrop-blur-sm transition-all hover:bg-primary-foreground/25 hover:-translate-y-0.5"
                 >
                   Devenir membre
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </Link>
+                </a>
               </motion.div>
             </div>
 

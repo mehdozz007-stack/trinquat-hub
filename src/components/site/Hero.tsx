@@ -5,6 +5,12 @@ import { ArrowRight, Calendar, Facebook, Instagram, Mail } from "lucide-react";
 import logo from "@/assets/logo.png";
 import hero from "@/assets/hero-bg.jpg";
 
+const socialLinks = [
+  { Icon: Facebook, href: "https://www.facebook.com/Trinquatetcompagnie/", label: "Facebook" },
+  { Icon: Instagram, href: "https://www.instagram.com/p/DQE1LeOgvRs/", label: "Instagram" },
+  /*{ Icon: Mail, href: "mailto:contact@trinquatetcompagnie.fr", label: "Email" },*/
+];
+
 export function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -63,8 +69,8 @@ export function Hero() {
             className="h-32 w-auto md:h-34 lg:h-42 rounded-xl drop-shadow-[0_10px_40px_rgba(103,176,33,0.25)]"
           />
           <div className="absolute -right-4 -bottom-4 flex flex-col gap-3">
-            {[Facebook, Instagram].map((Icon, i) => (
-              <a key={i} href="#" aria-label="Réseau social"
+            {socialLinks.map(({ Icon, href, label }) => (
+                <a key={label} href={href} aria-label={label} target="_blank" rel="noopener noreferrer"
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/30 bg-background/60 text-foreground transition-all hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground backdrop-blur">
                 <Icon className="h-4 w-4" />
               </a>
@@ -86,7 +92,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.9 }}
-          className="mt-6 text-5xl md:text-7xl lg:text-[5.5rem] font-medium leading-[1.05] text-foreground"
+          className="mt-6 text-5xl md:text-7xl lg:text-[5.5rem] font-normal leading-[1.05] text-foreground"
         >
           Le quartier <span className="italic text-gradient">se vit</span>
           <br /> ensemble.

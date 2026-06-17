@@ -59,6 +59,18 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 
+// Export route tree without API routes (to avoid server import issues)
+export const routeTree = rootRouteImport.addChildren([
+  IndexRoute,
+  ActualitesRoute,
+  AssociationRoute,
+  ContactRoute,
+  EvenementsRoute,
+  GalerieRoute,
+  AdminNewsletterRoute,
+  AdminLoginRoute,
+]) as any
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/actualites': typeof ActualitesRoute
@@ -136,32 +148,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/galerie': {
-      id: '/galerie'
-      path: '/galerie'
-      fullPath: '/galerie'
-      preLoaderRoute: typeof GalerieRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/evenements': {
-      id: '/evenements'
-      path: '/evenements'
-      fullPath: '/evenements'
-      preLoaderRoute: typeof EvenementsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/association': {
-      id: '/association'
-      path: '/association'
-      fullPath: '/association'
-      preLoaderRoute: typeof AssociationRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/actualites': {
@@ -171,18 +162,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ActualitesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/association': {
+      id: '/association'
+      path: '/association'
+      fullPath: '/association'
+      preLoaderRoute: typeof AssociationRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/newsletter': {
-      id: '/admin/newsletter'
-      path: '/admin/newsletter'
-      fullPath: '/admin/newsletter'
-      preLoaderRoute: typeof AdminNewsletterRouteImport
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/evenements': {
+      id: '/evenements'
+      path: '/evenements'
+      fullPath: '/evenements'
+      preLoaderRoute: typeof EvenementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/galerie': {
+      id: '/galerie'
+      path: '/galerie'
+      fullPath: '/galerie'
+      preLoaderRoute: typeof GalerieRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/login': {
@@ -190,6 +195,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/newsletter': {
+      id: '/admin/newsletter'
+      path: '/admin/newsletter'
+      fullPath: '/admin/newsletter'
+      preLoaderRoute: typeof AdminNewsletterRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -205,6 +217,6 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
   AdminNewsletterRoute: AdminNewsletterRoute,
 }
-export const routeTree = rootRouteImport
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+declare module '@tanstack/react-router' {
+  interface FileRouteTypes extends FileRouteTypes {}
+}

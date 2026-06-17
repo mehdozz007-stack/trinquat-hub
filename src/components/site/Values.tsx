@@ -21,7 +21,7 @@ export function Values() {
                 Nos valeurs
               </span>
               <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-                Ce qui nous <span className="italic text-gradient">rassemble</span>.
+                Ce qui nous <span className="text-gradient">rassemble</span>.
               </h2>
             </Reveal>
             <Reveal delay={0.1}>
@@ -32,18 +32,20 @@ export function Values() {
           </div>
 
           <div className="lg:col-span-7 grid sm:grid-cols-2 gap-4">
-            {values.map((v, i) => (
-              <Reveal key={v.title} delay={i * 0.05}>
-                <div className="group relative h-full rounded-2xl border border-border/70 bg-card p-7 transition-all duration-500 hover:-translate-y-1 hover:shadow-elegant hover:border-primary/40">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-soft text-primary-deep transition-colors group-hover:bg-gradient-leaf group-hover:text-primary-foreground">
-                    <v.icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="mt-5 text-xl font-semibold text-foreground">{v.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{v.text}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+                      {values.map((v, i) => (
+                        <Reveal key={v.title} delay={i * 0.05}>
+                          <div className="group relative h-full rounded-2xl border border-border/70 bg-card p-7 transition-all duration-500 hover:-translate-y-1 hover:shadow-elegant hover:border-primary/40">
+                            <div className="flex items-center gap-4">
+                              <div className="flex h-12 w-12 min-w-12 items-center justify-center rounded-xl bg-primary-soft text-primary-deep transition-colors group-hover:bg-gradient-leaf group-hover:text-primary-foreground">
+                                <v.icon className="h-5 w-5" />
+                              </div>
+                              <h3 className="text-xl font-semibold text-foreground">{v.title}</h3>
+                            </div>
+                            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{v.text}</p>
+                          </div>
+                        </Reveal>
+                      ))}
+                    </div>
         </div>
       </div>
     </section>

@@ -8,9 +8,9 @@ import { PageHeader } from "@/components/site/PageHeader";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — Trinquai & Compagnie" },
-      { name: "description", content: "Une question, une idée, l'envie de rejoindre l'association ? Écrivez à Trinquai & Compagnie." },
-      { property: "og:title", content: "Contact — Trinquai & Compagnie" },
+      { title: "Contact — Trinquat & Compagnie" },
+      { name: "description", content: "Une question, une idée, l'envie de rejoindre l'association ? Écrivez à Trinquat & Compagnie." },
+      { property: "og:title", content: "Contact — Trinquat & Compagnie" },
       { property: "og:description", content: "Écrivez-nous pour rejoindre l'association ou poser une question." },
     ],
     links: [{ rel: "canonical", href: "/contact" }],
@@ -24,7 +24,7 @@ function ContactPage() {
       <Navbar />
       <PageHeader
         eyebrow="Contact"
-        title={<>Envie de nous <span className="italic text-gradient">rejoindre</span> ?</>}
+        title={<>Envie de nous <span className="text-gradient">rejoindre</span> ?</>}
         lead="Une question, une idée, l'envie d'aider sur un événement ? On répond toujours."
       />
       <Contact />

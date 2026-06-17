@@ -3,6 +3,7 @@ import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo.png";
 import { Menu, X } from "lucide-react";
+import { Button } from "../ui/button";
 
 const links = [
   { to: "/", label: "Accueil" },
@@ -46,12 +47,13 @@ export function Navbar() {
             </li>
           ))}
         </ul>
-        <Link
-          to="/contact"
-          className="hidden md:inline-flex items-center rounded-full bg-gradient-leaf px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft transition-transform hover:-translate-y-0.5"
-        >
-          Rejoindre
-        </Link>
+        <a href="https://www.helloasso.com/associations/trinquat-et-compagnie/adhesions/adhesion-trinquat-et-compagnie-2026"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:inline-flex items-center rounded-xl bg-gradient-leaf px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft transition-transform hover:-translate-y-0.5"
+          >
+            Rejoindre l'association
+          </a>
         <button
           onClick={() => setOpen((o) => !o)}
           className="md:hidden rounded-full p-2 text-foreground hover:bg-accent"

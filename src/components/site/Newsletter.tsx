@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Reveal } from "./Reveal";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle, Mail } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { Send, CheckCircle, Mail, AlertCircle } from "lucide-react";
 
 export function Newsletter() {
   const [email, setEmail] = useState("");
@@ -12,23 +11,44 @@ export function Newsletter() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
+
     setStatus("loading");
-    const { error } = await supabase
-      .from("newsletter_subscribers")
-      .insert({ email: email.trim().toLowerCase() });
-    if (error) {
-      setStatus("error");
-      setMessage(
-        error.code === "23505"
-          ? "Cet email est déjà inscrit."
-          : "Une erreur est survenue, réessayez."
-      );
-    } else {
+    setMessage("");
+
+    try {
+      const res = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setStatus("error");
+        setMessage(data.error || "Erreur lors de l'inscription.");
+        setTimeout(() => {
+          setStatus("idle");
+          setMessage("");
+        }, 4000);
+        return;
+      }
+
       setStatus("success");
       setMessage("Merci ! Vous êtes bien inscrit·e à la newsletter.");
       setEmail("");
+      setTimeout(() => {
+        setStatus("idle");
+        setMessage("");
+      }, 4000);
+    } catch (err) {
+      setStatus("error");
+      setMessage("Erreur serveur. Veuillez réessayer.");
+      setTimeout(() => {
+        setStatus("idle");
+        setMessage("");
+      }, 4000);
     }
-    setTimeout(() => setStatus("idle"), 4000);
   };
 
   return (
@@ -54,7 +74,7 @@ export function Newsletter() {
               </motion.div>
 
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-[1.1]">
-                Restez <span className="italic text-gradient">informé·e</span>
+                Restez <span className="text-gradient">informé·e</span>
               </h2>
               <p className="mt-5 max-w-lg text-base leading-relaxed text-muted-foreground">
                 Recevez chaque mois les actualités du quartier, les prochains événements
@@ -79,24 +99,36 @@ export function Newsletter() {
                   </div>
                   <button
                     type="submit"
-                    disabled={status === "loading" || status === "success"}
+                    disabled={status !== "idle"}
                     className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-leaf px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-glow hover:-translate-y-0.5 disabled:opacity-80"
                   >
                     <Send className="h-4 w-4" />
-                    {status === "loading" ? "..." : "S'inscrire"}
+                    {status === "loading" ? "Inscription..." : "S'inscrire"}
                   </button>
                 </div>
 
                 <AnimatePresence>
-                  {(status === "success" || status === "error") && (
+                  {status === "success" && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                      className={`absolute -bottom-12 left-0 right-0 flex items-center justify-center gap-2 text-sm font-medium ${status === "error" ? "text-destructive" : "text-primary-deep"}`}
+                      className="absolute -bottom-12 left-0 right-0 flex items-center justify-center gap-2 text-sm font-medium text-primary-deep"
                     >
-                      {status === "success" && <CheckCircle className="h-4 w-4" />}
+                      <CheckCircle className="h-4 w-4" />
+                      {message}
+                    </motion.div>
+                  )}
+                  {status === "error" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                      className="absolute -bottom-12 left-0 right-0 flex items-center justify-center gap-2 text-sm font-medium text-red-600"
+                    >
+                      <AlertCircle className="h-4 w-4" />
                       {message}
                     </motion.div>
                   )}

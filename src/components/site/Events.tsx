@@ -8,8 +8,13 @@ import imgJardin from "@/assets/event-jardin.jpg";
 const events = [
   {
     img: imgFete, badge: "À venir",
-    date: "14 Juin 2026", title: "Fête du quartier", place: "Place Trinquat",
+    date: "14 Juillet 2026", title: "Fête du quartier", place: "Square des Aiguerelles",
     desc: "Une soirée magique sous les guirlandes : concert, jeux pour enfants et grande tablée.",
+  },
+  {
+    img: imgJardin, badge: "À venir",
+    date: "31 Juillet 2026", title: "Apero compost & jardinage", place: "City Stade des Aiguerelles",
+    desc: "Un moment convivial pour apprendre à composter et entretenir vos jardins. Apportez vos déchets organiques et votre bonne humeur !",
   },
   {
     img: imgRepas, badge: "Mensuel",
@@ -24,8 +29,8 @@ const events = [
 ];
 
 const more = [
-  { date: "5 Mai", label: "Vide-grenier de printemps" },
-  { date: "12 Mai", label: "Atelier compost & jardinage" },
+  { date: "15 Mars", label: "Marathon Photo" },
+  { date: "12 Avril", label: "Vide-grenier de printemps" },
   { date: "26 Mai", label: "Cinéma en plein air" },
   { date: "2 Juin", label: "Atelier créatif enfants" },
 ];
@@ -38,7 +43,7 @@ export function Events() {
           <Reveal>
             <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">Agenda</span>
             <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-              Nos événements <span className="italic text-gradient">au quartier</span>.
+              Nos <span className="text-gradient">événements</span>  au quartier.
             </h2>
           </Reveal>
         </div>
@@ -78,7 +83,7 @@ export function Events() {
           <div className="mt-12 rounded-3xl border border-border/70 bg-card p-8 md:p-10">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
               <div>
-                <h3 className="text-xl font-semibold">Et aussi ce printemps...</h3>
+                <h3 className="text-xl font-semibold">Et aussi cette année...</h3>
                 <p className="text-sm text-muted-foreground mt-1">Le calendrier complet de l'association.</p>
               </div>
               <ul className="grid sm:grid-cols-2 gap-x-10 gap-y-2 text-sm">

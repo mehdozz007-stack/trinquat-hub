@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { Lock, Mail } from "lucide-react";
+import { loginAdmin, getAdminSession } from "../lib/auth.client";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({
@@ -15,43 +15,59 @@ export const Route = createFileRoute("/admin/login")({
 
 function AdminLogin() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/admin/newsletter" });
-    });
-  }, [navigate]);
+    checkSession();
+  }, []);
+
+  const checkSession = async () => {
+    try {
+      const session = getAdminSession();
+      if (session) {
+        navigate({ to: "/admin/newsletter" });
+      }
+    } catch (e) {
+      // Pas de session, c'est normal
+    } finally {
+      setCheckingSession(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    const fn =
-      mode === "login"
-        ? supabase.auth.signInWithPassword({ email, password })
-        : supabase.auth.signUp({
-            email,
-            password,
-            options: { emailRedirectTo: `${window.location.origin}/admin/newsletter` },
-          });
-    const { error } = await fn;
-    setLoading(false);
-    if (error) {
-      setError(error.message);
-      return;
+
+    try {
+      const session = await loginAdmin(email, password);
+
+      if (!session) {
+        setError("Email ou mot de passe incorrect.");
+        setLoading(false);
+        return;
+      }
+
+      navigate({ to: "/admin/newsletter" });
+    } catch (err) {
+      setError("Erreur lors de la connexion. Veuillez réessayer.");
+      setLoading(false);
     }
-    if (mode === "signup") {
-      setError("Compte créé. Vérifiez vos emails pour confirmer puis connectez-vous. Un administrateur doit ensuite vous attribuer le rôle admin.");
-      setMode("login");
-      return;
-    }
-    navigate({ to: "/admin/newsletter" });
   };
+
+  if (checkingSession) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-6 bg-background relative overflow-hidden">
+        <div className="absolute inset-0 -z-10 bg-gradient-leaf opacity-[0.06]" />
+        <div className="absolute inset-0 -z-10 grain" />
+        <p className="text-muted-foreground">Chargement...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6 bg-background relative overflow-hidden">
@@ -78,7 +94,8 @@ function AdminLogin() {
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-full border border-border/70 bg-background pl-11 pr-5 py-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+              disabled={loading}
+              className="w-full rounded-full border border-border/70 bg-background pl-11 pr-5 py-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:opacity-70"
             />
           </div>
           <div className="relative">
@@ -86,11 +103,12 @@ function AdminLogin() {
             <input
               type="password"
               required
-              minLength={6}
+              minLength={8}
               placeholder="Mot de passe"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-full border border-border/70 bg-background pl-11 pr-5 py-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+              disabled={loading}
+              className="w-full rounded-full border border-border/70 bg-background pl-11 pr-5 py-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:opacity-70"
             />
           </div>
           {error && <p className="text-sm text-destructive">{error}</p>}
@@ -99,16 +117,9 @@ function AdminLogin() {
             disabled={loading}
             className="w-full rounded-full bg-gradient-leaf px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-glow hover:-translate-y-0.5 disabled:opacity-70"
           >
-            {loading ? "..." : mode === "login" ? "Se connecter" : "Créer le compte"}
+            {loading ? "Connexion..." : "Se connecter"}
           </button>
         </form>
-
-        <button
-          onClick={() => { setMode(mode === "login" ? "signup" : "login"); setError(null); }}
-          className="mt-6 w-full text-center text-xs text-muted-foreground hover:text-foreground"
-        >
-          {mode === "login" ? "Pas de compte ? Créer un compte" : "Déjà inscrit ? Se connecter"}
-        </button>
       </div>
     </div>
   );

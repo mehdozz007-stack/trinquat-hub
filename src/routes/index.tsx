@@ -8,6 +8,8 @@ import { JoinSection } from "@/components/site/JoinSection";
 import { Newsletter } from "@/components/site/Newsletter";
 import { Footer } from "@/components/site/Footer";
 
+
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
