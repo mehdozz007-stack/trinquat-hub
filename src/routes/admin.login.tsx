@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Lock, Mail } from "lucide-react";
-import { loginAdmin, getAdminSession } from "../lib/auth.client";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({
@@ -27,7 +26,7 @@ function AdminLogin() {
 
   const checkSession = async () => {
     try {
-      const session = getAdminSession();
+      const session = localStorage.getItem("admin_session");
       if (session) {
         navigate({ to: "/admin/newsletter" });
       }
@@ -44,17 +43,23 @@ function AdminLogin() {
     setError(null);
 
     try {
-      const session = await loginAdmin(email, password);
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
 
-      if (!session) {
-        setError("Email ou mot de passe incorrect.");
+      if (!res.ok) {
+        const data = await res.json() as { error?: string };
+        setError(data.error || "Erreur de connexion.");
         setLoading(false);
         return;
       }
 
       navigate({ to: "/admin/newsletter" });
     } catch (err) {
-      setError("Erreur lors de la connexion. Veuillez réessayer.");
+      setError("Impossible de se connecter.");
       setLoading(false);
     }
   };

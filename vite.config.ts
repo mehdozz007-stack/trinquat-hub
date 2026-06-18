@@ -5,15 +5,18 @@ import tsConfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
   plugins: [
+    tsConfigPaths(),
     react(),
     tailwindcss(),
-    tsConfigPaths(),
   ],
   server: {
     port: 5173,
-  },
-  optimizeDeps: {
-    exclude: ['jose', 'bcryptjs', '@tanstack/start-server-core', '@tanstack/react-start'],
-    include: ['react', 'react-dom', '@tanstack/react-router', '@tanstack/react-query'],
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        rewrite: (path) => path,
+      },
+    },
   },
 })

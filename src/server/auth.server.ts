@@ -71,18 +71,39 @@ export interface AdminSession {
   role: "admin" | "superadmin";
 }
 
+// For Nitro event handlers
 export async function requireAdmin(
-  request: Request,
+  requestOrEvent: Request | { headers: { get: (name: string) => string | null } },
   jwtSecret: string
 ): Promise<AdminSession> {
-  const token = getSessionCookie(request);
+  let token: string | null = null;
+
+  if (requestOrEvent instanceof Request) {
+    token = getSessionCookie(requestOrEvent);
+  } else if ("headers" in requestOrEvent && requestOrEvent.headers.get) {
+    const cookieHeader = requestOrEvent.headers.get("cookie");
+    if (cookieHeader) {
+      const cookies = cookieHeader
+        .split(";")
+        .map((c) => c.trim().split("="))
+        .reduce(
+          (acc, [k, v]) => {
+            acc[k] = v;
+            return acc;
+          },
+          {} as Record<string, string>
+        );
+      token = cookies[COOKIE_NAME] || null;
+    }
+  }
+
   if (!token) {
-    throw new Response("Unauthorized", { status: 401 });
+    throw new Error("401: Unauthorized");
   }
 
   const payload = await verifyJWT(token, jwtSecret);
   if (!payload) {
-    throw new Response("Unauthorized", { status: 401 });
+    throw new Error("401: Unauthorized");
   }
 
   return {

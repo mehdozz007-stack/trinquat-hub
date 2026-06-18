@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-// Server-only imports - commented out for client-only build
-// import { getDB } from "@/server/db.server";
-// import { verifyPassword, signJWT, serializeSessionCookie } from "@/server/auth.server";
-// import { LoginSchema } from "@/server/validation.server";
+import { getDB } from "@/server/db.server";
+import { verifyPassword, signJWT, serializeSessionCookie } from "@/server/auth.server";
+import { LoginSchema } from "@/server/validation.server";
 
 export const Route = createFileRoute("/api/admin/login")({
   server: {

@@ -4,7 +4,6 @@ import {
   Download, Trash2, LogOut, Mail, Search, Users, ShieldCheck, ShieldAlert,
   PenSquare, Send, Save, FileText, Eye, Calendar, CheckCircle2, Clock, X,
 } from "lucide-react";
-import { getAdminSession, logoutAdmin } from "../lib/auth.client";
 
 export const Route = createFileRoute("/admin/newsletter")({
   head: () => ({
@@ -20,7 +19,8 @@ type Subscriber = { id: string; email: string; is_active: boolean; created_at: s
 type AdminSession = { id: string; email: string; role: string };
 type Tab = "compose" | "history" | "subscribers";
 
-// Mock data for demo
+// Mock data
+const MOCK_ADMIN: AdminSession = { id: "admin-1", email: "admin@trinquat.local", role: "admin" };
 const MOCK_SUBSCRIBERS: Subscriber[] = [
   { id: "1", email: "marie.dupont@example.com", is_active: true, created_at: "2024-01-15T10:30:00Z" },
   { id: "2", email: "jean.martin@example.com", is_active: true, created_at: "2024-02-20T14:45:00Z" },
@@ -29,8 +29,6 @@ const MOCK_SUBSCRIBERS: Subscriber[] = [
   { id: "5", email: "anne.thomas@example.com", is_active: true, created_at: "2024-04-12T16:30:00Z" },
   { id: "6", email: "luc.fournier@example.com", is_active: true, created_at: "2024-03-22T13:45:00Z" },
 ];
-
-const MOCK_ADMIN: AdminSession = { id: "admin-1", email: "admin@trinquat.local", role: "admin" };
 
 function AdminNewsletter() {
   const navigate = useNavigate();
@@ -46,13 +44,15 @@ function AdminNewsletter() {
     let mounted = true;
     (async () => {
       try {
-        const session = getAdminSession();
-        if (mounted) {
-          if (session) {
-            setAdmin({ id: session.id, email: session.email, role: session.role });
-          } else {
-            navigate({ to: "/admin/login" });
-          }
+        const res = await fetch("/api/admin/me", {
+          method: "GET",
+          credentials: "include",
+        });
+        if (res.ok) {
+          const data = await res.json() as { id: string; email: string; role: string };
+          if (mounted) setAdmin(data);
+        } else {
+          if (mounted) navigate({ to: "/admin/login" });
         }
       } catch {
         if (mounted) navigate({ to: "/admin/login" });
@@ -60,26 +60,29 @@ function AdminNewsletter() {
         if (mounted) setCheckingSession(false);
       }
     })();
-    return () => { mounted = false; };
   }, [navigate]);
 
-  // Load subscribers - using mock data
+  // Load subscribers from backend
   useEffect(() => {
     if (!admin) return;
     let mounted = true;
     (async () => {
       setSubsLoading(true);
       try {
-        // Simulate API call with mock data
-        await new Promise(resolve => setTimeout(resolve, 400));
-        if (mounted) setSubs(MOCK_SUBSCRIBERS);
+        const res = await fetch("/api/admin/subscribers?limit=100", {
+          method: "GET",
+          credentials: "include",
+        });
+        if (res.ok) {
+          const data = await res.json() as { subscribers?: Subscriber[] };
+          if (mounted) setSubs(data.subscribers || []);
+        }
       } catch {
         if (mounted) setSubs(MOCK_SUBSCRIBERS);
       } finally {
         if (mounted) setSubsLoading(false);
       }
     })();
-    return () => { mounted = false; };
   }, [admin]);
 
   useEffect(() => {
@@ -88,7 +91,14 @@ function AdminNewsletter() {
   }, [checkingSession]);
 
   const handleLogout = async () => {
-    logoutAdmin();
+    try {
+      await fetch("/api/admin/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
     setAdmin(null);
     navigate({ to: "/admin/login" });
   };
@@ -185,9 +195,15 @@ function Subscribers({ subs, setSubs, loading }: { subs: Subscriber[]; setSubs: 
     if (!confirm(`Supprimer ${email} ?`)) return;
     setActionLoading(id);
     try {
-      // Simulate deletion
-      await new Promise(resolve => setTimeout(resolve, 300));
-      setSubs((prev) => prev.filter((s) => s.id !== id));
+      const res = await fetch(`/api/admin/subscribers/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (res.ok) {
+        setSubs((prev) => prev.filter((s) => s.id !== id));
+      } else {
+        alert("Erreur lors de la suppression");
+      }
     } catch {
       alert("Erreur lors de la suppression");
     } finally {
@@ -198,9 +214,17 @@ function Subscribers({ subs, setSubs, loading }: { subs: Subscriber[]; setSubs: 
   const toggleActive = async (s: Subscriber) => {
     setActionLoading(s.id);
     try {
-      // Simulate update
-      await new Promise(resolve => setTimeout(resolve, 300));
-      setSubs((prev) => prev.map((p) => (p.id === s.id ? { ...p, is_active: !s.is_active } : p)));
+      const res = await fetch(`/api/admin/subscribers/${s.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ is_active: !s.is_active }),
+      });
+      if (res.ok) {
+        setSubs((prev) => prev.map((p) => (p.id === s.id ? { ...p, is_active: !s.is_active } : p)));
+      } else {
+        alert("Erreur lors de la mise à jour");
+      }
     } catch {
       alert("Erreur lors de la mise à jour");
     } finally {
@@ -210,26 +234,9 @@ function Subscribers({ subs, setSubs, loading }: { subs: Subscriber[]; setSubs: 
 
   const exportCSV = async () => {
     try {
-      // Generate CSV from current data
-      const headers = ["Email", "Statut", "Inscrit le"];
-      const rows = filtered.map(s => [
-        s.email,
-        s.is_active ? "Actif" : "Désactivé",
-        new Date(s.created_at).toLocaleDateString("fr-FR")
-      ]);
-      
-      const csv = [headers, ...rows]
-        .map(row => row.map(cell => `"${cell}"`).join(","))
-        .join("\n");
-      
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `newsletter_${new Date().toISOString().slice(0, 10)}.csv`;
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch {
+      window.location.href = "/api/admin/subscribers/export";
+    } catch (err) {
+      console.error("Export error:", err);
       alert("Erreur lors de l'export");
     }
   };
