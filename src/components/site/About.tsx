@@ -26,14 +26,16 @@ export function About() {
               </h2>
             </Reveal>
             <Reveal delay={0.1}>
-              <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-                Trinquat & Compagnie est née de l'envie partagée de quelques voisins :
-                redonner au quartier son âme. Depuis, nous organisons fêtes, ateliers,
-                repas et chantiers participatifs — toujours avec simplicité et bonne humeur.
+              <p className="mt-8 text-base md:text-lg leading-relaxed text-muted-foreground">
+                Trinquat & Compagnie est née en 2020, de l'envie partagée de quelques voisins :
+                dynamiser la vie du quartier des Aiguerelles à Montpellier et lui redonner son âme. 
+                Depuis, nous créons du lien social et de la solidarité, améliorons le cadre de vie en favorisant 
+                la présence de la nature et des mobilités douces, et organisons fêtes, ateliers,
+                repas et chantiers participatifs, toujours avec simplicité et bonne humeur.
               </p>
             </Reveal>
             <Reveal delay={0.2}>
-              <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+              <p className="mt-4 text-base md:text-lg leading-relaxed text-muted-foreground">
                 L'association est ouverte à toutes et tous. Une cotisation symbolique,
                 une envie de partager, et le quartier devient un peu plus le vôtre.
               </p>

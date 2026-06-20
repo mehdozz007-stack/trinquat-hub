@@ -40,7 +40,7 @@ export function Footer() {
             <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground/80">Nous trouver</h3>
             <ul className="mt-10 space-y-5">
               <li className="flex items-start gap-4">
-                <span className="mt-1 flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary-deep">
+                <span className="shrink-0 mt-1 flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary-deep">
                   <Mail className="h-5 w-5" />
                 </span>
                 <div>
@@ -49,12 +49,12 @@ export function Footer() {
                 </div>
               </li>
               <li className="flex items-start gap-4">
-                <span className="mt-1 flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary-deep">
-                  <MapPin className="h-5 w-5" />
+                <span className="shrink-0 mt-1 flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary-deep">
+                  <MapPin className="h-5 w-5 -mt-0.5" />
                 </span>
                 <div>
-                  <p className="text-sm font-semibold">Maison pour tous Boris Vian</p>
-                  <p className="text-muted-foreground">Tous les samedis 10h-12h</p>
+                  <p className="text-sm font-semibold">Par adresse</p>
+                  <p className="text-muted-foreground hover:text-foreground">410 Avenue du Pont Trinquat, 34070 Montpellier</p>
                 </div>
               </li>
             </ul>
@@ -63,8 +63,8 @@ export function Footer() {
         <div className="mt-12 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-t border-border/70 pt-6 text-xs text-muted-foreground">
           <p>© {new Date().getFullYear()} Trinquat & Compagnie — Tous droits réservés.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-foreground">Mentions légales</a>
-            <a href="#" className="hover:text-foreground">Politique de confidentialité</a>
+            <Link to="/mentions-legales" className="hover:text-foreground">Mentions légales</Link>
+            <Link to="/politique-confidentialite" className="hover:text-foreground">Politique de confidentialité</Link>
           </div>
         </div>
       </div>

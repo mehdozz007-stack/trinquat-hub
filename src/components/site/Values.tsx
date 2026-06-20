@@ -25,8 +25,10 @@ export function Values() {
               </h2>
             </Reveal>
             <Reveal delay={0.1}>
-              <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-                Trinquat & Compagnie repose sur des valeurs simples mais fortes : la solidarité, le respect de la nature, et la convivialité. Chaque action reflète notre engagement envers le quartier et ses habitants.
+              <p className="mt-8 text-base md:text-lg leading-relaxed text-muted-foreground">
+                Trinquat & Compagnie repose sur des valeurs simples mais fortes : 
+                la solidarité, le respect de la nature, et la convivialité. Chaque 
+                action reflète notre engagement envers le quartier et ses habitants.
               </p>
             </Reveal>
           </div>

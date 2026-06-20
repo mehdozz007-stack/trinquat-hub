@@ -5,9 +5,10 @@ import { Check, Mail, MapPin, Send } from "lucide-react";
 
 export function Contact() {
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const name = String(fd.get("name") ?? "").trim();
@@ -18,9 +19,34 @@ export function Contact() {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.email = "Email invalide.";
     if (message.length < 5) errs.message = "Votre message est un peu court.";
     setErrors(errs);
+    
     if (Object.keys(errs).length === 0) {
-      setSent(true);
-      (e.currentTarget as HTMLFormElement).reset();
+      setLoading(true);
+      try {
+        const response = await fetch("https://formsubmit.co/ajax/contact@trinquatetcompagnie.fr", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            message,
+          }),
+        });
+
+        if (response.ok) {
+          setSent(true);
+          (e.currentTarget as HTMLFormElement).reset();
+        } else {
+          setErrors({ submit: "Erreur lors de l'envoi. Veuillez réessayer." });
+        }
+      } catch (error) {
+        setErrors({ submit: "Erreur de connexion. Veuillez réessayer." });
+      } finally {
+        setLoading(false);
+      }
     }
   }
 
@@ -31,15 +57,15 @@ export function Contact() {
           <Reveal>
             <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">Contact</span>
             <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-              Envie de nous <span className="text-gradient">rejoindre</span> ?
+              Nous <span className="text-gradient">contacter</span> ?
             </h2>
-            <p className="mt-8 text-lg text-muted-foreground leading-relaxed max-w-md">
+            <p className="mt-8 text-base md:text-lg leading-relaxed text-muted-foreground max-w-md">
               Une question, une idée, l'envie d'aider sur un événement ? Écrivez-nous,
               nous répondons toujours, c'est promis !
             </p>
             <ul className="mt-10 space-y-5">
               <li className="flex items-start gap-4">
-                <span className="mt-1 flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary-deep">
+                <span className="shrink-0 mt-1 flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary-deep">
                   <Mail className="h-5 w-5" />
                 </span>
                 <div>
@@ -48,12 +74,12 @@ export function Contact() {
                 </div>
               </li>
               <li className="flex items-start gap-4">
-                <span className="mt-1 flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary-deep">
-                  <MapPin className="h-5 w-5" />
+                <span className="shrink-0 mt-1 flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary-deep">
+                  <MapPin className="h-5 w-5 -mt-0.5" />
                 </span>
                 <div>
-                  <p className="text-sm font-semibold">Maison pour tous Boris Vian</p>
-                  <p className="text-muted-foreground">Tous les samedis 10h-12h</p>
+                  <p className="text-sm font-semibold">Par adresse</p>
+                  <p className="text-muted-foreground hover:text-foreground">410 Avenue du Pont Trinquat, 34070 Montpellier</p>
                 </div>
               </li>
             </ul>
@@ -89,6 +115,11 @@ export function Contact() {
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                     className="space-y-5"
                   >
+                    {errors.submit && (
+                      <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+                        {errors.submit}
+                      </div>
+                    )}
                     <Field label="Votre nom" name="name" type="text" error={errors.name} placeholder="Marie Dupont" />
                     <Field label="Email" name="email" type="email" error={errors.email} placeholder="marie@exemple.fr" />
                     <div>
@@ -102,9 +133,10 @@ export function Contact() {
                     </div>
                     <button
                       type="submit"
-                      className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-4 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5"
+                      disabled={loading}
+                      className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-4 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Envoyer
+                      {loading ? "Envoi..." : "Envoyer"}
                       <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                     </button>
                   </motion.form>

@@ -2,16 +2,18 @@ import { useEffect, useRef, useState } from "react";
 import { useInView, motion } from "framer-motion";
 
 const stats = [
-  { value: 240, suffix: "+", label: "Familles adhérentes" },
-  { value: 38, suffix: "", label: "Événements / an" },
-  { value: 72, suffix: "", label: "Bénévoles actifs" },
-  { value: 12, suffix: " ans", label: "D'aventure collective" },
+  { value: 45, suffix: "+", label: "Familles adhérentes" },
+  { value: 5, suffix: "+", label: "Événements / an" },
+  { value: 20, suffix: "+", label: "Bénévoles actifs" },
+  { value: 6, suffix: " ans", label: "D'aventure collective" },
 ];
 
 function Counter({ to, suffix }: { to: number; suffix: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
   const [n, setN] = useState(0);
+  const [completed, setCompleted] = useState(false);
+
   useEffect(() => {
     if (!inView) return;
     const start = performance.now();
@@ -21,11 +23,24 @@ function Counter({ to, suffix }: { to: number; suffix: string }) {
       const p = Math.min(1, (t - start) / dur);
       const eased = 1 - Math.pow(1 - p, 3);
       setN(Math.round(to * eased));
-      if (p < 1) raf = requestAnimationFrame(tick);
+      if (p < 1) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        setCompleted(true);
+      }
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [inView, to]);
+
+  // Fallback: si l'animation ne s'est pas lancée après 2s, afficher la valeur finale directement
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (!completed) setN(to);
+    }, 2000);
+    return () => clearTimeout(timeout);
+  }, [to, completed]);
+
   return <span ref={ref}>{n}{suffix}</span>;
 }
 

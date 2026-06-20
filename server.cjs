@@ -20,6 +20,16 @@ app.use(express.json());
 let admins = [];
 let subscribers = [];
 
+// Helper function to set cookie (no Secure flag for HTTP development)
+const setCookie = (res, name, value, maxAge) => {
+  res.setHeader('Set-Cookie', `${name}=${value}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${maxAge}`);
+};
+
+// Helper function to clear cookie
+const clearCookie = (res, name) => {
+  res.setHeader('Set-Cookie', `${name}=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0`);
+};
+
 // ========== ADMIN ENDPOINTS ==========
 
 // Bootstrap first admin
@@ -43,7 +53,7 @@ app.post('/api/admin/bootstrap', (req, res) => {
   admins.push(admin);
 
   // Set cookie
-  res.setHeader('Set-Cookie', `tc_admin=${admin.id}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=28800`);
+  setCookie(res, 'tc_admin', admin.id, 28800);
 
   res.json({ ok: true, message: 'Admin created successfully' });
 });
@@ -62,7 +72,7 @@ app.post('/api/admin/login', (req, res) => {
     return res.status(401).json({ error: 'Invalid credentials' });
   }
 
-  res.setHeader('Set-Cookie', `tc_admin=${admin.id}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=28800`);
+  setCookie(res, 'tc_admin', admin.id, 28800);
 
   res.json({ ok: true, message: 'Logged in successfully' });
 });
@@ -82,7 +92,7 @@ app.get('/api/admin/me', (req, res) => {
 
 // Logout
 app.post('/api/admin/logout', (req, res) => {
-  res.setHeader('Set-Cookie', 'tc_admin=; Max-Age=0; HttpOnly; Secure; SameSite=Lax; Path=/');
+  clearCookie(res, 'tc_admin');
   res.json({ ok: true, message: 'Logged out' });
 });
 

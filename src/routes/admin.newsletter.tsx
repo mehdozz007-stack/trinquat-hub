@@ -2,8 +2,9 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
   Download, Trash2, LogOut, Mail, Search, Users, ShieldCheck, ShieldAlert,
-  PenSquare, Send, Save, FileText, Eye, Calendar, CheckCircle2, Clock, X,
+  PenSquare, Send, Save, FileText, AlertCircle, Eye, Calendar, CheckCircle2, Clock, X,
 } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/admin/newsletter")({
   head: () => ({
@@ -18,6 +19,8 @@ export const Route = createFileRoute("/admin/newsletter")({
 type Subscriber = { id: string; email: string; is_active: boolean; created_at: string };
 type AdminSession = { id: string; email: string; role: string };
 type Tab = "compose" | "history" | "subscribers";
+type Draft = { id: string; subject: string; content: string; savedAt: string };
+type SentNewsletter = { id: string; subject: string; content: string; sentAt: string; recipientCount: number };
 
 // Mock data
 const MOCK_ADMIN: AdminSession = { id: "admin-1", email: "admin@trinquat.local", role: "admin" };
@@ -38,6 +41,9 @@ function AdminNewsletter() {
   const [tab, setTab] = useState<Tab>("subscribers");
   const [subs, setSubs] = useState<Subscriber[]>([]);
   const [subsLoading, setSubsLoading] = useState(false);
+  const [drafts, setDrafts] = useState<Draft[]>([]);
+  const [sentNewsletters, setSentNewsletters] = useState<SentNewsletter[]>([]);
+  const [selectedDraft, setSelectedDraft] = useState<Draft | null>(null);
 
   // Check session on mount
   useEffect(() => {
@@ -175,10 +181,26 @@ function AdminNewsletter() {
           <Subscribers subs={subs} setSubs={setSubs} loading={subsLoading} />
         )}
         {tab === "compose" && (
-          <Composer recipientsCount={activeSubs.length} />
+          <Composer 
+            recipientsCount={activeSubs.length} 
+            drafts={drafts}
+            setDrafts={setDrafts}
+            sentNewsletters={sentNewsletters}
+            setSentNewsletters={setSentNewsletters}
+            selectedDraft={selectedDraft}
+            setSelectedDraft={setSelectedDraft}
+          />
         )}
         {tab === "history" && (
-          <History />
+          <History 
+            drafts={drafts} 
+            setDrafts={setDrafts}
+            sentNewsletters={sentNewsletters}
+            onLoadDraft={(draft) => {
+              setSelectedDraft(draft);
+              setTab("compose");
+            }}
+          />
         )}
       </main>
     </div>
@@ -313,37 +335,375 @@ function Subscribers({ subs, setSubs, loading }: { subs: Subscriber[]; setSubs: 
 }
 
 /* =============== Composer =============== */
-function Composer({ recipientsCount }: { recipientsCount: number }) {
+function Composer({ 
+  recipientsCount, 
+  drafts, 
+  setDrafts,
+  sentNewsletters,
+  setSentNewsletters,
+  selectedDraft,
+  setSelectedDraft
+}: { 
+  recipientsCount: number;
+  drafts: Draft[];
+  setDrafts: React.Dispatch<React.SetStateAction<Draft[]>>;
+  sentNewsletters: SentNewsletter[];
+  setSentNewsletters: React.Dispatch<React.SetStateAction<SentNewsletter[]>>;
+  selectedDraft: Draft | null;
+  setSelectedDraft: React.Dispatch<React.SetStateAction<Draft | null>>;
+}) {
+  const [subject, setSubject] = useState(selectedDraft?.subject ?? "");
+  const [content, setContent] = useState(selectedDraft?.content ?? "");
+  const [preview, setPreview] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  // Load draft on selection
+  useEffect(() => {
+    if (selectedDraft) {
+      setSubject(selectedDraft.subject);
+      setContent(selectedDraft.content);
+      setSelectedDraft(null);
+    }
+  }, [selectedDraft, setSelectedDraft]);
+
+  const handleSend = async () => {
+    if (!subject.trim() || !content.trim()) {
+      setMessage({ type: "error", text: "Veuillez remplir le sujet et le contenu." });
+      return;
+    }
+
+    setSending(true);
+    try {
+      const res = await fetch("/api/admin/newsletter/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          subject: subject.trim(),
+          content: content.trim(),
+        }),
+      });
+
+      if (res.ok) {
+        const newNewsletter: SentNewsletter = {
+          id: Date.now().toString(),
+          subject: subject.trim(),
+          content: content.trim(),
+          sentAt: new Date().toISOString(),
+          recipientCount: recipientsCount,
+        };
+        setSentNewsletters((prev) => [newNewsletter, ...prev]);
+        setDrafts((prev) => prev.filter((d) => d.subject !== subject.trim()));
+        setMessage({ type: "success", text: "Newsletter envoyée avec succès !" });
+        setSubject("");
+        setContent("");
+        setPreview(false);
+        setTimeout(() => setMessage(null), 4000);
+      } else {
+        const data = await res.json() as { error?: string };
+        setMessage({ type: "error", text: data.error || "Erreur lors de l'envoi." });
+      }
+    } catch {
+      setMessage({ type: "error", text: "Erreur serveur. Veuillez réessayer." });
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const saveDraft = () => {
+    if (!subject.trim() || !content.trim()) {
+      setMessage({ type: "error", text: "Veuillez remplir le sujet et le contenu pour enregistrer." });
+      return;
+    }
+    const existingDraftIndex = drafts.findIndex((d) => d.subject === subject.trim());
+    const newDraft: Draft = {
+      id: existingDraftIndex >= 0 ? drafts[existingDraftIndex].id : Date.now().toString(),
+      subject: subject.trim(),
+      content: content.trim(),
+      savedAt: new Date().toISOString(),
+    };
+    if (existingDraftIndex >= 0) {
+      setDrafts((prev) => prev.map((d, i) => (i === existingDraftIndex ? newDraft : d)));
+      setMessage({ type: "success", text: "Brouillon mis à jour !" });
+    } else {
+      setDrafts((prev) => [newDraft, ...prev]);
+      setMessage({ type: "success", text: "Brouillon enregistré !" });
+    }
+    setTimeout(() => setMessage(null), 3000);
+  };
+
   return (
-    <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-10 text-center">
-      <div className="flex justify-center mb-4">
-        <Mail className="h-12 w-12 text-muted-foreground/40" />
+    <div className="grid gap-6 lg:grid-cols-3">
+      {/* Editor */}
+      <div className="lg:col-span-2 space-y-6">
+        {/* Subject */}
+        <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-8">
+          <label className="block text-sm font-semibold mb-3">Sujet de la newsletter</label>
+          <input
+            type="text"
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+            placeholder="Ex: Avril - Nouvelles du quartier"
+            className="w-full rounded-xl border border-border/70 bg-background/80 px-4 py-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 transition-all"
+          />
+        </div>
+
+        {/* Content */}
+        <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-8">
+          <label className="block text-sm font-semibold mb-3">Contenu</label>
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Écrivez votre newsletter ici..."
+            rows={12}
+            className="w-full rounded-xl border border-border/70 bg-background/80 px-4 py-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 transition-all resize-none"
+          />
+          <p className="mt-3 text-xs text-muted-foreground">
+            {content.length} caractères
+          </p>
+        </div>
+
+        {/* Message */}
+        {message && (
+          <div className={`rounded-2xl p-4 text-sm flex items-center gap-3 ${
+            message.type === "success"
+              ? "bg-primary/10 border border-primary/30 text-primary-deep"
+              : "bg-destructive/10 border border-destructive/30 text-destructive"
+          }`}>
+            {message.type === "success" ? (
+              <CheckCircle2 className="h-5 w-5 shrink-0" />
+            ) : (
+              <AlertCircle className="h-5 w-5 shrink-0" />
+            )}
+            {message.text}
+          </div>
+        )}
+
+        {/* Actions */}
+        <div className="flex gap-3">
+          <button
+            onClick={() => setPreview(!preview)}
+            className="inline-flex items-center gap-2 rounded-full border border-border/70 px-6 py-3 text-sm font-medium hover:bg-accent transition-all"
+          >
+            <Eye className="h-4 w-4" />
+            {preview ? "Modifier" : "Aperçu"}
+          </button>
+          <button
+            onClick={saveDraft}
+            className="inline-flex items-center gap-2 rounded-full border border-border/70 px-6 py-3 text-sm font-medium hover:bg-accent transition-all"
+          >
+            <Save className="h-4 w-4" />
+            Brouillon
+          </button>
+          <button
+            onClick={handleSend}
+            disabled={sending || !subject.trim() || !content.trim()}
+            className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-leaf px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-glow hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Send className="h-4 w-4" />
+            {sending ? "Envoi en cours..." : "Envoyer maintenant"}
+          </button>
+        </div>
       </div>
-      <h2 className="text-lg font-medium mb-2">Composer une newsletter</h2>
-      <p className="text-sm text-muted-foreground max-w-md mx-auto">
-        La fonctionnalité de composition et d'envoi de newsletters nécessite une configuration d'un service d'envoi d'emails (Resend, SendGrid, etc.).
-      </p>
-      <p className="text-xs text-muted-foreground mt-4 border-t border-border/30 pt-4">
-        Vous pouvez actuellement gérer les abonnés dans l'onglet « Abonnés ». Contactez l'administrateur technique pour activer l'envoi de newsletters.
-      </p>
+
+      {/* Preview / Stats */}
+      <div className="space-y-6">
+        {/* Recipients Stats */}
+        <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary-deep">
+              <Users className="h-5 w-5" />
+            </div>
+            <span className="text-sm font-semibold">Destinataires</span>
+          </div>
+          <div className="space-y-2">
+            <div>
+              <p className="text-xs text-muted-foreground">Abonnés actifs</p>
+              <p className="text-3xl font-bold text-gradient">{recipientsCount}</p>
+            </div>
+            {recipientsCount === 0 && (
+              <p className="text-xs text-destructive bg-destructive/10 rounded-lg p-2">
+                Aucun destinataire. Activez des abonnés d'abord.
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Preview Card */}
+        {preview && (
+          <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant overflow-hidden">
+            <div className="bg-gradient-leaf p-6 text-primary-foreground">
+              <img src={logo} alt="Trinquat & Compagnie" className="h-12 mb-4 object-contain rounded" />
+              <h3 className="text-lg font-semibold">{subject || "Sujet..."}</h3>
+              <p className="text-xs opacity-90 mt-1">Newsletter du quartier</p>
+            </div>
+            <div className="p-6">
+              <p className="text-sm leading-relaxed whitespace-pre-wrap text-muted-foreground">
+                {content || "Votre contenu s'affichera ici..."}
+              </p>
+            </div>
+            <div className="border-t border-border/40 p-4 bg-muted/30">
+              <p className="text-xs text-muted-foreground text-center">
+                Aperçu du rendu dans la boîte mail
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Tips */}
+        <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-6">
+          <h4 className="text-sm font-semibold mb-3">Conseils</h4>
+          <ul className="space-y-2 text-xs text-muted-foreground">
+            <li className="flex gap-2">
+              <span className="text-primary-deep">•</span>
+              <span>Utilisez un sujet accrocheur et court</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="text-primary-deep">•</span>
+              <span>Gardez le message clair et concis</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="text-primary-deep">•</span>
+              <span>Testez l'aperçu avant d'envoyer</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="text-primary-deep">•</span>
+              <span>Vérifiez le nombre de destinataires</span>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }
 
 /* =============== History =============== */
-function History() {
+function History({ 
+  drafts, 
+  setDrafts,
+  sentNewsletters,
+  onLoadDraft 
+}: { 
+  drafts: Draft[];
+  setDrafts: React.Dispatch<React.SetStateAction<Draft[]>>;
+  sentNewsletters: SentNewsletter[];
+  onLoadDraft: (draft: Draft) => void;
+}) {
+  const [tab, setTab] = useState<"drafts" | "sent">("drafts");
+
+  const deleteDraft = (id: string) => {
+    setDrafts((prev) => prev.filter((d) => d.id !== id));
+  };
+
+  const isEmpty = (tab === "drafts" ? drafts.length === 0 : sentNewsletters.length === 0);
+
   return (
-    <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-10 text-center">
-      <div className="flex justify-center mb-4">
-        <Clock className="h-12 w-12 text-muted-foreground/40" />
+    <div className="space-y-6">
+      {/* Tabs */}
+      <div className="inline-flex rounded-full border border-border/60 bg-card/70 backdrop-blur-sm p-1 shadow-soft">
+        <button
+          onClick={() => setTab("drafts")}
+          className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium transition ${
+            tab === "drafts" ? "bg-gradient-leaf text-primary-foreground shadow-soft" : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <FileText className="h-4 w-4" /> Brouillons ({drafts.length})
+        </button>
+        <button
+          onClick={() => setTab("sent")}
+          className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium transition ${
+            tab === "sent" ? "bg-gradient-leaf text-primary-foreground shadow-soft" : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Send className="h-4 w-4" /> Envoyées ({sentNewsletters.length})
+        </button>
       </div>
-      <h2 className="text-lg font-medium mb-2">Historique des newsletters</h2>
-      <p className="text-sm text-muted-foreground max-w-md mx-auto">
-        L'historique des newsletters envoyées s'affichera ici une fois que vous commencerez à envoyer des newsletters.
-      </p>
-      <p className="text-xs text-muted-foreground mt-4 border-t border-border/30 pt-4">
-        Pour le moment, vous pouvez gérer vos abonnés dans l'onglet « Abonnés ».
-      </p>
+
+      {/* Content */}
+      {isEmpty ? (
+        <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-10 text-center">
+          <div className="flex justify-center mb-4">
+            <Clock className="h-12 w-12 text-muted-foreground/40" />
+          </div>
+          <h2 className="text-lg font-medium mb-2">
+            {tab === "drafts" ? "Aucun brouillon" : "Aucune newsletter envoyée"}
+          </h2>
+          <p className="text-sm text-muted-foreground max-w-md mx-auto">
+            {tab === "drafts"
+              ? "Commencez à rédiger une newsletter et enregistrez-la en brouillon."
+              : "Vos newsletters envoyées apparaîtront ici."}
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {tab === "drafts"
+            ? drafts.map((draft) => (
+                <div
+                  key={draft.id}
+                  className="rounded-2xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-soft p-4 flex items-start justify-between gap-4 hover:bg-card/80 transition-colors"
+                >
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-sm truncate">{draft.subject}</h3>
+                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{draft.content}</p>
+                    <p className="text-xs text-muted-foreground/60 mt-2">
+                      Enregistré le {new Date(draft.savedAt).toLocaleDateString("fr-FR", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  </div>
+                  <div className="flex gap-2 flex-shrink-0">
+                    <button
+                      onClick={() => onLoadDraft(draft)}
+                      className="rounded-full bg-primary-soft px-4 py-2 text-xs font-medium text-primary-deep hover:bg-primary-soft/80 transition"
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      onClick={() => deleteDraft(draft.id)}
+                      className="rounded-full p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              ))
+            : sentNewsletters.map((nl) => (
+                <div
+                  key={nl.id}
+                  className="rounded-2xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-soft p-4"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-sm truncate">{nl.subject}</h3>
+                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{nl.content}</p>
+                    </div>
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary-deep">
+                      <CheckCircle2 className="h-5 w-5" />
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
+                    <span>
+                      Envoyée à {nl.recipientCount} destinataire{nl.recipientCount > 1 ? "s" : ""}
+                    </span>
+                    <span>
+                      {new Date(nl.sentAt).toLocaleDateString("fr-FR", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
+                  </div>
+                </div>
+              ))}
+        </div>
+      )}
     </div>
   );
 }

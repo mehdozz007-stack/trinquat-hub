@@ -7,6 +7,8 @@ import { Route as EvenementsRouteComponent } from "./routes/evenements";
 import { Route as ActualitesRouteComponent } from "./routes/actualites";
 import { Route as GalerieRouteComponent } from "./routes/galerie";
 import { Route as ContactRouteComponent } from "./routes/contact";
+import { Route as MentionsLegalesRouteComponent } from "./routes/mentions-legales";
+import { Route as PolitiqueConfidentialiteRouteComponent } from "./routes/politique-confidentialite";
 import { Route as AdminLoginRouteComponent } from "./routes/admin.login";
 import { Route as AdminNewsletterRouteComponent } from "./routes/admin.newsletter";
 
@@ -50,6 +52,18 @@ const contactRoute = ContactRouteComponent.update({
   getParentRoute: () => rootRoute,
 } as any);
 
+const mentionsLegalesRoute = MentionsLegalesRouteComponent.update({
+  id: "/mentions-legales",
+  path: "/mentions-legales",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const politiqueConfidentialiteRoute = PolitiqueConfidentialiteRouteComponent.update({
+  id: "/politique-confidentialite",
+  path: "/politique-confidentialite",
+  getParentRoute: () => rootRoute,
+} as any);
+
 const adminLoginRoute = AdminLoginRouteComponent.update({
   id: "/admin/login",
   path: "/admin/login",
@@ -69,6 +83,8 @@ const routeTree = rootRoute.addChildren([
   actualitesRoute,
   galerieRoute,
   contactRoute,
+  mentionsLegalesRoute,
+  politiqueConfidentialiteRoute,
   adminLoginRoute,
   adminNewsletterRoute,
 ]);
