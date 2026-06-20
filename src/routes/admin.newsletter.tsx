@@ -91,6 +91,52 @@ function AdminNewsletter() {
     })();
   }, [admin]);
 
+  // Load drafts from backend
+  useEffect(() => {
+    if (!admin) return;
+    let mounted = true;
+
+    (async () => {
+      try {
+        const res = await fetch("/api/admin/drafts", {
+          method: "GET",
+          credentials: "include",
+        });
+        if (res.ok) {
+          const data = await res.json() as { drafts: Draft[] };
+          if (mounted) setDrafts(data.drafts);
+        }
+      } catch (err) {
+        console.error("Erreur chargement brouillons:", err);
+      }
+    })();
+
+    return () => { mounted = false; };
+  }, [admin]);
+
+  // Load sent newsletters from backend
+  useEffect(() => {
+    if (!admin) return;
+    let mounted = true;
+
+    (async () => {
+      try {
+        const res = await fetch("/api/admin/sent-newsletters", {
+          method: "GET",
+          credentials: "include",
+        });
+        if (res.ok) {
+          const data = await res.json() as { sent: SentNewsletter[] };
+          if (mounted) setSentNewsletters(data.sent);
+        }
+      } catch (err) {
+        console.error("Erreur chargement historique:", err);
+      }
+    })();
+
+    return () => { mounted = false; };
+  }, [admin]);
+
   useEffect(() => {
     if (checkingSession) return;
     setLoading(false);
@@ -106,6 +152,8 @@ function AdminNewsletter() {
       console.error("Logout error:", err);
     }
     setAdmin(null);
+    setDrafts([]);
+    setSentNewsletters([]);
     navigate({ to: "/admin/login" });
   };
 
@@ -386,12 +434,13 @@ function Composer({
       });
 
       if (res.ok) {
+        const apiData = await res.json() as { id: string; recipientCount: number; sentAt: string };
         const newNewsletter: SentNewsletter = {
-          id: Date.now().toString(),
+          id: apiData.id,
           subject: subject.trim(),
           content: content.trim(),
-          sentAt: new Date().toISOString(),
-          recipientCount: recipientsCount,
+          sentAt: apiData.sentAt,
+          recipientCount: apiData.recipientCount,
         };
         setSentNewsletters((prev) => [newNewsletter, ...prev]);
         setDrafts((prev) => prev.filter((d) => d.subject !== subject.trim()));
@@ -411,26 +460,43 @@ function Composer({
     }
   };
 
-  const saveDraft = () => {
+  const saveDraft = async () => {
     if (!subject.trim() || !content.trim()) {
       setMessage({ type: "error", text: "Veuillez remplir le sujet et le contenu pour enregistrer." });
       return;
     }
-    const existingDraftIndex = drafts.findIndex((d) => d.subject === subject.trim());
-    const newDraft: Draft = {
-      id: existingDraftIndex >= 0 ? drafts[existingDraftIndex].id : Date.now().toString(),
-      subject: subject.trim(),
-      content: content.trim(),
-      savedAt: new Date().toISOString(),
-    };
-    if (existingDraftIndex >= 0) {
-      setDrafts((prev) => prev.map((d, i) => (i === existingDraftIndex ? newDraft : d)));
-      setMessage({ type: "success", text: "Brouillon mis à jour !" });
-    } else {
-      setDrafts((prev) => [newDraft, ...prev]);
-      setMessage({ type: "success", text: "Brouillon enregistré !" });
+
+    try {
+      const res = await fetch("/api/admin/drafts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          subject: subject.trim(),
+          content: content.trim(),
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json() as Draft;
+        setDrafts((prev) => {
+          const index = prev.findIndex((d) => d.id === data.id);
+          if (index >= 0) {
+            return prev.map((d, i) => (i === index ? data : d));
+          } else {
+            return [data, ...prev];
+          }
+        });
+        setMessage({ type: "success", text: "Brouillon enregistré !" });
+        setTimeout(() => setMessage(null), 3000);
+      } else {
+        const error = await res.json() as { error?: string };
+        setMessage({ type: "error", text: error.error || "Erreur lors de la sauvegarde" });
+      }
+    } catch (err) {
+      console.error("Error saving draft:", err);
+      setMessage({ type: "error", text: "Erreur serveur" });
     }
-    setTimeout(() => setMessage(null), 3000);
   };
 
   return (
@@ -592,8 +658,21 @@ function History({
 }) {
   const [tab, setTab] = useState<"drafts" | "sent">("drafts");
 
-  const deleteDraft = (id: string) => {
-    setDrafts((prev) => prev.filter((d) => d.id !== id));
+  const deleteDraft = async (id: string) => {
+    try {
+      const res = await fetch(`/api/admin/drafts/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (res.ok) {
+        setDrafts((prev) => prev.filter((d) => d.id !== id));
+      } else {
+        console.error("Erreur lors de la suppression du brouillon");
+      }
+    } catch (err) {
+      console.error("Error deleting draft:", err);
+    }
   };
 
   const isEmpty = (tab === "drafts" ? drafts.length === 0 : sentNewsletters.length === 0);
@@ -656,7 +735,7 @@ function History({
                       })}
                     </p>
                   </div>
-                  <div className="flex gap-2 flex-shrink-0">
+                  <div className="flex gap-2 shrink-0">
                     <button
                       onClick={() => onLoadDraft(draft)}
                       className="rounded-full bg-primary-soft px-4 py-2 text-xs font-medium text-primary-deep hover:bg-primary-soft/80 transition"
@@ -682,7 +761,7 @@ function History({
                       <h3 className="font-semibold text-sm truncate">{nl.subject}</h3>
                       <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{nl.content}</p>
                     </div>
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary-deep">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary-deep">
                       <CheckCircle2 className="h-5 w-5" />
                     </div>
                   </div>

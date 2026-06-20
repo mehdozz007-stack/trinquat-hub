@@ -1,8 +1,13 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const { v4: uuid } = require('uuid');
+const { initializeDatabase, getDatabase, createAdmin, getDrafts, saveDraft, deleteDraft, getSentNewsletters, saveSentNewsletter } = require('./db.cjs');
 
 const app = express();
+
+// Initialize database
+initializeDatabase();
 
 // CORS configuration with credentials support
 const corsOptions = {
@@ -15,8 +20,15 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 
-// In-memory storage (replace with database later)
+// GLOBAL LOGGING MIDDLEWARE
+app.use((req, res, next) => {
+  process.stderr.write(`[${new Date().toISOString()}] ${req.method} ${req.path} - Cookie: ${req.headers.cookie || 'none'}\n`);
+  next();
+});
+
+// In-memory storage (for admins and subscribers)
 let admins = [];
 let subscribers = [];
 
@@ -34,22 +46,65 @@ const clearCookie = (res, name) => {
 
 // Bootstrap first admin
 app.post('/api/admin/bootstrap', (req, res) => {
+  console.log('📨 Bootstrap endpoint called');
   const { email, password } = req.body;
+  console.log('   Email:', email);
   const bootstrapToken = req.headers['x-bootstrap-token'];
+  console.log('   Bootstrap token provided:', !!bootstrapToken);
 
   if (bootstrapToken !== 'ba8277f9c94b0cc120ecd85dcd66bbc069ef5be2f6b998326cd628571a80127c') {
     return res.status(403).json({ error: 'Invalid bootstrap token' });
   }
 
+  // Check both in-memory and database for existing admin
   if (admins.length > 0) {
     return res.status(400).json({ error: 'Admin already exists' });
+  }
+
+  let db;
+  try {
+    db = getDatabase();
+    console.log('✓ Database connection obtained');
+  } catch (err) {
+    console.error('❌ Failed to get database:', err.message);
+    return res.status(500).json({ error: 'Database unavailable: ' + err.message });
+  }
+
+  try {
+    console.log('🔍 Looking for existing admin with email:', email);
+    const existing = db.prepare('SELECT id FROM admins WHERE email = ?').get(email);
+    if (existing) {
+      console.log('✓ Found existing admin in DB:', existing.id);
+      // Add to in-memory array so subsequent logins work
+      const admin = { id: existing.id, email, password, role: 'admin' };
+      admins.push(admin);
+      setCookie(res, 'tc_admin', admin.id, 28800);
+      return res.json({ ok: true, message: 'Admin already exists, logged in' });
+    }
+    console.log('✗ No existing admin found in DB');
+  } catch (err) {
+    console.error('❌ Error checking existing admin:', err.message);
+    return res.status(500).json({ error: 'Error checking admin: ' + err.message });
   }
 
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password required' });
   }
 
-  const admin = { id: uuid(), email, password, role: 'admin' };
+  const adminId = uuid();
+  console.log('📝 Creating new admin with ID:', adminId);
+  
+  try {
+    // Create in database
+    createAdmin(adminId, email, password);
+    console.log('✓ Admin created successfully in DB');
+  } catch (err) {
+    console.error('❌ Database error during bootstrap:', err.code, err.message);
+    return res.status(500).json({ error: 'Failed to create admin: ' + err.message });
+  }
+  
+  // Also add to memory for compatibility
+  const admin = { id: adminId, email, password, role: 'admin' };
   admins.push(admin);
 
   // Set cookie
@@ -61,15 +116,46 @@ app.post('/api/admin/bootstrap', (req, res) => {
 // Login
 app.post('/api/admin/login', (req, res) => {
   const { email, password } = req.body;
+  console.log('📨 POST /admin/login - Email:', email);
 
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password required' });
   }
 
-  const admin = admins.find(a => a.email === email && a.password === password);
+  let admin = admins.find(a => a.email === email && a.password === password);
+
+  // If not in memory, try to load from database
+  if (!admin) {
+    console.log('   Admin not in memory, checking database...');
+    try {
+      const db = getDatabase();
+      const dbAdmin = db.prepare('SELECT id, email, password_hash FROM admins WHERE email = ?').get(email);
+      if (dbAdmin && dbAdmin.password_hash === password) {
+        console.log('   ✓ Found in DB, adding to memory. ID:', dbAdmin.id);
+        admin = { id: dbAdmin.id, email: dbAdmin.email, password: dbAdmin.password_hash, role: 'admin' };
+        admins.push(admin); // Add to memory for subsequent requests
+      }
+    } catch (err) {
+      console.warn('Could not load admin from database:', err.message);
+    }
+  }
 
   if (!admin) {
     return res.status(401).json({ error: 'Invalid credentials' });
+  }
+
+  // Ensure admin exists in database
+  try {
+    const db = getDatabase();
+    const existing = db.prepare('SELECT id FROM admins WHERE id = ?').get(admin.id);
+    if (!existing) {
+      db.prepare(`
+        INSERT INTO admins (id, email, password_hash, role, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `).run(admin.id, email, password, 'admin', new Date().toISOString(), new Date().toISOString());
+    }
+  } catch (err) {
+    console.warn('Could not sync admin to database:', err.message);
   }
 
   setCookie(res, 'tc_admin', admin.id, 28800);
@@ -83,11 +169,15 @@ app.get('/api/admin/me', (req, res) => {
   if (!cookie) return res.status(401).json({ error: 'Unauthorized' });
 
   const adminId = cookie.split('tc_admin=')[1]?.split(';')[0];
-  const admin = admins.find(a => a.id === adminId);
-
-  if (!admin) return res.status(401).json({ error: 'Unauthorized' });
-
-  res.json({ id: admin.id, email: admin.email, role: admin.role });
+  
+  try {
+    const db = getDatabase();
+    const admin = db.prepare('SELECT id, email, role FROM admins WHERE id = ?').get(adminId);
+    if (!admin) return res.status(401).json({ error: 'Unauthorized' });
+    res.json({ id: admin.id, email: admin.email, role: admin.role });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
 });
 
 // Logout
@@ -125,29 +215,36 @@ app.post('/api/newsletter/subscribe', (req, res) => {
 
 // List subscribers (admin only)
 app.get('/api/admin/subscribers', (req, res) => {
-  const cookie = req.headers.cookie;
-  if (!cookie) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const cookie = req.headers.cookie;
+    if (!cookie) return res.status(401).json({ error: 'Unauthorized' });
 
-  const adminId = cookie.split('tc_admin=')[1]?.split(';')[0];
-  if (!admins.find(a => a.id === adminId)) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    const adminId = cookie.split('tc_admin=')[1]?.split(';')[0];
+    
+    const db = getDatabase();
+    const admin = db.prepare('SELECT id FROM admins WHERE id = ?').get(adminId);
+    if (!admin) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const q = req.query.q;
+    const limit = Math.min(parseInt(req.query.limit || '100'), 1000);
+    const offset = parseInt(req.query.offset || '0');
+
+    let filtered = subscribers;
+    if (q) {
+      filtered = subscribers.filter(s => s.email.toLowerCase().includes(q.toLowerCase()));
+    }
+
+    const paginated = filtered.slice(offset, offset + limit);
+
+    res.json({
+      subscribers: paginated,
+      total: filtered.length,
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
   }
-
-  const q = req.query.q;
-  const limit = Math.min(parseInt(req.query.limit || '100'), 1000);
-  const offset = parseInt(req.query.offset || '0');
-
-  let filtered = subscribers;
-  if (q) {
-    filtered = subscribers.filter(s => s.email.toLowerCase().includes(q.toLowerCase()));
-  }
-
-  const paginated = filtered.slice(offset, offset + limit);
-
-  res.json({
-    subscribers: paginated,
-    total: filtered.length,
-  });
 });
 
 // Toggle subscriber
@@ -208,8 +305,167 @@ app.get('/api/admin/subscribers/export', (req, res) => {
   res.send(csv);
 });
 
-const PORT = 3001;
+// ========== NEWSLETTER DRAFT ENDPOINTS ==========
+
+// TEST ENDPOINT - NO AUTH
+app.get("/api/test/drafts", (req, res) => {
+  try {
+    require('fs').writeFileSync('C:\\workspaceMZ\\trinquat-hub\\test-endpoint-reached.txt', `Test endpoint called at ${new Date().toISOString()}`);
+    res.json({ message: "Test endpoint works!" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/admin/drafts - Récupérer les brouillons
+app.get("/api/admin/drafts", (req, res) => {
+  try {
+    // Try to write to a simple file right away
+    require('fs').appendFileSync('C:\\workspaceMZ\\trinquat-hub\\test-write.txt', `Request received: ${new Date().toISOString()}\n`);
+    
+    const cookie = req.headers.cookie;
+    const adminId = cookie?.split('tc_admin=')[1]?.split(';')[0];
+
+    if (!adminId) {
+      return res.status(401).json({ error: "Non authentifié" });
+    }
+
+    // Always use database for GET requests - more reliable than in-memory
+    const db = getDatabase();
+    const admin = db.prepare('SELECT id, email FROM admins WHERE id = ?').get(adminId);
+
+    if (!admin) {
+      return res.status(401).json({ error: "Admin introuvable" });
+    }
+
+    const adminDrafts = getDrafts(admin.id);
+    res.json({ drafts: adminDrafts });
+  } catch (err) {
+    res.status(500).json({ error: "Erreur serveur", detail: err.message });
+  }
+});
+
+// POST /api/admin/drafts - Sauvegarder un brouillon
+app.post("/api/admin/drafts", (req, res) => {
+  const { subject, content } = req.body;
+  
+  // Parse cookie from header (like other endpoints)
+  const cookie = req.headers.cookie;
+  const adminId = cookie?.split('tc_admin=')[1]?.split(';')[0];
+
+  if (!adminId) {
+    return res.status(401).json({ error: "Non authentifié" });
+  }
+
+  if (!subject || !content) {
+    return res.status(400).json({ error: "Subject et content requis" });
+  }
+
+  const admin = admins.find((a) => a.id === adminId);
+  if (!admin) {
+    return res.status(401).json({ error: "Admin introuvable" });
+  }
+
+  try {
+    const draft = saveDraft(admin.id, subject, content);
+    res.json(draft);
+  } catch (err) {
+    console.error("Error saving draft:", err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
+
+// DELETE /api/admin/drafts/:id - Supprimer un brouillon
+app.delete("/api/admin/drafts/:id", (req, res) => {
+  const { id } = req.params;
+  const cookie = req.headers.cookie;
+  const adminId = cookie?.split('tc_admin=')[1]?.split(';')[0];
+
+  if (!adminId) {
+    return res.status(401).json({ error: "Non authentifié" });
+  }
+
+  const admin = admins.find((a) => a.id === adminId);
+  if (!admin) {
+    return res.status(401).json({ error: "Admin introuvable" });
+  }
+
+  try {
+    deleteDraft(id, admin.id);
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Error deleting draft:", err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
+
+// GET /api/admin/sent-newsletters - Récupérer l'historique
+app.get("/api/admin/sent-newsletters", (req, res) => {
+  try {
+    const cookie = req.headers.cookie;
+    const adminId = cookie?.split('tc_admin=')[1]?.split(';')[0];
+
+    if (!adminId) {
+      return res.status(401).json({ error: "Non authentifié" });
+    }
+
+    const db = getDatabase();
+    const admin = db.prepare('SELECT id FROM admins WHERE id = ?').get(adminId);
+    if (!admin) {
+      return res.status(401).json({ error: "Admin introuvable" });
+    }
+
+    const adminSent = getSentNewsletters(admin.id);
+    res.json({ sent: adminSent });
+  } catch (err) {
+    console.error("Error fetching sent newsletters:", err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
+
+// POST /api/admin/newsletter/send
+app.post("/api/admin/newsletter/send", (req, res) => {
+  const { subject, content } = req.body;
+  const cookie = req.headers.cookie;
+  const adminId = cookie?.split('tc_admin=')[1]?.split(';')[0];
+
+  if (!adminId) {
+    return res.status(401).json({ error: "Non authentifié" });
+  }
+
+  if (!subject || !content) {
+    return res.status(400).json({ error: "Subject et content requis" });
+  }
+
+  const admin = admins.find((a) => a.id === adminId);
+  if (!admin) {
+    return res.status(401).json({ error: "Admin introuvable" });
+  }
+
+  const activeSubscribers = subscribers.filter((s) => s.is_active);
+  if (activeSubscribers.length === 0) {
+    return res.status(400).json({ error: "Aucun abonné actif" });
+  }
+
+  try {
+    const newsletter = saveSentNewsletter(admin.id, subject, content, activeSubscribers.length);
+
+    res.json({
+      success: true,
+      id: newsletter.id,
+      recipientCount: newsletter.recipientCount,
+      sentAt: newsletter.sentAt,
+    });
+  } catch (err) {
+    console.error("Error sending newsletter:", err);
+    res.status(500).json({ error: "Erreur lors de l'envoi" });
+  }
+});
+
+const PORT = 3002;
 app.listen(PORT, () => {
+  const fs = require('fs');
+  fs.writeFileSync('C:\\workspaceMZ\\trinquat-hub\\server-started.txt', `Server started at ${new Date().toISOString()}`);
   console.log(`✅ Backend server running on http://localhost:${PORT}`);
   console.log(`📝 Bootstrap token: ba8277f9c94b0cc120ecd85dcd66bbc069ef5be2f6b998326cd628571a80127c`);
 });

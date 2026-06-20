@@ -1,12 +1,11 @@
 name = "trinquat-compagnie"
-main = ".output/server/index.mjs"
 compatibility_date = "2025-05-01"
 compatibility_flags = ["nodejs_compat"]
 
 [[d1_databases]]
-binding = "DB"
+binding = "trinquat_newsletter"
 database_name = "trinquat_newsletter"
-database_id = "local"  # DEV: Use local D1 emulator. PROD: Replace with actual D1 ID
+database_id = "db2895c7-7a16-4bf3-90b6-72485f80ea94"
 migrations_dir = "migrations"
 
 [env.production]
@@ -14,7 +13,7 @@ vars = { ENVIRONMENT = "production" }
 [[env.production.d1_databases]]
 binding = "DB"
 database_name = "trinquat_newsletter"
-database_id = "REPLACE_WITH_ACTUAL_D1_ID"
+database_id = "db2895c7-7a16-4bf3-90b6-72485f80ea94"
 
 # Secrets configuration (for production use):
 # wrangler secret put JWT_SECRET --env production

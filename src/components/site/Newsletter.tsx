@@ -1,7 +1,44 @@
 import { useState } from "react";
 import { Reveal } from "./Reveal";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, cubicBezier } from "framer-motion";
 import { Send, Mail, AlertCircle, CheckCircle2 } from "lucide-react";
+
+const easeCustom = cubicBezier(0.22, 1, 0.36, 1);
+const easeBounce = cubicBezier(0.34, 1.56, 0.64, 1);
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: { duration: 0.3 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: easeCustom },
+  },
+};
+
+const iconVariants = {
+  hidden: { opacity: 0, scale: 0.5, rotate: -10 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    rotate: 0,
+    transition: { duration: 0.6, ease: easeBounce },
+  },
+};
 
 export function Newsletter() {
   const [email, setEmail] = useState("");
@@ -56,16 +93,40 @@ export function Newsletter() {
                     key="success"
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.3 }}
                     className="flex flex-col items-center py-12"
                   >
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-leaf text-primary-foreground shadow-glow">
+                    <motion.div
+                      variants={iconVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-leaf text-primary-foreground shadow-glow"
+                    >
                       <CheckCircle2 className="h-7 w-7" />
-                    </div>
-                    <h3 className="mt-6 text-3xl font-semibold">Newsletter <span className="text-gradient">confirmée</span>!</h3> 
-                    <p className="mt-2 max-w-sm text-muted-foreground">
+                    </motion.div>
+                    <motion.h3
+                      variants={itemVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="mt-6 text-3xl font-semibold"
+                    >
+                      Newsletter <span className="text-gradient">confirmée</span>
+                    </motion.h3>
+                    <motion.p
+                      variants={itemVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="mt-2 max-w-sm text-muted-foreground"
+                    >
                       Merci pour votre inscription. Vous recevrez bientôt nos actualités et nos événements.
-                    </p>
-                    <button
+                    </motion.p>
+                    <motion.button
+                      variants={itemVariants}
+                      initial="hidden"
+                      animate="visible"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                       onClick={() => {
                         setStatus("idle");
                         setEmail("");
@@ -74,23 +135,47 @@ export function Newsletter() {
                       className="mt-8 inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium hover:bg-accent"
                     >
                       S'inscrire à nouveau
-                    </button>
+                    </motion.button>
                   </motion.div>
                 ) : status === "error" ? (
                   <motion.div
                     key="error"
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.3 }}
                     className="flex flex-col items-center py-12"
                   >
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10 text-destructive shadow-soft">
+                    <motion.div
+                      variants={iconVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10 text-destructive shadow-soft"
+                    >
                       <AlertCircle className="h-7 w-7" />
-                    </div>
-                    <h3 className="mt-6 text-2xl font-semibold">Oups, une erreur</h3>
-                    <p className="mt-2 max-w-sm text-muted-foreground">
+                    </motion.div>
+                    <motion.h3
+                      variants={itemVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="mt-6 text-2xl font-semibold"
+                    >
+                      Oups, une erreur
+                    </motion.h3>
+                    <motion.p
+                      variants={itemVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="mt-2 max-w-sm text-muted-foreground"
+                    >
                       {message}
-                    </p>
-                    <button
+                    </motion.p>
+                    <motion.button
+                      variants={itemVariants}
+                      initial="hidden"
+                      animate="visible"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                       onClick={() => {
                         setStatus("idle");
                         setMessage("");
@@ -98,35 +183,53 @@ export function Newsletter() {
                       className="mt-8 inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium hover:bg-accent"
                     >
                       Réessayer
-                    </button>
+                    </motion.button>
                   </motion.div>
                 ) : (
                   <motion.div
                     key="form"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
                     className="flex flex-col items-center w-full"
                   >
                     <motion.div
                       initial={{ scale: 0.8, opacity: 0 }}
                       whileInView={{ scale: 1, opacity: 1 }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                      transition={{ duration: 0.5, ease: easeCustom }}
                       className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-leaf text-primary-foreground shadow-soft mb-8"
                     >
                       <Mail className="h-6 w-6" />
                     </motion.div>
 
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-[1.1]">
+                    <motion.h2
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.1 }}
+                      className="text-3xl md:text-4xl lg:text-5xl font-medium leading-[1.1]"
+                    >
                       Restez <span className="text-gradient">informé·e</span>
-                    </h2>
-                    <p className="mt-5 max-w-lg text-sm md:text-lg leading-relaxed text-muted-foreground">
+                    </motion.h2>
+                    <motion.p
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                      className="mt-5 max-w-lg text-sm md:text-lg leading-relaxed text-muted-foreground"
+                    >
                       Recevez chaque mois les actualités du quartier, les prochains événements
                       et les coulisses de l'association directement dans votre boîte mail.
-                    </p>
+                    </motion.p>
 
-                    <form
+                    <motion.form
                       onSubmit={handleSubmit}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.3 }}
                       className="mt-10 w-full max-w-md"
                     >
                       <div className="flex flex-col sm:flex-row gap-3">
@@ -141,20 +244,28 @@ export function Newsletter() {
                             className="w-full rounded-full border border-border/70 bg-background/80 pl-11 pr-5 py-3.5 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 transition-all"
                           />
                         </div>
-                        <button
+                        <motion.button
                           type="submit"
                           disabled={status !== "idle"}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
                           className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-leaf px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-glow hover:-translate-y-0.5 disabled:opacity-80"
                         >
                           <Send className="h-4 w-4" />
                           {status === "loading" ? "Inscription..." : "S'inscrire"}
-                        </button>
+                        </motion.button>
                       </div>
-                    </form>
+                    </motion.form>
 
-                    <p className="mt-6 text-xs text-muted-foreground/70">
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.4 }}
+                      className="mt-6 text-xs text-muted-foreground/70"
+                    >
                       Pas de spam, promis. Vous pouvez vous désinscrire à tout moment.
-                    </p>
+                    </motion.p>
                   </motion.div>
                 )}
               </AnimatePresence>
