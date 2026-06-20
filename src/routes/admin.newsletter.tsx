@@ -201,28 +201,30 @@ function AdminNewsletter() {
               <p className="text-xs text-muted-foreground">{admin.email}</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Link to="/" className="rounded-full border border-border/70 px-4 py-2 text-xs hover:bg-accent">Site</Link>
-            <button onClick={handleLogout} className="inline-flex items-center gap-1.5 rounded-full border border-border/70 px-4 py-2 text-xs hover:bg-accent">
-              <LogOut className="h-3.5 w-3.5" /> Déconnexion
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Link to="/" className="rounded-full border border-border/70 px-3 sm:px-4 py-2 text-xs sm:text-sm hover:bg-accent transition-colors">Site</Link>
+            <button onClick={handleLogout} className="inline-flex items-center gap-1 sm:gap-1.5 rounded-full border border-border/70 px-2 sm:px-4 py-2 text-xs sm:text-sm hover:bg-accent transition-colors">
+              <LogOut className="h-3 sm:h-3.5 w-3 sm:w-3.5 shrink-0" /> <span className="hidden sm:inline">Déconnexion</span>
             </button>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-6 py-10">
+      <main className="mx-auto max-w-6xl px-4 sm:px-6 py-6 sm:py-10">
         {/* Stats */}
-        <div className="grid gap-4 sm:grid-cols-3 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
           <StatCard icon={<Users className="h-4 w-4" />} label="Abonnés actifs" value={activeSubs.length} />
           <StatCard icon={<Mail className="h-4 w-4" />} label="Total abonnés" value={subs.length} />
           <StatCard icon={<Mail className="h-4 w-4" />} label="Désactivés" value={subs.filter(s => !s.is_active).length} />
         </div>
 
         {/* Tabs */}
-        <div className="inline-flex rounded-full border border-border/60 bg-card/70 backdrop-blur-sm p-1 mb-6 shadow-soft">
+        <div className="overflow-x-auto mb-6 sm:mb-8">
+        <div className="inline-flex rounded-full border border-border/60 bg-card/70 backdrop-blur-sm p-1 shadow-soft">
           <TabBtn active={tab === "subscribers"} onClick={() => setTab("subscribers")} icon={<Users className="h-4 w-4" />} label="Abonnés" />
           <TabBtn active={tab === "compose"} onClick={() => setTab("compose")} icon={<PenSquare className="h-4 w-4" />} label="Composer" />
           <TabBtn active={tab === "history"} onClick={() => setTab("history")} icon={<FileText className="h-4 w-4" />} label="Historique" />
+        </div>
         </div>
 
         {tab === "subscribers" && (
@@ -320,29 +322,29 @@ function Subscribers({ subs, setSubs, loading }: { subs: Subscriber[]; setSubs: 
   }
 
   return (
-    <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant overflow-hidden">
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-5 border-b border-border/40">
-        <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+    <div className="rounded-2xl sm:rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant overflow-hidden">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center p-3 sm:p-5 border-b border-border/40">
+        <div className="relative flex-1 w-full">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
             value={query} onChange={(e) => setQuery(e.target.value)}
-            placeholder="Rechercher un email..."
-            className="w-full rounded-full border border-border/70 bg-background pl-11 pr-5 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            placeholder="Rechercher..."
+            className="w-full rounded-full border border-border/70 bg-background pl-10 pr-4 py-2 sm:py-2.5 text-xs sm:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           />
         </div>
         <button onClick={exportCSV} disabled={filtered.length === 0}
-          className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-leaf px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-glow hover:-translate-y-0.5 disabled:opacity-50">
-          <Download className="h-4 w-4" /> Exporter CSV
+          className="inline-flex items-center justify-center gap-1 sm:gap-2 rounded-full bg-gradient-leaf px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-glow hover:-translate-y-0.5 disabled:opacity-50 whitespace-nowrap">
+          <Download className="h-3.5 sm:h-4 w-3.5 sm:w-4" /> <span className="hidden sm:inline">Exporter</span><span className="sm:hidden">CSV</span>
         </button>
       </div>
 
       {filtered.length === 0 ? (
-        <div className="p-16 text-center text-sm text-muted-foreground">
+        <div className="p-8 sm:p-16 text-center text-xs sm:text-sm text-muted-foreground">
           {subs.length === 0 ? "Aucun abonné pour le moment." : "Aucun abonné correspondant à votre recherche."}
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto -mx-4 sm:mx-0">
+          <table className="w-full text-xs sm:text-sm">
             <thead className="bg-muted/30 text-xs uppercase tracking-wider text-muted-foreground">
               <tr>
                 <th className="text-left px-5 py-3 font-medium">Email</th>
@@ -500,39 +502,39 @@ function Composer({
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-3">
+    <div className="grid gap-4 sm:gap-6 lg:grid-cols-3 grid-cols-1">
       {/* Editor */}
-      <div className="lg:col-span-2 space-y-6">
+      <div className="lg:col-span-2 space-y-4 sm:space-y-6">
         {/* Subject */}
-        <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-8">
-          <label className="block text-sm font-semibold mb-3">Sujet de la newsletter</label>
+        <div className="rounded-2xl sm:rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-4 sm:p-8">
+          <label className="block text-xs sm:text-sm font-semibold mb-2 sm:mb-3">Sujet</label>
           <input
             type="text"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            placeholder="Ex: Avril - Nouvelles du quartier"
-            className="w-full rounded-xl border border-border/70 bg-background/80 px-4 py-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 transition-all"
+            placeholder="Sujet de la newsletter..."
+            className="w-full rounded-lg sm:rounded-xl border border-border/70 bg-background/80 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 transition-all"
           />
         </div>
 
         {/* Content */}
-        <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-8">
-          <label className="block text-sm font-semibold mb-3">Contenu</label>
+        <div className="rounded-2xl sm:rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-4 sm:p-8">
+          <label className="block text-xs sm:text-sm font-semibold mb-2 sm:mb-3">Contenu</label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Écrivez votre newsletter ici..."
-            rows={12}
-            className="w-full rounded-xl border border-border/70 bg-background/80 px-4 py-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 transition-all resize-none"
+            placeholder="Écrivez votre newsletter..."
+            rows={8}
+            className="w-full rounded-lg sm:rounded-xl border border-border/70 bg-background/80 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 transition-all resize-none"
           />
-          <p className="mt-3 text-xs text-muted-foreground">
+          <p className="mt-2 sm:mt-3 text-xs text-muted-foreground">
             {content.length} caractères
           </p>
         </div>
 
         {/* Message */}
         {message && (
-          <div className={`rounded-2xl p-4 text-sm flex items-center gap-3 ${
+          <div className={`rounded-lg sm:rounded-2xl p-3 sm:p-4 text-xs sm:text-sm flex items-center gap-2 sm:gap-3 ${
             message.type === "success"
               ? "bg-primary/10 border border-primary/30 text-primary-deep"
               : "bg-destructive/10 border border-destructive/30 text-destructive"
@@ -547,46 +549,46 @@ function Composer({
         )}
 
         {/* Actions */}
-        <div className="flex gap-3">
+        <div className="flex flex-col xs:flex-row gap-2 sm:gap-3">
           <button
             onClick={() => setPreview(!preview)}
-            className="inline-flex items-center gap-2 rounded-full border border-border/70 px-6 py-3 text-sm font-medium hover:bg-accent transition-all"
+            className="inline-flex items-center justify-center gap-1 sm:gap-2 rounded-full border border-border/70 px-3 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-medium hover:bg-accent transition-all active:scale-95"
           >
-            <Eye className="h-4 w-4" />
-            {preview ? "Modifier" : "Aperçu"}
+            <Eye className="h-4 sm:h-4 w-4 sm:w-4 shrink-0" />
+            <span>{preview ? "Modifier" : "Aperçu"}</span>
           </button>
           <button
             onClick={saveDraft}
-            className="inline-flex items-center gap-2 rounded-full border border-border/70 px-6 py-3 text-sm font-medium hover:bg-accent transition-all"
+            className="inline-flex items-center justify-center gap-1 sm:gap-2 rounded-full border border-border/70 px-3 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-medium hover:bg-accent transition-all active:scale-95"
           >
-            <Save className="h-4 w-4" />
-            Brouillon
+            <Save className="h-4 sm:h-4 w-4 sm:w-4 shrink-0" />
+            <span>Brouillon</span>
           </button>
           <button
             onClick={handleSend}
             disabled={sending || !subject.trim() || !content.trim()}
-            className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-leaf px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-glow hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 inline-flex items-center justify-center gap-1 sm:gap-2 rounded-full bg-gradient-leaf px-3 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-glow hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
           >
-            <Send className="h-4 w-4" />
-            {sending ? "Envoi en cours..." : "Envoyer maintenant"}
+            <Send className="h-4 sm:h-4 w-4 sm:w-4 shrink-0" />
+            <span>{sending ? "Envoi en cours..." : "Envoyer"}</span>
           </button>
         </div>
       </div>
 
       {/* Preview / Stats */}
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Recipients Stats */}
-        <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary-deep">
-              <Users className="h-5 w-5" />
+        <div className="rounded-2xl sm:rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-4 sm:p-6">
+          <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <div className="flex h-8 sm:h-10 w-8 sm:w-10 items-center justify-center rounded-lg sm:rounded-xl bg-primary-soft text-primary-deep">
+              <Users className="h-4 sm:h-5 w-4 sm:w-5" />
             </div>
-            <span className="text-sm font-semibold">Destinataires</span>
+            <span className="text-xs sm:text-sm font-semibold">Destinataires</span>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-1 sm:space-y-2">
             <div>
               <p className="text-xs text-muted-foreground">Abonnés actifs</p>
-              <p className="text-3xl font-bold text-gradient">{recipientsCount}</p>
+              <p className="text-2xl sm:text-3xl font-bold text-gradient">{recipientsCount}</p>
             </div>
             {recipientsCount === 0 && (
               <p className="text-xs text-destructive bg-destructive/10 rounded-lg p-2">
@@ -618,9 +620,9 @@ function Composer({
         )}
 
         {/* Tips */}
-        <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-6">
-          <h4 className="text-sm font-semibold mb-3">Conseils</h4>
-          <ul className="space-y-2 text-xs text-muted-foreground">
+        <div className="rounded-2xl sm:rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-4 sm:p-6">
+          <h4 className="text-xs sm:text-sm font-semibold mb-2 sm:mb-3">Conseils</h4>
+          <ul className="space-y-1 sm:space-y-2 text-xs text-muted-foreground">
             <li className="flex gap-2">
               <span className="text-primary-deep">•</span>
               <span>Utilisez un sujet accrocheur et court</span>
@@ -678,8 +680,9 @@ function History({
   const isEmpty = (tab === "drafts" ? drafts.length === 0 : sentNewsletters.length === 0);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Tabs */}
+      <div className="overflow-x-auto">
       <div className="inline-flex rounded-full border border-border/60 bg-card/70 backdrop-blur-sm p-1 shadow-soft">
         <button
           onClick={() => setTab("drafts")}
@@ -698,17 +701,18 @@ function History({
           <Send className="h-4 w-4" /> Envoyées ({sentNewsletters.length})
         </button>
       </div>
+      </div>
 
       {/* Content */}
       {isEmpty ? (
-        <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-10 text-center">
-          <div className="flex justify-center mb-4">
-            <Clock className="h-12 w-12 text-muted-foreground/40" />
+        <div className="rounded-2xl sm:rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant p-6 sm:p-10 text-center">
+          <div className="flex justify-center mb-3 sm:mb-4">
+            <Clock className="h-10 sm:h-12 w-10 sm:w-12 text-muted-foreground/40" />
           </div>
-          <h2 className="text-lg font-medium mb-2">
+          <h2 className="text-base sm:text-lg font-medium mb-2">
             {tab === "drafts" ? "Aucun brouillon" : "Aucune newsletter envoyée"}
           </h2>
-          <p className="text-sm text-muted-foreground max-w-md mx-auto">
+          <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto">
             {tab === "drafts"
               ? "Commencez à rédiger une newsletter et enregistrez-la en brouillon."
               : "Vos newsletters envoyées apparaîtront ici."}
@@ -791,9 +795,9 @@ function History({
 
 function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: number }) {
   return (
-    <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm p-5 shadow-soft">
-      <div className="flex items-center gap-2 text-muted-foreground text-xs">{icon}<span>{label}</span></div>
-      <div className="mt-2 text-3xl font-medium">{value}</div>
+    <div className="rounded-2xl sm:rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm p-4 sm:p-5 shadow-soft">
+      <div className="flex items-center gap-1.5 sm:gap-2 text-muted-foreground text-xs">{icon}<span className="truncate">{label}</span></div>
+      <div className="mt-2 text-2xl sm:text-3xl font-medium">{value}</div>
     </div>
   );
 }
@@ -802,11 +806,11 @@ function TabBtn({ active, onClick, icon, label }: { active: boolean; onClick: ()
   return (
     <button
       onClick={onClick}
-      className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium transition ${
+      className={`inline-flex items-center gap-1 sm:gap-2 rounded-full px-2 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium transition whitespace-nowrap active:scale-95 ${
         active ? "bg-gradient-leaf text-primary-foreground shadow-soft" : "text-muted-foreground hover:text-foreground"
       }`}
     >
-      {icon} {label}
+      {icon} <span>{label}</span>
     </button>
   );
 }
