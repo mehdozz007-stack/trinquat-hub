@@ -21,7 +21,7 @@ export const Route = createFileRoute("/association")({
 
 function AssociationPage() {
   return (
-    <main className="min-h-dvh bg-background text-foreground">
+    <main className="flex flex-col min-h-screen">
       <Navbar />
       <PageHeader
         eyebrow="Qui sommes-nous"

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "./Reveal";
 import { ArrowUpRight, X } from "lucide-react";
 import g7 from "@/assets/gallery-7.jpg";
-import VideGrenier from "@/assets/Vide-grenier.jpg";
+import VideGrenier from "@/assets/Vide-grenier2.jpg";
 import g10 from "@/assets/gallery-10.jpg";
 import g11 from "@/assets/gallery-11.jpg";
 const news = [

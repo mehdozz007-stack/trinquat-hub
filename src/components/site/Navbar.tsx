@@ -80,13 +80,15 @@ export function Navbar() {
                 </Link>
               </li>
             ))}
-            <Link
-              to="/contact"
+            <a
+              href="https://www.helloasso.com/associations/trinquat-et-compagnie/adhesions/adhesion-trinquat-et-compagnie-2026"
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setOpen(false)}
               className="mt-3 inline-flex items-center justify-center rounded-full bg-gradient-leaf px-5 py-3 text-sm font-semibold text-primary-foreground"
             >
               Rejoindre l'association
-            </Link>
+            </a>
           </ul>
         </motion.div>
       )}

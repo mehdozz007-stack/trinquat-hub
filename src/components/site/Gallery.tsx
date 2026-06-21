@@ -4,23 +4,24 @@ import { X } from "lucide-react";
 import { Reveal } from "./Reveal";
 //import g1 from "@/assets/gallery-1.jpg";
 import g1 from "@/assets/gallery-1.jpg";
-import g4 from "@/assets/gallery-4.jpg";
 import g5 from "@/assets/gallery-5.jpg";
 import g8 from "@/assets/gallery-8.jpg";
 import g9 from "@/assets/gallery-9.jpg";
-
+import g10 from "@/assets/vide-grenier1.jpg";
+import g11 from "@/assets/Vide-grenier2.jpg";
 const photos = [
   { src: g1, alt: "Composteur installé dans le quartier", h: "row-span-2" },
-  { src: g4, alt: "Vide-grenier de printemps", h: "" },
   { src: g8, alt: "Voisins réunis sous un arbre", h: "" },
   { src: g5, alt: "Atelier créatif enfants", h: "" },
   { src: g9, alt: "La fête intergénérationnelle de la soupe", h: "" },
+  { src: g10, alt: "Vide-grenier de printemps", h: "" },
+  { src: g11, alt: "Vide-grenier de printemps", h: "" },
 ];
 
 export function Gallery() {
   const [open, setOpen] = useState<number | null>(null);
   return (
-    <section id="gallery" className="py-12 md:py-20 bg-secondary/40">
+    <section id="gallery" className="py-12 md:py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <Reveal>
           <div className="max-w-2xl">

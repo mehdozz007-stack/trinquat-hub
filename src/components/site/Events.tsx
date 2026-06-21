@@ -4,7 +4,7 @@ import { Reveal } from "./Reveal";
 import { Link } from "@tanstack/react-router";
 import { Calendar, MapPin, ArrowUpRight, X } from "lucide-react";
 import imgFete from "@/assets/gallery-8.jpg";
-import imgRepas from "@/assets/event-repas.jpg";
+import imgRepas from "@/assets/gallery-9.jpg";
 import imgJardin from "@/assets/event-jardin.jpg";
 import g7 from "@/assets/gallery-7.jpg";
 import g11 from "@/assets/gallery-11.jpg";
@@ -22,7 +22,7 @@ const events = [
   },
   {
     img: imgRepas, badge: "Mensuel",
-    date: "Chaque 1er dimanche", title: "Repas partagé", place: "Maison de quartier",
+    date: "Chaque 1er dimanche", title: "Repas partagé", place: "Square des Aiguerelles",
     desc: "Chacun apporte un plat à partager. Un rituel devenu incontournable.",
   },
   {

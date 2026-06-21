@@ -1,4 +1,5 @@
 import { Reveal } from "./Reveal";
+import { useState } from "react";
 import { Leaf, Users, HandHeart, Sparkles, TreePine, Heart } from "lucide-react";
 
 const values = [
@@ -11,6 +12,8 @@ const values = [
 ];
 
 export function Values() {
+  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+
   return (
     <section id="values" className="relative py-12 md:py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -36,7 +39,12 @@ export function Values() {
           <div className="lg:col-span-7 grid sm:grid-cols-2 gap-4">
                       {values.map((v, i) => (
                         <Reveal key={v.title} delay={i * 0.05}>
-                          <div className="group relative h-full rounded-2xl border border-border/70 bg-card p-7 transition-all duration-500 hover:-translate-y-1 hover:shadow-elegant hover:border-primary/40">
+                          <div 
+                            className={`group relative h-full rounded-2xl border border-border/70 bg-card p-7 shadow-lg shadow-primary-deep/15 transition-all duration-300 cursor-pointer hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary-deep/40 hover:border-primary/60 hover:scale-[1.02] ${
+                              selectedCard === v.title 
+                                ? 'scale-110 shadow-2xl shadow-primary-deep/50 border-primary/80 ring-2 ring-primary-deep/30' 
+                                : ''
+                            }`}>
                             <div className="flex items-center gap-4">
                               <div className="flex h-12 w-12 min-w-12 items-center justify-center rounded-xl bg-primary-soft text-primary-deep transition-colors group-hover:bg-gradient-leaf group-hover:text-primary-foreground">
                                 <v.icon className="h-5 w-5" />
