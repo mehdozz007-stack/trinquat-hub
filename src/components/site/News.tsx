@@ -11,10 +11,9 @@ const news = [
     excerpt: "Un vide-grenier à ne pas manquer pour dénicher des trésors et rencontrer vos voisins." },
       { img: g10, tag: "Vie de quartier", date: "15 Mars 2026", title: "Marathon Photo : capturez l'essence du quartier !",
         excerpt: "Rassemblez vos appareils photo et explorez le quartier à travers votre objectif." },  
-{ img: g7, tag: "Jardin", date: "1 Janvier 2026", title: "Un nouveau composteur pour le quartier, juste à coté du city stade !",
+{ img: g7, tag: "Jardin", date: "1 Janvier 2026", title: "Un nouveau composteur pour le quartier, à côté du city stade !",
     excerpt: "Un composteur a été installé pour encourager le compostage et réduire les déchets organiques." },
-    { img: g11, tag: "Fête", date: "16 Novembre 2025", title: "Fête/faites de la soupe : un succès intergénérationnel !",
-    excerpt: "Les habitants se sont réunis pour partager des moments conviviaux autour de la soupe à cuisiner." },
+
     
 ];
 

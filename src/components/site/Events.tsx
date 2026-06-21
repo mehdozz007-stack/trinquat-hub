@@ -7,6 +7,7 @@ import imgFete from "@/assets/gallery-8.jpg";
 import imgRepas from "@/assets/event-repas.jpg";
 import imgJardin from "@/assets/event-jardin.jpg";
 import g7 from "@/assets/gallery-7.jpg";
+import g11 from "@/assets/gallery-11.jpg";
 
 const events = [
   {
@@ -16,7 +17,7 @@ const events = [
   },
   {
     img: g7, badge: "À venir",
-    date: "31 Juillet 2026", title: "Apero compost & jardinage", place: "City Stade des Aiguerelles",
+    date: "31 Juillet 2026", title: "Apéro compost & jardinage", place: "City Stade des Aiguerelles",
     desc: "Un moment convivial pour apprendre à composter et entretenir vos jardins. Apportez vos déchets organiques et votre bonne humeur !",
   },
   {
@@ -28,6 +29,10 @@ const events = [
     img: imgJardin, badge: "Hebdomadaire",
     date: "Samedis matin", title: "Jardinage collectif", place: "Jardin partagé",
     desc: "Plantation, désherbage, récolte. Une bouffée d'air et de nouvelles recettes.",
+  },
+  {
+    img: g11, badge: "Fête", date: "16 Novembre 2025", place: "Square des Aiguerelles", title: "Fête/faites de la soupe : un succès intergénérationnel !",
+    desc: "Les habitants se sont réunis pour partager des moments conviviaux autour de la soupe à cuisiner.",
   },
 ];
 

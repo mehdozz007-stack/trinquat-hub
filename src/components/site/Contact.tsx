@@ -103,7 +103,10 @@ export function Contact() {
                       Merci, on revient vers vous très vite. À bientôt dans le quartier.
                     </p>
                     <button
-                      onClick={() => setSent(false)}
+                      onClick={() => {
+                        setSent(false);
+                        setErrors({});
+                      }}
                       className="mt-8 inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium hover:bg-accent"
                     >
                       Envoyer un autre message
