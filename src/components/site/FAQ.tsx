@@ -6,15 +6,15 @@ import { ChevronDown } from "lucide-react";
 const faqs = [
   {
     question: "Comment rejoindre Trinquat & Compagnie ?",
-    answer: "Très simple ! Venez nous voir à la permanence le samedi de 10h à 12h à la Maison pour tous Boris Vian, ou écrivez-nous. Une cotisation symbolique et le tour est joué.",
+    answer: "Très simple ! Cliquez sur le bouton d'inscription et suivez les instructions sur HelloAsso. Une cotisation symbolique et le tour est joué.",
   },
   {
     question: "Quel est le coût de la cotisation ?",
-    answer: "La cotisation est vraiment symbolique : 5€ pour l'année. C'est avant tout un symbole d'engagement envers l'association. Les plus généreux peuvent contribuer davantage bien sûr !",
+    answer: "5€ pour l'année. C'est avant tout un symbole d'engagement envers l'association. Les plus généreux peuvent contribuer davantage bien sûr !",
   },
   {
     question: "Je travaille le samedi, comment faire ?",
-    answer: "Pas de souci ! Vous pouvez nous contacter par email ou venir à l'un de nos événements en semaine. On s'adapte à vos horaires.",
+    answer: "Pas de souci ! Vous pouvez nous contacter par email ou venir à l'un de nos événements. On s'adapte à vos horaires.",
   },
   {
     question: "Faut-il être disponible pour tous les événements ?",
