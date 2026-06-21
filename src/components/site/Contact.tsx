@@ -23,7 +23,7 @@ export function Contact() {
     if (Object.keys(errs).length === 0) {
       setLoading(true);
       try {
-        const response = await fetch("https://formsubmit.co/ajax/contact@trinquatetcompagnie.fr", {
+        const response = await fetch("https://formsubmit.co/ajax/mehdozz007@gmail.com", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -126,7 +126,7 @@ export function Contact() {
                       <label className="block text-sm font-medium mb-2">Message</label>
                       <textarea
                         name="message" rows={5}
-                        placeholder="Bonjour Trinquat !"
+                        placeholder="Bonjour Trinquat & Compagnie !"
                         className={`w-full rounded-xl border bg-background/60 px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 ${errors.message ? "border-destructive" : "border-border"}`}
                       />
                       {errors.message && <p className="mt-1.5 text-xs text-destructive">{errors.message}</p>}

@@ -78,7 +78,7 @@ export function JoinSection() {
                   <span className="italic font-(var(--font-display))">l'association</span>
                 </h2>
                 <p className="mt-6 text-base leading-relaxed opacity-90 max-w-xs">
-                  Rejoignez les 100+ habitants qui font vivre le quartier. Chaque voisin apporte sa pierre à l'édifice.
+                  Rejoignez les 45+ habitants qui font vivre le quartier. Chaque voisin apporte sa pierre à l'édifice.
                 </p>
 
                 <a href="https://www.helloasso.com/associations/trinquat-et-compagnie/adhesions/adhesion-trinquat-et-compagnie-2026"

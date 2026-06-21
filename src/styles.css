@@ -166,6 +166,10 @@
 }
 
 @layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  
   * {
     border-color: var(--color-border);
   }

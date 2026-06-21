@@ -1,19 +1,26 @@
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "./Reveal";
-import { ArrowUpRight } from "lucide-react";
-import g3 from "@/assets/gallery-3.jpg";
-import g2 from "@/assets/gallery-2.jpg";
-import g5 from "@/assets/gallery-5.jpg";
-
+import { ArrowUpRight, X } from "lucide-react";
+import g7 from "@/assets/gallery-7.jpg";
+import VideGrenier from "@/assets/Vide-grenier.jpg";
+import g10 from "@/assets/gallery-10.jpg";
+import g11 from "@/assets/gallery-11.jpg";
 const news = [
-  { img: g3, tag: "Vie de quartier", date: "12 Mars 2026", title: "La fête des voisins prépare sa 12e édition",
-    excerpt: "Une journée entière pour célébrer ensemble : programme, bénévoles, et nouveautés." },
-  { img: g2, tag: "Jardin", date: "28 Février 2026", title: "Un nouveau carré potager pour les enfants",
-    excerpt: "Les écoliers ont planté tomates, fraises et aromatiques. La récolte arrive bientôt." },
-  { img: g5, tag: "Ateliers", date: "10 Février 2026", title: "Reprise des ateliers créatifs du mercredi",
-    excerpt: "Peinture, modelage, bricolage : retrouvez le programme du trimestre." },
+{ img: VideGrenier, tag: "Vie de quartier", date: "12 Avril 2026", title: "Le vide-grenier de printemps approche !",
+    excerpt: "Un vide-grenier à ne pas manquer pour dénicher des trésors et rencontrer vos voisins." },
+      { img: g10, tag: "Vie de quartier", date: "15 Mars 2026", title: "Marathon Photo : capturez l'essence du quartier !",
+        excerpt: "Rassemblez vos appareils photo et explorez le quartier à travers votre objectif." },  
+{ img: g7, tag: "Jardin", date: "1 Janvier 2026", title: "Un nouveau composteur pour le quartier, juste à coté du city stade !",
+    excerpt: "Un composteur a été installé pour encourager le compostage et réduire les déchets organiques." },
+    { img: g11, tag: "Fête", date: "16 Novembre 2025", title: "Fête/faites de la soupe : un succès intergénérationnel !",
+    excerpt: "Les habitants se sont réunis pour partager des moments conviviaux autour de la soupe à cuisiner." },
+    
 ];
 
 export function News() {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   return (
     <section id="news" className="py-12 md:py-20 bg-secondary/70">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -29,7 +36,7 @@ export function News() {
           {news.map((n, i) => (
             <Reveal key={n.title} delay={i * 0.08}>
               <article className="group h-full flex flex-col overflow-hidden rounded-3xl bg-card border border-border/70 transition-all duration-500 hover:-translate-y-1 hover:shadow-elegant">
-                <div className="aspect-16/10 overflow-hidden">
+                <div className="aspect-16/10 overflow-hidden cursor-pointer" onClick={() => setSelectedImage(n.img)}>
                   <img src={n.img} alt={n.title} loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105" />
                 </div>
@@ -40,15 +47,49 @@ export function News() {
                   </div>
                   <h3 className="mt-4 text-xl font-semibold leading-snug">{n.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground flex-1">{n.excerpt}</p>
-                  <a href="#" className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-deep">
+                  {/*<a href="#" className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-deep">
                     Lire l'article <ArrowUpRight className="h-4 w-4" />
-                  </a>
+                  </a>*/}
                 </div>
               </article>
             </Reveal>
           ))}
         </div>
       </div>
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-xl max-h-[60vh] flex items-center justify-center p-6"
+            >
+              <img
+                src={selectedImage}
+                alt="Image agrandie"
+                className="w-full h-full object-contain"
+              />
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/80 rounded-full text-white transition-all duration-200"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

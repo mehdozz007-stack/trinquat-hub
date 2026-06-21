@@ -1,16 +1,23 @@
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "./Reveal";
 import { Link } from "@tanstack/react-router";
-import { Calendar, MapPin, ArrowUpRight } from "lucide-react";
-import imgFete from "@/assets/event-fete.jpg";
+import { Calendar, MapPin, ArrowUpRight, X } from "lucide-react";
+import imgFete from "@/assets/gallery-8.jpg";
 import imgRepas from "@/assets/event-repas.jpg";
-
+import g7 from "@/assets/gallery-7.jpg";
 const events = [
   {
     img: imgFete, badge: "À venir",
-    date: "14 Juin 2026", title: "Fête du quartier", place: "Place Trinquat",
-    desc: "Une soirée magique sous les guirlandes : concert, jeux pour enfants et grande tablée.",
+    date: "9 Juillet 2026", title: "Rencontre", place: "Square des Aiguerelles",
+    desc: "Une rencontre magique avec la communauté locale.",
   },
   {
+    img: g7, badge: "À venir",
+    date: "31 Juillet 2026", title: "Apero compost & jardinage", place: "City Stade des Aiguerelles",
+    desc: "Un moment convivial pour apprendre à composter et entretenir vos jardins. Apportez vos déchets organiques et votre bonne humeur !",
+  },  
+   {
     img: imgRepas, badge: "Mensuel",
     date: "Chaque 1er dimanche", title: "Repas partagé", place: "Maison de quartier",
     desc: "Chacun apporte un plat à partager. Un rituel devenu incontournable.",
@@ -18,6 +25,8 @@ const events = [
 ];
 
 export function EventsPreview() {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   return (
     <section id="events-preview" className="relative bg-secondary/40 py-12 md:py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -39,11 +48,11 @@ export function EventsPreview() {
           </Reveal>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-3">
           {events.map((e, i) => (
             <Reveal key={e.title} delay={i * 0.08}>
               <article className="group relative h-full overflow-hidden rounded-3xl bg-card border border-border/70 transition-all duration-500 hover:-translate-y-1 hover:shadow-elegant">
-                <div className="relative h-64 overflow-hidden">
+                <div className="relative h-64 overflow-hidden cursor-pointer" onClick={() => setSelectedImage(e.img)}>
                   <img
                     src={e.img} alt={e.title} loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
@@ -70,6 +79,40 @@ export function EventsPreview() {
           ))}
         </div>
       </div>
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-xl max-h-[60vh] flex items-center justify-center p-6"
+            >
+              <img
+                src={selectedImage}
+                alt="Image agrandie"
+                className="w-full h-full object-contain"
+              />
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/80 rounded-full text-white transition-all duration-200"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

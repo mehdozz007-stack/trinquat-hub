@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { v4: uuid } = require('uuid');
+const axios = require('axios');
+require('dotenv').config();
 const { initializeDatabase, getDatabase, createAdmin, getDrafts, saveDraft, deleteDraft, getSentNewsletters, saveSentNewsletter } = require('./db.cjs');
 
 const app = express();
@@ -423,8 +425,75 @@ app.get("/api/admin/sent-newsletters", (req, res) => {
   }
 });
 
-// POST /api/admin/newsletter/send
-app.post("/api/admin/newsletter/send", (req, res) => {
+// ========== BREVO EMAIL FUNCTION ==========
+async function sendViaBrevo(emails, subject, content) {
+  const brevoApiKey = process.env.BREVO_API_KEY;
+  const senderEmail = process.env.BREVO_SENDER_EMAIL;
+  const senderName = process.env.BREVO_SENDER_NAME;
+
+  console.log(`🔍 Brevo Debug: API Key exists: ${!!brevoApiKey}`);
+  console.log(`🔍 Brevo Debug: Sender Email: ${senderEmail}`);
+  console.log(`🔍 Brevo Debug: Emails to send: ${emails.length}`);
+
+  if (!brevoApiKey) {
+    console.error("❌ BREVO_API_KEY not configured in .env.local");
+    throw new Error("Email service not configured");
+  }
+
+  if (emails.length === 0) {
+    console.error("❌ No emails to send");
+    throw new Error("No recipient emails provided");
+  }
+
+  const results = {
+    successful: 0,
+    failed: 0,
+    errors: [],
+  };
+
+  // Send email to each subscriber
+  for (const email of emails) {
+    try {
+      console.log(`📧 Sending email to ${email}...`);
+      const response = await axios.post(
+        "https://api.brevo.com/v3/smtp/email",
+        {
+          to: [{ email }],
+          sender: { name: senderName, email: senderEmail },
+          subject,
+          textContent: content,
+          htmlContent: `<p>${content.replace(/\n/g, "<br>")}</p>`,
+        },
+        {
+          headers: {
+            "api-key": brevoApiKey,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      results.successful++;
+      console.log(`✅ Email sent to ${email} - Message ID: ${response.data.messageId}`);
+    } catch (err) {
+      results.failed++;
+      const errorMsg = err.response?.data?.message || err.message;
+      results.errors.push(`${email}: ${errorMsg}`);
+      console.error(`❌ Failed to send to ${email}:`, {
+        status: err.response?.status,
+        data: err.response?.data,
+        message: err.message,
+      });
+    }
+  }
+
+  console.log(`📊 Brevo send results: ${results.successful} successful, ${results.failed} failed`);
+  if (results.errors.length > 0) {
+    console.log(`📋 Errors:`, results.errors);
+  }
+  return results;
+}
+
+// ========== NEWSLETTER SEND ENDPOINT ==========
+app.post("/api/admin/newsletter/send", async (req, res) => {
   const { subject, content } = req.body;
   const cookie = req.headers.cookie;
   const adminId = cookie?.split('tc_admin=')[1]?.split(';')[0];
@@ -448,19 +517,97 @@ app.post("/api/admin/newsletter/send", (req, res) => {
   }
 
   try {
-    const newsletter = saveSentNewsletter(admin.id, subject, content, activeSubscribers.length);
+    // Get subscriber emails from database
+    const db = getDatabase();
+    const dbSubscribers = db.prepare('SELECT email FROM subscribers WHERE is_active = 1').all();
+    const subscriberEmails = dbSubscribers.map(s => s.email);
+
+    console.log(`📧 Sending newsletter to ${subscriberEmails.length} subscribers via Brevo...`);
+
+    // Send via Brevo
+    const sendResults = await sendViaBrevo(subscriberEmails, subject, content);
+
+    // Save newsletter to database
+    const newsletter = saveSentNewsletter(admin.id, subject, content, subscriberEmails.length);
 
     res.json({
       success: true,
       id: newsletter.id,
       recipientCount: newsletter.recipientCount,
       sentAt: newsletter.sentAt,
+      brevoResults: sendResults,
     });
   } catch (err) {
     console.error("Error sending newsletter:", err);
     res.status(500).json({ error: "Erreur lors de l'envoi" });
   }
 });
+
+// ========== DEBUG ENDPOINTS ==========
+
+// GET /api/admin/test-brevo - Test Brevo configuration
+app.get("/api/admin/test-brevo", (req, res) => {
+  const brevoKey = process.env.BREVO_API_KEY;
+  const senderEmail = process.env.BREVO_SENDER_EMAIL;
+
+  console.log("🔍 Testing Brevo configuration...");
+
+  res.json({
+    brevoApiKeyConfigured: !!brevoKey,
+    brevoApiKeyLength: brevoKey ? brevoKey.length : 0,
+    senderEmail,
+    senderName: process.env.BREVO_SENDER_NAME,
+  });
+});
+
+// GET /api/admin/check-subscribers - Check if subscribers exist in database
+app.get("/api/admin/check-subscribers", (req, res) => {
+  try {
+    const db = getDatabase();
+    const allSubs = db.prepare("SELECT * FROM subscribers").all();
+    const activeSubs = db.prepare("SELECT * FROM subscribers WHERE is_active = 1").all();
+
+    console.log(`📊 Subscribers in DB: ${allSubs.length} total, ${activeSubs.length} active`);
+
+    res.json({
+      totalSubscribers: allSubs.length,
+      activeSubscribers: activeSubs.length,
+      subscribers: allSubs.map(s => ({ email: s.email, is_active: s.is_active })),
+    });
+  } catch (err) {
+    console.error("Error checking subscribers:", err);
+    res.status(500).json({ error: "Erreur lors de la vérification" });
+  }
+});
+
+// POST /api/admin/test-send-email - Test send single email
+app.post("/api/admin/test-send-email", async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: "Email requis" });
+  }
+
+  try {
+    console.log(`📧 Testing email send to: ${email}`);
+
+    const results = await sendViaBrevo(
+      [email],
+      "🧪 Test Newsletter - Trinquat & Compagnie",
+      "Ceci est un email de test pour vérifier que Brevo est correctement configuré."
+    );
+
+    res.json({
+      success: results.successful > 0,
+      results,
+    });
+  } catch (err) {
+    console.error("Error sending test email:", err);
+    res.status(500).json({ error: err.message || "Erreur lors de l'envoi du test" });
+  }
+});
+
+// ========== END DEBUG ENDPOINTS ==========
 
 const PORT = 3002;
 app.listen(PORT, () => {

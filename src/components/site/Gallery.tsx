@@ -3,19 +3,18 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { Reveal } from "./Reveal";
 //import g1 from "@/assets/gallery-1.jpg";
-import g2 from "@/assets/gallery-2.jpg";
-import g3 from "@/assets/gallery-3.jpg";
+import g1 from "@/assets/gallery-1.jpg";
 import g4 from "@/assets/gallery-4.jpg";
-//import g5 from "@/assets/gallery-5.jpg";
-//import g6 from "@/assets/gallery-6.jpg";
+import g5 from "@/assets/gallery-5.jpg";
+import g8 from "@/assets/gallery-8.jpg";
+import g9 from "@/assets/gallery-9.jpg";
 
 const photos = [
-  //{ src: g1, alt: "Grande tablée sous les guirlandes", h: "row-span-2" },
-  { src: g2, alt: "Enfants au jardin partagé", h: "" },
-  //{ src: g6, alt: "Voisins réunis sous un arbre", h: "" },
-  { src: g3, alt: "Soirée lumineuse de quartier", h: "row-span-2" },
+  { src: g1, alt: "Composteur installé dans le quartier", h: "row-span-2" },
   { src: g4, alt: "Vide-grenier de printemps", h: "" },
-  //{ src: g5, alt: "Atelier créatif enfants", h: "" },
+  { src: g8, alt: "Voisins réunis sous un arbre", h: "" },
+  { src: g5, alt: "Atelier créatif enfants", h: "" },
+  { src: g9, alt: "La fête intergénérationnelle de la soupe", h: "" },
 ];
 
 export function Gallery() {
