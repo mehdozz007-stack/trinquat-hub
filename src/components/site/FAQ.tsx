@@ -13,7 +13,7 @@ const faqs = [
     answer: "5€ pour l'année. C'est avant tout un symbole d'engagement envers l'association. Les plus généreux peuvent contribuer davantage bien sûr !",
   },
   {
-    question: "Je travaille le samedi, comment faire ?",
+    question: "Je travaille la semaine, comment faire ?",
     answer: "Pas de souci ! Vous pouvez nous contacter par email ou venir à l'un de nos événements. On s'adapte à vos horaires.",
   },
   {

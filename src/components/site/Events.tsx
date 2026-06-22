@@ -2,12 +2,12 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "./Reveal";
 import { Link } from "@tanstack/react-router";
-import { Calendar, MapPin, ArrowUpRight, X } from "lucide-react";
+import { Calendar, MapPin, ArrowUpRight, X, Badge } from "lucide-react";
 import imgFete from "@/assets/gallery-8.jpg";
 import imgRepas from "@/assets/gallery-9.jpg";
-import imgJardin from "@/assets/event-jardin.jpg";
+import VideGrenier from "@/assets/vide-grenier1.jpg";
 import g7 from "@/assets/gallery-7.jpg";
-import g11 from "@/assets/gallery-11.jpg";
+import g9 from "@/assets/gallery-9.jpg";
 
 const events = [
   {
@@ -16,31 +16,21 @@ const events = [
     desc: "Une rencontre magique avec la communauté locale.",
   },
   {
-    img: g7, badge: "À venir",
-    date: "31 Juillet 2026", title: "Apéro compost & jardinage", place: "City Stade des Aiguerelles",
+    img: g7, badge: "À venir", date: "31 Juillet 2026", title: "Apéro compost & jardinage", place: "City Stade des Aiguerelles",
     desc: "Un moment convivial pour apprendre à composter et entretenir vos jardins. Apportez vos déchets organiques et votre bonne humeur !",
   },
+  { img: VideGrenier, badge: "Vie de quartier", date: "12 Avril 2026", place: "École Anne-Frank Charles Dickes", title: "Le vide-grenier de printemps",
+      desc: "Un vide-grenier à l'école du quartier, pour dénicher des trésors et rencontrer vos voisins." },
+    
   {
-    img: imgRepas, badge: "Mensuel",
-    date: "Chaque 1er dimanche", title: "Repas partagé", place: "Square des Aiguerelles",
-    desc: "Chacun apporte un plat à partager. Un rituel devenu incontournable.",
-  },
-  {
-    img: imgJardin, badge: "Hebdomadaire",
-    date: "Samedis matin", title: "Jardinage collectif", place: "Jardin partagé",
-    desc: "Plantation, désherbage, récolte. Une bouffée d'air et de nouvelles recettes.",
-  },
-  {
-    img: g11, badge: "Fête", date: "16 Novembre 2025", place: "Square des Aiguerelles", title: "Fête/faites de la soupe : un succès intergénérationnel !",
+    img: g9, badge: "Fête", date: "16 Novembre 2025", place: "Square des Aiguerelles", title: "Fête/faites de la soupe : un succès intergénérationnel !",
     desc: "Les habitants se sont réunis pour partager des moments conviviaux autour de la soupe à cuisiner.",
   },
 ];
 
 const more = [
-  { date: "15 Mars", label: "Marathon Photo" },
-  { date: "12 Avril", label: "Vide-grenier de printemps" },
   { date: "26 Mai", label: "Cinéma en plein air" },
-  { date: "2 Juin", label: "Atelier créatif enfants" },
+  { date: "15 Mars", label: "Marathon Photo" },
 ];
 
 export function Events() {
@@ -94,7 +84,7 @@ export function Events() {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
               <div>
                 <h3 className="text-xl font-semibold">Et aussi cette année...</h3>
-                <p className="text-sm text-muted-foreground mt-1">Le calendrier complet de l'association.</p>
+                <p className="text-sm text-muted-foreground mt-1">Le calendrier de l'association.</p>
               </div>
               <ul className="grid sm:grid-cols-2 gap-x-10 gap-y-2 text-sm">
                 {more.map((m) => (

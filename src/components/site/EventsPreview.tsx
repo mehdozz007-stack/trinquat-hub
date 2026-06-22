@@ -17,18 +17,13 @@ const events = [
     date: "31 Juillet 2026", title: "Apero compost & jardinage", place: "City Stade des Aiguerelles",
     desc: "Un moment convivial pour apprendre à composter et entretenir vos jardins. Apportez vos déchets organiques et votre bonne humeur !",
   },  
-   {
-    img: imgRepas, badge: "Mensuel",
-    date: "Chaque 1er dimanche", title: "Repas partagé", place: "Square des Aiguerelles",
-    desc: "Chacun apporte un plat à partager. Un rituel devenu incontournable.",
-  },
 ];
 
 export function EventsPreview() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
-    <section id="events-preview" className="relative bg-secondary/40 py-12 md:py-20">
+    <section id="events-preview" className="relative bg-secondary/50 py-12 md:py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16">
           <Reveal>

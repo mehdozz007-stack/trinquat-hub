@@ -3,9 +3,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "./Reveal";
 import { ArrowUpRight, X } from "lucide-react";
 import g7 from "@/assets/gallery-7.jpg";
-import VideGrenier from "@/assets/Vide-grenier2.jpg";
+import VideGrenier from "@/assets/Vide-grenier.jpg";
 import g10 from "@/assets/gallery-10.jpg";
+import g9 from "@/assets/gallery-9.jpg";
 import g11 from "@/assets/gallery-11.jpg";
+
 const news = [
 { img: VideGrenier, tag: "Vie de quartier", date: "12 Avril 2026", title: "Le vide-grenier de printemps approche !",
     excerpt: "Un vide-grenier à ne pas manquer pour dénicher des trésors et rencontrer vos voisins." },
@@ -13,7 +15,10 @@ const news = [
         excerpt: "Rassemblez vos appareils photo et explorez le quartier à travers votre objectif." },  
 { img: g7, tag: "Jardin", date: "1 Janvier 2026", title: "Un nouveau composteur pour le quartier, à côté du city stade !",
     excerpt: "Un composteur a été installé pour encourager le compostage et réduire les déchets organiques." },
-
+      {
+    img: g11, badge: "Fête", date: "16 Novembre 2025", place: "Square des Aiguerelles", title: "Fête/faites de la soupe : un succès intergénérationnel !",
+    desc: "Les habitants se sont réunis pour partager des moments conviviaux autour de la soupe à cuisiner.",
+  },
     
 ];
 

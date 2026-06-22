@@ -1,11 +1,38 @@
 import logo from "@/assets/logo.png";
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Mail, MapPin } from "lucide-react";
+import logoBorisVian from "@/assets/partners/logo-boris-vian.jpg";
+import logoptitsTrinquat from "@/assets/partners/logoAsso.png";
+import logoMairie from "@/assets/partners/logo-mairie-montpellier.png";
 
 const socialLinks = [
   { Icon: Facebook, href: "https://www.facebook.com/Trinquatetcompagnie/", label: "Facebook" },
   { Icon: Instagram, href: "https://www.instagram.com/p/DQE1LeOgvRs/", label: "Instagram" },
   { Icon: Mail, href: "mailto:contact@trinquatetcompagnie.fr", label: "Email" },
+];
+
+const officialPartners = [
+  {
+    id: 1,
+    name: "Boris Vian",
+    logo: logoBorisVian,
+    alt: "Logo École Boris Vian",
+    website: "https://www.montpellier.fr/territoire/lieux-equipements/maison-pour-tous-boris-vian#/search@43.5960982,3.8918619,15.00",
+  },
+  {
+    id: 2,
+    name: "Les P'tits Trinquat",
+    logo: logoptitsTrinquat,
+    alt: "Logo Les P'tits Trinquat",
+    website: "https://www.lespetitstrinquat.fr/",
+  },
+  {
+    id: 3,
+    name: "Mairie de Montpellier",
+    logo: logoMairie,
+    alt: "Logo Mairie de Montpellier",
+    website: "https://www.montpellier.fr/",
+  },
 ];
 
 export function Footer() {
@@ -60,11 +87,41 @@ export function Footer() {
             </ul>
           </div>
         </div>
-        <div className="mt-12 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-t border-border/70 pt-6 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} Trinquat & Compagnie — Tous droits réservés.</p>
-          <div className="flex gap-6">
-            <Link to="/mentions-legales" className="hover:text-foreground">Mentions légales</Link>
-            <Link to="/politique-confidentialite" className="hover:text-foreground">Politique de confidentialité</Link>
+        
+        {/* Bottom */}
+        <div className="mt-12 flex flex-col items-center justify-center gap-8  border-t border-border pt-8">
+          {/* Official Partners Section */}
+          <div className="flex flex-col items-center justify-center gap-4 w-full ">
+            <h4 className="mb-4 text-base uppercase tracking-wider text-black/80 font-semibold">
+              Nos partenaires officiels
+            </h4>
+            <div className="flex flex-wrap items-center justify-center gap-6 md:gap-8">
+              {officialPartners.map((partner) => (
+                <a
+                  key={partner.id}
+                  href={partner.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center transition-all hover:scale-105"
+                  aria-label={`Visiter ${partner.name}`}
+                >
+                  <img
+                    src={partner.logo}
+                    alt={partner.alt}
+                    className="h-24 w-auto object-contain md:h-32 rounded-lg"
+                  />
+                </a>
+              ))}
+            </div>
+          </div>
+
+        
+        <div className="mt-12 flex flex-col items-center md:flex-row md:items-center md:justify-between gap-4 border-t border-border pt-6 text-xs text-muted-foreground">
+          <p className="text-center">© {new Date().getFullYear()} Trinquat & Compagnie — Tous droits réservés.</p>
+            <div className="flex gap-6">
+              <Link to="/mentions-legales" className="hover:text-foreground">Mentions légales</Link>
+              <Link to="/politique-confidentialite" className="hover:text-foreground">Politique de confidentialité</Link>
+            </div>
           </div>
         </div>
       </div>
