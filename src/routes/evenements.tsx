@@ -24,7 +24,7 @@ function EvenementsPage() {
       <PageHeader
         eyebrow="Agenda"
         title={<>Les rendez-vous <span className="text-gradient">du quartier</span>.</>}
-        lead="Toute l'année, des moments à vivre ensemble : fêtes, ateliers, jardinage et repas partagés."
+        lead="Des moments simples et chaleureux pour se retrouver entre voisins et créer de jolis souvenirs."
       />
       <Events />
       <Footer />

@@ -4,7 +4,7 @@ import { Reveal } from "./Reveal";
 import { Link } from "@tanstack/react-router";
 import { Calendar, MapPin, ArrowUpRight, X } from "lucide-react";
 import imgFete from "@/assets/gallery-8.jpg";
-import imgRepas from "@/assets/gallery-9.jpg";
+import VideGrenier from "@/assets/vide-grenier1.jpg";
 import g7 from "@/assets/gallery-7.jpg";
 const events = [
   {
@@ -16,7 +16,10 @@ const events = [
     img: g7, badge: "À venir",
     date: "31 Juillet 2026", title: "Apero compost & jardinage", place: "City Stade des Aiguerelles",
     desc: "Un moment convivial pour apprendre à composter et entretenir vos jardins. Apportez vos déchets organiques et votre bonne humeur !",
-  },  
+  },
+    { img: VideGrenier, badge: "Vie de quartier", date: "12 Avril 2026", place: "École Anne-Frank Charles Dickes", title: "Le vide-grenier de printemps",
+      desc: "Un vide-grenier à l'école du quartier, pour dénicher des trésors et rencontrer vos voisins." },
+      
 ];
 
 export function EventsPreview() {
@@ -31,6 +34,9 @@ export function EventsPreview() {
             <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
               Les <span className="text-gradient">rendez-vous</span> du quartier.
             </h2>
+            <p className="mt-4 text-base md:text-lg leading-relaxed text-muted-foreground max-w-md">
+            Des moments simples pour se retrouver entre voisins.
+          </p>
           </Reveal>
           <Reveal delay={0.1}>
             <Link

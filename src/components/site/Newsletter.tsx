@@ -80,12 +80,13 @@ export function Newsletter() {
     <section className="relative py-16 md:py-24 overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-gradient-leaf opacity-[0.06]" />
       <div className="absolute inset-0 -z-10 grain" />
+      
 
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <Reveal>
           <div className="relative overflow-hidden rounded-[2.5rem] border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant">
-            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-leaf opacity-10 blur-3xl" />
-            <div className="absolute -left-16 -bottom-16 h-48 w-48 rounded-full bg-primary-soft opacity-30 blur-2xl" />
+            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-leaf opacity-10 blur-3xl will-change-transform transform-gpu" />
+            <div className="absolute -left-16 -bottom-16 h-48 w-48 rounded-full bg-primary-soft opacity-30 blur-2xl will-change-transform transform-gpu" />
 
             <div className="relative z-10 flex flex-col items-center text-center px-8 py-14 md:px-16 md:py-20">
               <AnimatePresence mode="wait">
@@ -266,7 +267,7 @@ export function Newsletter() {
                           onChange={(e) => setConsent(e.target.checked)}
                           className="mt-1.5 h-4 w-4 rounded border border-border/70 bg-background cursor-pointer accent-primary shrink-0"
                         />
-                        <span className="text-[10px] text-muted-foreground">
+                        <span className="text-[12px] text-muted-foreground">
                           J'accepte de recevoir les actualités et événements de Trinquat & Compagnie. Je peux me désinscrire à tout moment.
                         </span>
                       </label>

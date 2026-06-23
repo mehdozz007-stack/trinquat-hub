@@ -45,6 +45,9 @@ export function Events() {
             <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
               Nos <span className="text-gradient">événements</span>  au quartier.
             </h2>
+            <p className="mt-4 text-base md:text-lg leading-relaxed text-muted-foreground max-w-md">
+               Toute l'année, des moments à vivre ensemble : fêtes, ateliers, jardinage et repas partagés.        
+            </p>
           </Reveal>
         </div>
 

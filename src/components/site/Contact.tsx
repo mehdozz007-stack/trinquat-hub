@@ -33,6 +33,10 @@ export function Contact() {
             name,
             email,
             message,
+            _captcha: "false",
+            _template: "box",
+            _subject: "📩 Nouveau message depuis le site 🌳 Trinquat & Compagnie 🌳",
+            _replyto: email,
           }),
         });
 
