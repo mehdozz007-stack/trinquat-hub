@@ -81,7 +81,7 @@ export function Footer() {
                 </span>
                 <div>
                   <p className="text-sm font-semibold">Par adresse</p>
-                  <p className="text-muted-foreground hover:text-foreground">410 Avenue du Pont Trinquat, 34070 Montpellier</p>
+                  <p className="text-muted-foreground hover:text-foreground">Maison pour tous Boris Vian, 34070 Montpellier</p>
                 </div>
               </li>
             </ul>
