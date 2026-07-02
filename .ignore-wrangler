@@ -1,0 +1,2 @@
+# Wrangler config is for Workers, not for Pages
+# This file tells Cloudflare Pages to ignore wrangler.toml
