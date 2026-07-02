@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site en cours de construction - Trinquat & Compagnie</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f5a3d 0%, #1a8a52 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+        
+        .container {
+            text-align: center;
+            background: white;
+            padding: 60px 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            margin: 20px;
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, #0f5a3d, #1a8a52);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+        
+        h1 {
+            font-size: 32px;
+            margin-bottom: 16px;
+            color: #0f5a3d;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .construction-icon {
+            font-size: 80px;
+            margin: 20px 0;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .timeline {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 12px;
+            text-align: left;
+        }
+        
+        .timeline-item {
+            margin: 15px 0;
+            padding-left: 30px;
+            position: relative;
+            color: #666;
+            font-size: 15px;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: #1a8a52;
+            border-radius: 50%;
+        }
+        
+        .contact {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+        
+        .contact p {
+            font-size: 14px;
+            color: #999;
+            margin: 10px 0;
+        }
+        
+        .social-links {
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #1a8a52;
+            color: white;
+            border-radius: 50%;
+            text-decoration: none;
+            margin: 0 8px;
+            line-height: 40px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: #0f5a3d;
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🏗️</div>
+        
+        <h1>Site en cours de construction</h1>
+        
+        <div class="construction-icon">⚙️</div>
+        
+        <p class="subtitle">
+            Nous travaillons dur pour améliorer notre plateforme. Revenez très bientôt pour découvrir les nouveautés !
+        </p>
+        
+        <div class="timeline">
+            <div class="timeline-item">✨ Nouveau design en préparation</div>
+            <div class="timeline-item">🚀 Performance optimisée</div>
+            <div class="timeline-item">📱 Meilleure expérience mobile</div>
+            <div class="timeline-item">🔒 Sécurité renforcée</div>
+        </div>
+        
+        <div class="contact">
+            <p><strong>Trinquat & Compagnie</strong></p>
+            <p>Association d'habitants du quartier des Aiguerelles</p>
+            <p>Montpellier, France</p>
+            
+            <div class="social-links">
+                <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">f</a>
+                <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">📷</a>
+                <a href="mailto:contact@trinquatetcompagnie.fr">✉️</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
