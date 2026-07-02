@@ -29,9 +29,12 @@ export function Values() {
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-8 text-base md:text-lg leading-relaxed text-muted-foreground">
-                Trinquat & Compagnie repose sur des valeurs simples mais fortes : 
-                la solidarité, le respect de la nature, et la convivialité. Chaque 
-                action reflète notre engagement envers le quartier et ses habitants.
+                Notre association s'appuie sur des valeurs simples mais essentielles : la solidarité, 
+                le respect de la nature et la convivialité. Nous croyons que chaque geste, 
+                même modeste, peut renforcer les liens entre voisins et embellir notre cadre de vie.
+                <br />
+                Ensemble, nous cultivons un esprit d'entraide, nous prenons soin de notre environnement, 
+                et nous créons des moments de partage où chacun trouve sa place.
               </p>
             </Reveal>
           </div>
@@ -42,7 +45,7 @@ export function Values() {
                           <div 
                             className={`group relative h-full rounded-2xl border border-border/70 bg-card p-7 shadow-lg shadow-primary-deep/15 transition-all duration-300 cursor-pointer hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary-deep/40 hover:border-primary/60 hover:scale-[1.02] ${
                               selectedCard === v.title 
-                                ? 'scale-110 shadow-2xl shadow-primary-deep/50 border-primary/80 ring-2 ring-primary-deep/30' 
+                                ? 'scale-110 shadow-2xl shadow-primary-deep/50 border-primary/80' 
                                 : ''
                             }`}>
                             <div className="flex items-center gap-4">

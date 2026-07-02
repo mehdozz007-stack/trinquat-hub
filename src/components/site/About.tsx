@@ -24,7 +24,7 @@ export function About() {
                 Qui sommes-nous
               </span>
               <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-                Une <span className="text-gradient">grande famille</span><br />
+                Une <span className="text-gradient">famille</span><br />
                 à l'ombre des arbres.
               </h2>
             </Reveal>
@@ -51,7 +51,7 @@ export function About() {
                 <div 
                                     className={`group relative h-full rounded-2xl border border-border/70 bg-card p-7 shadow-lg shadow-primary-deep/15 transition-all duration-300 cursor-pointer hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary-deep/40 hover:border-primary/60 hover:scale-[1.02] ${
                     selectedCard === v.title 
-                      ? 'scale-110 shadow-2xl shadow-primary-deep/50 border-primary/80 ring-2 ring-primary-deep/30' 
+                      ? 'scale-110 shadow-2xl shadow-primary-deep/50 border-primary/80' 
                       : ''
                   }`}>
                   <div className="flex items-center gap-4">

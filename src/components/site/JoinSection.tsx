@@ -31,7 +31,7 @@ const floatingIcons = [
 
 export function JoinSection() {
   return (
-    <section className="relative py-12 md:py-20 overflow-hidden bg-secondary/70">
+    <section className="relative py-12 md:py-20 overflow-hidden bg-secondary/50">
       <div className="absolute inset-0 -z-10 bg-gradient-hero opacity-60" />
       <div className="absolute inset-0 -z-10 grain" />
 
