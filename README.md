@@ -4,88 +4,110 @@
 
 ```bash
 npm install
-npm run dev:all
+npm run dev          # Terminal 1: Frontend Vite (:5173)
+npx wrangler dev --local  # Terminal 2: Backend Worker (:8787)
 ```
 
 - **Frontend**: http://localhost:5173
-- **Backend**: http://localhost:3002
+- **Backend**: http://127.0.0.1:8787
+- **Admin**: http://localhost:5173/admin/login
 
 ## Architecture
 
 ```
-Frontend (React 19 + Vite)      Backend (Express.js)       Database (SQLite Local)
-    :5173                           :3002                  trinquat_newsletter.sqlite3
-    ↓                               ↓                      ↓
-  Admin UI          ←→    API Endpoints (14)    ←→    Tables (5)
-  Newsletter         Authentication             Subscribers
-  Subscribers        Newsletter Drafts          Drafts
-  Composer           Sent Newsletters           Sessions
-  History            Subscribers CRUD
+Frontend (React 19 + Vite)      Backend (Cloudflare Worker)     Database (D1 Local)
+    :5173                           :8787 (Wrangler)          trinquat_newsletter.db
+    ↓                               ↓                         ↓
+  Admin UI          ←→    API Endpoints (7)     ←→    Tables (4)
+  Newsletter         Bootstrap Admin                  admins
+  Subscribers        Login/Logout                     subscribers
+  Composer           Newsletter Subscribe            drafts
+  History            Admin Management                sent_newsletters
 ```
 
 ## 🔐 Admin Login
 
-### 1. Bootstrap - Créer le premier admin
+### Setup Local Development
 
 ```bash
-curl -X POST http://localhost:3002/api/admin/bootstrap \
+# Terminal 1: Start Frontend
+npm run dev
+
+# Terminal 2: Start Backend Worker + D1 Database
+npx wrangler dev --local
+
+# Terminal 3 (optional): Apply migrations to local D1
+npx wrangler d1 execute trinquat_newsletter --file ./migrations/0001_init_schema.sql --local
+npx wrangler d1 execute trinquat_newsletter --file ./migrations/0002_seed_test_data.sql --local
+```
+
+### Test Admin Login
+
+Go to **http://localhost:5173/admin/login**
+
+```
+Email: admin@trinquat.local
+Password: password123
+```
+
+### Bootstrap New Admin (curl)
+
+```bash
+curl -X POST http://127.0.0.1:8787/api/admin/bootstrap \
   -H "Content-Type: application/json" \
-  -H "x-bootstrap-token: ba8277f9c94b0cc120ecd85dcd66bbc069ef5be2f6b998326cd628571a80127c" \
   -d '{
-    "email": "confidential",
-    "password": "confidential"
+    "email": "admin@example.com",
+    "password": "SecurePassword123"
   }'
-```
-
-### 2. Login - Se connecter
-
-Allez à **http://localhost:5173/admin/login**
-
-```
-Email: contact@trinquatetcompagnie.fr
-Password: confidentiel
 ```
 
 ## 📊 API Endpoints
 
-### Authentication
-- `POST /api/admin/bootstrap` - Créer le premier admin (token requis)
-- `POST /api/admin/login` - Se connecter
-- `GET /api/admin/me` - Session courante (cookie requis)
+### Authentication (Cloudflare Worker)
+- `POST /api/admin/bootstrap` - Créer le premier admin
+- `POST /api/admin/login` - Se connecter (retourne cookie `tc_admin`)
+- `GET /api/admin/me` - Session courante (nécessite cookie `tc_admin`)
 - `POST /api/admin/logout` - Se déconnecter
 
 ### Newsletter Public
-- `POST /api/newsletter/subscribe` - S'abonner
+- `POST /api/newsletter/subscribe` - S'abonner à la newsletter
 
-### Newsletter Admin (authentification par cookie `tc_admin`)
-- `GET /api/admin/subscribers?limit=100` - Lister les abonnés
-- `PATCH /api/admin/subscribers/:id` - Toggle actif/désactivé
-- `DELETE /api/admin/subscribers/:id` - Supprimer abonné
-- `GET /api/admin/subscribers/export` - Exporter CSV
-
-### Drafts & History
+### Newsletter Admin (cookie `tc_admin` requis)
+- `GET /api/admin/subscribers` - Lister les abonnés
 - `GET /api/admin/drafts` - Récupérer les brouillons
 - `POST /api/admin/drafts` - Sauvegarder un brouillon
-- `DELETE /api/admin/drafts/:id` - Supprimer brouillon
 - `GET /api/admin/sent-newsletters` - Historique des envois
-- `POST /api/admin/newsletter/send` - Envoyer une newsletter
 
-## 💾 Base de Données
+## 💾 Base de Données (Cloudflare D1)
 
-### Schéma Local (SQLite)
+### Schéma Tables
 ```
-admins                    - Comptes administrateur
-admin_sessions           - Sessions d'authentification
-newsletter_subscribers   - Base d'abonnés
-newsletter_drafts        - Brouillons de newsletters
-newsletter_sent          - Historique d'envois
+admins              - Comptes administrateur (id, email, password_hash, role)
+subscribers         - Abonnés newsletter (id, email, is_active)
+drafts              - Brouillons newsletters (id, admin_id, subject, content)
+sent_newsletters    - Historique envois (id, admin_id, subject, recipient_count)
 ```
 
-### Fichiers D1
-- Migration: `migrations/0001_init.sql`
-- Config: `wrangler.toml`
-- Database ID: `db2895c7-7a16-4bf3-90b6-72485f80ea94`
-- Environnement: WEUR (Europe Ouest)
+### Configuration D1
+- **Database ID**: `db2895c7-7a16-4bf3-90b6-72485f80ea94`
+- **Binding**: `trinquat_newsletter` (env.trinquat_newsletter)
+- **Migrations**: `migrations/0001_init_schema.sql`, `0002_seed_test_data.sql`
+- **Config**: `wrangler.toml`
+- **Environnement**: WEUR (Europe Ouest)
+
+### Local Development
+```bash
+# Créer/réinitialiser DB locale
+rm -rf .wrangler/state/v3/d1
+npx wrangler dev --local
+
+# Exécuter migrations
+npx wrangler d1 execute trinquat_newsletter --file ./migrations/0001_init_schema.sql --local
+npx wrangler d1 execute trinquat_newsletter --file ./migrations/0002_seed_test_data.sql --local
+
+# Query directement
+npx wrangler d1 execute trinquat_newsletter --command "SELECT * FROM admins;" --local
+```
 
 ## 🎯 Features
 
@@ -127,18 +149,20 @@ newsletter_sent          - Historique d'envois
 - Lucide Icons
 
 **Backend**
-- Express.js 4.18
-- Better-sqlite3 (SQLite)
+- Cloudflare Workers (src/worker.ts)
+- Vanilla fetch-based routing
 - UUID
-- CORS
-- Cookie-parser
+- CORS support
+- HttpOnly cookies
 
 **Database**
-- SQLite (local: `trinquat_newsletter.sqlite3`)
-- Cloudflare D1 (production: distant)
+- Cloudflare D1 (SQLite)
+- Local: `.wrangler/state/v3/d1/` (via Wrangler dev)
+- Remote: Cloudflare D1 (production)
 
 **DevTools**
 - TypeScript
+- Wrangler 4.103+
 - ESLint
 - Vite
 
@@ -146,67 +170,96 @@ newsletter_sent          - Historique d'envois
 
 ```bash
 npm run dev          # Frontend Vite (:5173)
-npm run dev:server   # Backend Express (:3002)
-npm run dev:all      # Frontend + Backend
-npm run build        # Build production
-npm run preview      # Preview build
-npm run lint         # Linter
+npm run build        # Build production (React app -> dist/)
+npm run preview      # Preview production build locally
+npm run lint         # Run ESLint
+```
+
+## 🌐 Wrangler Commands
+
+```bash
+# Local Development
+npx wrangler dev --local              # Start Worker on :8787 with local D1
+
+# Database Migrations
+npx wrangler d1 execute trinquat_newsletter --file ./migrations/0001_init_schema.sql --local
+npx wrangler d1 execute trinquat_newsletter --file ./migrations/0002_seed_test_data.sql --local
+
+# Query Database
+npx wrangler d1 execute trinquat_newsletter --command "SELECT * FROM admins;" --local
+
+# Production Deployment
+npx wrangler deploy                   # Deploy to trinquat-compagnie.mehdozz007.workers.dev
 ```
 
 ## 🚀 Déploiement
 
-### Local Development
+### Development Local
+
+**Terminal 1: Frontend**
 ```bash
-npm run dev:all
+npm run dev
+# Écoute sur http://localhost:5173
 ```
 
-### Production (Cloudflare Workers)
-
-#### 1. Installer Wrangler
+**Terminal 2: Backend + D1**
 ```bash
-npm install -g wrangler@latest
-wrangler login
+npx wrangler dev --local
+# Écoute sur http://127.0.0.1:8787
+# D1 local dans .wrangler/state/v3/d1/
 ```
 
-#### 2. Créer D1 distant
+**Setup Initial** (une seule fois):
 ```bash
-wrangler d1 create trinquat_newsletter
-# Copier l'ID dans wrangler.toml [env.production]
+# Créer les tables
+npx wrangler d1 execute trinquat_newsletter --file ./migrations/0001_init_schema.sql --local
+
+# Ajouter données de test
+npx wrangler d1 execute trinquat_newsletter --file ./migrations/0002_seed_test_data.sql --local
 ```
 
-#### 3. Appliquer migrations
-```bash
-wrangler d1 migrations apply trinquat_newsletter
-```
+### Production (Cloudflare Pages + Workers)
 
-#### 4. Configurer secrets
-```bash
-wrangler secret put JWT_SECRET --env production
-wrangler secret put ADMIN_BOOTSTRAP_TOKEN --env production
-```
-
-#### 5. Déployer
+#### 1. Deploy Frontend (Pages)
 ```bash
 npm run build
-wrangler deploy --env production
+npx wrangler pages publish dist --project-name trinquat-hub-main
 ```
 
-#### 6. Bootstrap en production
+#### 2. Deploy Backend (Worker)
 ```bash
-curl -X POST https://votre-domaine.workers.dev/api/admin/bootstrap \
+npx wrangler deploy
+# Déploie à trinquat-compagnie.mehdozz007.workers.dev
+```
+
+#### 3. Vérifier D1 Production
+```bash
+# Appliquer migrations en production
+npx wrangler d1 execute trinquat_newsletter --file ./migrations/0001_init_schema.sql --remote
+
+# Query en production
+npx wrangler d1 execute trinquat_newsletter --command "SELECT COUNT(*) FROM subscribers;" --remote
+```
+
+#### 4. Bootstrap Admin Production
+```bash
+curl -X POST https://trinquat-compagnie.mehdozz007.workers.dev/api/admin/bootstrap \
   -H "Content-Type: application/json" \
-  -H "x-bootstrap-token: YOUR_TOKEN" \
-  -d '{"email":"admin@example.com","password":"SecurePass"}'
+  -d '{
+    "email": "admin@trinquatetcompagnie.fr",
+    "password": "SecurePassword"
+  }'
 ```
 
 ## 📁 Structure du Projet
 
 ```
 src/
+├── worker.ts                   # 🔑 Cloudflare Worker - API backend
 ├── routes/
 │   ├── index.tsx                # Page d'accueil
 │   ├── admin.login.tsx          # Login admin
-│   ├── admin.newsletter.tsx     # Dashboard admin (3 tabs)
+│   ├── admin.newsletter.tsx     # Dashboard admin
 │   ├── actualites.tsx
 │   ├── association.tsx
 │   ├── contact.tsx
@@ -223,7 +276,7 @@ src/
 │   │   ├── Hero.tsx
 │   │   ├── Navbar.tsx
 │   │   ├── News.tsx
-│   │   ├── Newsletter.tsx       # 📧 Formulaire inscription
+│   │   ├── Newsletter.tsx       # 📧 Form inscription
 │   │   ├── PageHeader.tsx
 │   │   ├── Reveal.tsx
 │   │   ├── Stats.tsx
@@ -234,28 +287,28 @@ src/
 ├── lib/
 │   ├── utils.ts
 │   ├── config.server.ts
+│   ├── error-page.ts
 │   └── api/
 │       └── example.functions.ts
 ├── styles.css                   # Tailwind
-├── server.cjs                   # 🔑 Express backend
-├── db.cjs                       # Database layer
 ├── router.tsx
 └── start.ts
 
 migrations/
-└── 0001_init.sql               # Schéma D1
+├── 0001_init_schema.sql         # Créer les 4 tables
+└── 0002_seed_test_data.sql      # Données de test (admin + subscribers)
 
 public/
 ├── robots.txt
-└── assets/
+├── og-image.jpg                 # OG Preview image
+└── maintenance.html             # Maintenance page
 
 Configuration:
-├── vite.config.ts              # Proxy API -> :3002
+├── vite.config.ts               # Proxy API -> 127.0.0.1:8787
 ├── tsconfig.json
 ├── eslint.config.js
-├── bunfig.toml                 # Bun package manager
-├── wrangler.toml               # Cloudflare config
-├── components.json             # Shadcn config
+├── wrangler.toml                # Cloudflare Worker config + D1 binding
+├── components.json              # Shadcn config
 └── package.json
 ```
 
@@ -295,41 +348,52 @@ Configuration:
 
 ### "Backend not responding"
 ```bash
-# Vérifier que le serveur tourne
-curl http://localhost:3002/api/admin/me
+# Vérifier que Wrangler tourne
+curl http://127.0.0.1:8787/api/admin/me
 # Redémarrer si nécessaire
-npm run dev:server
+npx wrangler dev --local
 ```
 
 ### "CORS errors"
-→ Vérifier que frontend est sur :5173 et backend sur :3002
+→ Vérifier que frontend est sur :5173 et backend sur :8787
 
-### "Bootstrap fails"
-→ Vérifier le token exact et les parenthèses JSON
+### "Login fails avec 401"
+→ Exécuter les migrations (voir section Déploiement → Setup Initial)
+→ Test login: `admin@trinquat.local` / `password123`
 
 ### "Données perdues après restart"
-→ Normal, données en mémoire. Seront persistantes avec D1.
+→ Normal en dev local. Pour persister, les données sont stockées dans `.wrangler/state/v3/d1/`
 
 ### "D1 local ne fonctionne pas"
 ```bash
-# Réinitialiser
+# Réinitialiser la DB locale
 rm -rf .wrangler/state/v3/d1
-npm run dev:server  # Recréer BD
+
+# Redémarrer Wrangler et réappliquer migrations
+npx wrangler dev --local
+npx wrangler d1 execute trinquat_newsletter --file ./migrations/0001_init_schema.sql --local
+npx wrangler d1 execute trinquat_newsletter --file ./migrations/0002_seed_test_data.sql --local
 ```
+
+### "Worker hung / 500 errors"
+→ Probablement un problème de migration non appliquée
+→ Vérifier que tables existent: `SELECT name FROM sqlite_master WHERE type='table';`
 
 ## 📊 État Final
 
 | Élément | Status | Notes |
 |---------|--------|-------|
-| Frontend React | ✅ Complet | Toutes pages + animations |
-| Backend Express | ✅ Fonctionnel | 14 endpoints |
-| Authentication | ✅ JWT cookies | HttpOnly sécurisé |
-| Database SQLite Local | ✅ Opérationnel | 5 tables |
-| Database D1 Cloudflare | ✅ Prêt | Production ready |
-| Newsletter Subscription | ✅ Marche | Validation + confirmations |
-| Admin Dashboard | ✅ Complet | 3 tabs fonctionnels |
-| Animations | ✅ Smooth | Transitions fluides |
-| Déploiement | ✅ Prêt | Cloudflare Workers |
+| Frontend React | ✅ Complet | Pages + animations |
+| Backend Cloudflare Worker | ✅ Fonctionnel | 7 endpoints |
+| Authentication | ✅ Cookies HttpOnly | Sécurisé |
+| Database D1 Local | ✅ Opérationnel | 4 tables |
+| Database D1 Production | ✅ Prêt | Cloudflare |
+| Newsletter Subscription | ✅ Marche | Validation |
+| Admin Dashboard | ✅ Complet | Login + CRUD |
+| Animations | ✅ Smooth | Framer Motion |
+| Déploiement | ✅ Prêt | Pages + Workers |
+| OG Images | ✅ Prêt | Social sharing |
+| Maintenance Page | ✅ Déployée | Production |
 
 ## 🎯 Prochaines Étapes (Post-MVP)
 
@@ -343,15 +407,34 @@ npm run dev:server  # Recréer BD
 
 ## 📞 Support
 
-Pour toute question, consultez:
-- Terminal logs: `npm run dev:all`
-- Frontend errors: Browser DevTools
-- Backend errors: Terminal avec Express logs
-- Database: `wrangler d1 execute trinquat_newsletter --local --command "SELECT * FROM table;"`
+### Logs & Debugging
+```bash
+# Terminal 1: Frontend Vite logs
+npm run dev
+
+# Terminal 2: Worker Wrangler logs
+npx wrangler dev --local
+
+# Database query
+npx wrangler d1 execute trinquat_newsletter --command "SELECT * FROM admins;" --local
+
+# Browser DevTools: Application > Cookies (tc_admin)
+```
+
+### Endpoints Disponibles (Dev)
+- **Frontend**: http://localhost:5173
+- **API**: http://127.0.0.1:8787
+- **Admin Panel**: http://localhost:5173/admin/login
+- **Test Credentials**: `admin@trinquat.local` / `password123`
+
+### Links Importants
+- **GitHub**: https://github.com/
+- **Cloudflare Dashboard**: https://dash.cloudflare.com/
+- **Wrangler Docs**: https://developers.cloudflare.com/workers/
 
 ---
 
-**Version**: 1.0 - Complete & Production Ready  
-**Date**: Juin 2026  
-**Status**: ✅ Déploiement possible  
-**Bootstrap Token**: `ba8277f9c94b0cc120ecd85dcd66bbc069ef5be2f6b998326cd628571a80127c`
+**Version**: 2.0 - Cloudflare Workers Migration Complete  
+**Date**: Juillet 2026  
+**Status**: ✅ Production Deployed  
+**Architecture**: Cloudflare Pages (Frontend) + Cloudflare Workers (Backend) + Cloudflare D1 (Database)

@@ -77,7 +77,7 @@ export function Contact() {
                   <a href="mailto:contact@trinquatetcompagnie.fr" className="text-muted-foreground hover:text-foreground">contact@trinquatetcompagnie.fr</a>
                 </div>
               </li>
-              <li className="flex items-start gap-4">
+              {/*<li className="flex items-start gap-4">
                 <span className="shrink-0 mt-1 flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary-deep">
                   <MapPin className="h-5 w-5 -mt-0.5" />
                 </span>
@@ -85,7 +85,7 @@ export function Contact() {
                   <p className="text-sm font-semibold">Par adresse</p>
                   <p className="text-muted-foreground hover:text-foreground">410 Avenue du Pont Trinquat, 34070 Montpellier</p>
                 </div>
-              </li>
+              </li>*/}
             </ul>
           </Reveal>
 
