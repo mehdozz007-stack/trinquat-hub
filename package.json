@@ -8,7 +8,7 @@
     "dev": "vite",
     "dev:server": "node server.cjs",
     "dev:all": "npm run db:init && concurrently \"npm run dev\" \"npm run dev:server\"",
-    "build": "vite build && node scripts/post-build.cjs",
+    "build": "vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
