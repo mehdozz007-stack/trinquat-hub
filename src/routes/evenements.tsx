@@ -23,7 +23,7 @@ function EvenementsPage() {
       <Navbar />
       <PageHeader
         eyebrow="Agenda"
-        title={<>Les rendez-vous <span className="text-gradient">du quartier</span>.</>}
+        title={<>Les rendez-vous <span className="text-gradient">du quartier</span></>}
         lead="Des moments simples et chaleureux pour se retrouver entre voisins et créer de jolis souvenirs."
       />
       <Events />

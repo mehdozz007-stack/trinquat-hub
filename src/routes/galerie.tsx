@@ -23,7 +23,7 @@ function GaleriePage() {
       <Navbar />
       <PageHeader
         eyebrow="Galerie"
-        title={<><span className="text-gradient">Souvenirs</span> partagés.</>}
+        title={<><span className="text-gradient">Souvenirs</span> partagés</>}
         lead="Quelques instants capturés au fil des saisons, par les habitants eux-mêmes."
       />
       <Gallery />

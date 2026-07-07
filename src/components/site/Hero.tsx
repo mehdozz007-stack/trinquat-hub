@@ -95,7 +95,7 @@ export function Hero() {
           className="mt-6 text-5xl md:text-7xl lg:text-[5.5rem] font-normal leading-[1.05] text-foreground"
         >
           Le quartier <span className="italic text-gradient">se vit</span>
-          <br /> ensemble.
+          <br /> ensemble
         </motion.h1>
 
         <motion.p

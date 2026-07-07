@@ -32,7 +32,7 @@ export function EventsPreview() {
           <Reveal>
             <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">Agenda</span>
             <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-              Les <span className="text-gradient">rendez-vous</span> du quartier.
+              Les <span className="text-gradient">rendez-vous</span> du quartier
             </h2>
             <p className="mt-4 text-base md:text-lg leading-relaxed text-muted-foreground max-w-md">
             Des moments simples pour se retrouver entre voisins.

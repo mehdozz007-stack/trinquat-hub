@@ -25,7 +25,7 @@ export function About() {
               </span>
               <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
                 Une <span className="text-gradient">famille</span><br />
-                à l'ombre des arbres.
+                à l'ombre des arbres
               </h2>
             </Reveal>
             <Reveal delay={0.1}>

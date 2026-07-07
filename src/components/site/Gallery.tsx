@@ -27,12 +27,12 @@ export function Gallery() {
           <div className="max-w-2xl">
             <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">Galerie</span>
             <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-              Nos<span className="text-gradient"> photos</span> souvenirs.
+              Nos<span className="text-gradient"> photos</span> souvenirs
             </h2>
           </div>
         </Reveal>
 
-        <div className="mt-14 grid grid-cols-2 md:grid-cols-3 auto-rows-[180px] md:auto-rows-[220px] gap-4">
+        <div className="mt-14 grid grid-cols-2 md:grid-cols-3 auto-rows-45 md:auto-rows gap-4">
           {photos.map((p, i) => (
             <Reveal key={i} delay={i * 0.05} className={p.h}>
               <button
