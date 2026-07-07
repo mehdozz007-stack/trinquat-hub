@@ -18,7 +18,7 @@ npx wrangler dev --local  # Terminal 2: Backend Worker (:8787)
 Frontend (React 19 + Vite)      Backend (Cloudflare Worker)     Database (D1 Local)
     :5173                           :8787 (Wrangler)          trinquat_newsletter.db
     ↓                               ↓                         ↓
-  Admin UI          ←→    API Endpoints (7)     ←→    Tables (4)
+  Admin UI          ←→    API Endpoints (11)     ←→    Tables (4)
   Newsletter         Bootstrap Admin                  admins
   Subscribers        Login/Logout                     subscribers
   Composer           Newsletter Subscribe            drafts
@@ -74,8 +74,12 @@ curl -X POST http://127.0.0.1:8787/api/admin/bootstrap \
 
 ### Newsletter Admin (cookie `tc_admin` requis)
 - `GET /api/admin/subscribers` - Lister les abonnés
+- `PATCH /api/admin/subscribers/:id` - Toggle actif/inactif
+- `DELETE /api/admin/subscribers/:id` - Supprimer un abonné
 - `GET /api/admin/drafts` - Récupérer les brouillons
 - `POST /api/admin/drafts` - Sauvegarder un brouillon
+- `PATCH /api/admin/drafts/:id` - Modifier un brouillon
+- `DELETE /api/admin/drafts/:id` - Supprimer un brouillon
 - `GET /api/admin/sent-newsletters` - Historique des envois
 
 ## 💾 Base de Données (Cloudflare D1)
@@ -384,7 +388,7 @@ npx wrangler d1 execute trinquat_newsletter --file ./migrations/0002_seed_test_d
 | Élément | Status | Notes |
 |---------|--------|-------|
 | Frontend React | ✅ Complet | Pages + animations |
-| Backend Cloudflare Worker | ✅ Fonctionnel | 7 endpoints |
+| Backend Cloudflare Worker | ✅ Fonctionnel | 11 endpoints |
 | Authentication | ✅ Cookies HttpOnly | Sécurisé |
 | Database D1 Local | ✅ Opérationnel | 4 tables |
 | Database D1 Production | ✅ Prêt | Cloudflare |

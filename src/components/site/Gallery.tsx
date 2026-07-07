@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { X } from "lucide-react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Reveal } from "./Reveal";
 //import g1 from "@/assets/gallery-1.jpg";
 import g1 from "@/assets/gallery-1.jpg";
@@ -57,6 +57,18 @@ export function Gallery() {
             className="fixed inset-0 z-100 flex items-center justify-center bg-foreground/85 p-6 backdrop-blur-xl"
             onClick={() => setOpen(null)}
           >
+            {/* Navigation gauche */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpen((open - 1 + photos.length) % photos.length);
+              }}
+              className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 rounded-full bg-background/80 hover:bg-background p-3 text-foreground transition-all hover:scale-110 z-10"
+              aria-label="Photo précédente"
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </button>
+
             <motion.img
               key={open}
               initial={{ scale: 0.95, opacity: 0 }}
@@ -65,6 +77,20 @@ export function Gallery() {
               src={photos[open].src} alt={photos[open].alt}
               className="max-h-[85vh] max-w-[90vw] rounded-2xl object-contain shadow-elegant"
             />
+
+            {/* Navigation droite */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpen((open + 1) % photos.length);
+              }}
+              className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 rounded-full bg-background/80 hover:bg-background p-3 text-foreground transition-all hover:scale-110 z-10"
+              aria-label="Photo suivante"
+            >
+              <ChevronRight className="h-6 w-6" />
+            </button>
+
+            {/* Bouton fermer */}
             <button
               onClick={() => setOpen(null)}
               className="absolute right-6 top-6 rounded-full bg-background/90 p-3 text-foreground hover:bg-background"
@@ -72,6 +98,11 @@ export function Gallery() {
             >
               <X className="h-5 w-5" />
             </button>
+
+            {/* Compteur photos */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full bg-background/80 text-sm text-foreground">
+              {open + 1} / {photos.length}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

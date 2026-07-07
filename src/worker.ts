@@ -392,7 +392,7 @@ export default {
           const db = env.trinquat_newsletter;
           const result = await db
             .prepare(
-              'SELECT id, subject, content, created_at FROM drafts WHERE admin_id = ? ORDER BY created_at DESC'
+              'SELECT id, subject, content, created_at as savedAt FROM drafts WHERE admin_id = ? ORDER BY created_at DESC'
             )
             .bind(adminId)
             .all<any>();
@@ -450,7 +450,121 @@ export default {
             .run();
 
           return corsHeaders(
-            new Response(JSON.stringify({ id: draftId, subject: body.subject, content: body.content, created_at: now }), {
+            new Response(JSON.stringify({ id: draftId, subject: body.subject, content: body.content, savedAt: now }), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        } catch (dbErr) {
+          console.error('Database error:', dbErr);
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Server error' }), {
+              status: 500,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+      }
+
+      // Update draft
+      const draftPatchMatch = pathname.match(/^\/api\/admin\/drafts\/([^/]+)$/);
+      if (draftPatchMatch && method === 'PATCH') {
+        const adminId = getAdminIdFromCookie(request);
+        if (!adminId) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Unauthorized' }), {
+              status: 401,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        const draftId = draftPatchMatch[1];
+        const body = await getJsonBody<{ subject?: string; content?: string }>(request);
+
+        try {
+          const db = env.trinquat_newsletter;
+          const now = new Date().toISOString();
+
+          // Get current draft to verify ownership
+          const draft = await db
+            .prepare('SELECT id, admin_id FROM drafts WHERE id = ?')
+            .bind(draftId)
+            .first<any>();
+
+          if (!draft || draft.admin_id !== adminId) {
+            return corsHeaders(
+              new Response(JSON.stringify({ error: 'Unauthorized' }), {
+                status: 401,
+                headers: { 'Content-Type': 'application/json' },
+              })
+            );
+          }
+
+          await db
+            .prepare('UPDATE drafts SET subject = ?, content = ?, updated_at = ? WHERE id = ?')
+            .bind(
+              body?.subject || draft.subject,
+              body?.content || draft.content,
+              now,
+              draftId
+            )
+            .run();
+
+          return corsHeaders(
+            new Response(JSON.stringify({ ok: true, id: draftId }), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        } catch (dbErr) {
+          console.error('Database error:', dbErr);
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Server error' }), {
+              status: 500,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+      }
+
+      // Delete draft
+      const draftDeleteMatch = pathname.match(/^\/api\/admin\/drafts\/([^/]+)$/);
+      if (draftDeleteMatch && method === 'DELETE') {
+        const adminId = getAdminIdFromCookie(request);
+        if (!adminId) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Unauthorized' }), {
+              status: 401,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        const draftId = draftDeleteMatch[1];
+
+        try {
+          const db = env.trinquat_newsletter;
+
+          // Verify draft ownership before deleting
+          const draft = await db
+            .prepare('SELECT admin_id FROM drafts WHERE id = ?')
+            .bind(draftId)
+            .first<any>();
+
+          if (!draft || draft.admin_id !== adminId) {
+            return corsHeaders(
+              new Response(JSON.stringify({ error: 'Unauthorized' }), {
+                status: 401,
+                headers: { 'Content-Type': 'application/json' },
+              })
+            );
+          }
+
+          await db.prepare('DELETE FROM drafts WHERE id = ?').bind(draftId).run();
+
+          return corsHeaders(
+            new Response(JSON.stringify({ ok: true, id: draftId }), {
               status: 200,
               headers: { 'Content-Type': 'application/json' },
             })

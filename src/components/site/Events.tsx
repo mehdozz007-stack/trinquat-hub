@@ -110,7 +110,7 @@ export function Events() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedImage(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 md:p-6"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
@@ -118,18 +118,18 @@ export function Events() {
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ duration: 0.3 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-xl max-h-[60vh] flex items-center justify-center p-6"
+              className="relative w-full h-full max-w-7xl max-h-[90vh] flex items-center justify-center"
             >
               <img
                 src={selectedImage}
                 alt="Image agrandie"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain rounded-2xl shadow-2xl"
               />
               <button
                 onClick={() => setSelectedImage(null)}
-                className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/80 rounded-full text-white transition-all duration-200"
+                className="absolute top-4 right-4 md:top-6 md:right-6 p-2.5 md:p-3 bg-black/60 hover:bg-black/80 rounded-full text-white transition-all duration-200 z-10"
               >
-                <X className="h-6 w-6" />
+                <X className="h-5 w-5 md:h-6 md:w-6" />
               </button>
             </motion.div>
           </motion.div>
