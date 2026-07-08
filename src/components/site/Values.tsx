@@ -6,7 +6,7 @@ const values = [
   { icon: Users, title: "Voisinage", text: "Faire connaissance, tisser des liens durables entre habitants de tous âges." },
   { icon: HandHeart, title: "Entraide", text: "Coup de main, prêt d'outils, garde d'enfants : une chaîne de solidarité." },
   { icon: Sparkles, title: "Convivialité", text: "Des moments simples et chaleureux qui font la richesse du quartier." },
-  { icon: TreePine, title: "Nature", text: "Un jardin partagé, des plantations, et le respect du vivant qui nous entoure." },
+  { icon: TreePine, title: "Nature", text: "Des plantations, et le respect du vivant qui nous entoure." },
   { icon: Heart, title: "Famille", text: "Des activités pensées pour les enfants, les parents et les aînés." },
   { icon: Leaf, title: "Écologie", text: "Composteur collectif, troc, et initiatives pour un quartier plus durable." },
 ];

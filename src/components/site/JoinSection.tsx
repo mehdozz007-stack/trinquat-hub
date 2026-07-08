@@ -14,11 +14,6 @@ const perks = [
     title: "Événements prioritaires",
     text: "Accès réservé aux repas de quartier, ateliers et animations pour toute la famille.",
   },
-  {
-    icon: TreePine,
-    title: "Jardin partagé",
-    text: "Un pied de terre au potager collectif et des conseils jardinage entre voisins.",
-  },
 ];
 
 const floatingIcons = [
@@ -92,7 +87,7 @@ export function JoinSection() {
               </motion.div>
             </div>
 
-            <div className="lg:col-span-3 px-8 py-12 md:px-12 md:py-16">
+            <div className="lg:col-span-3 px-8 py-12 md:px-12 md:py-16 flex flex-col justify-center">
               <Reveal>
                 <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary-deep mb-10">
                   Les avantages de l'adhésion
