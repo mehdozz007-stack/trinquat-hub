@@ -68,7 +68,7 @@ export function Hero() {
             alt="Trinquat & Compagnie"
             className="h-32 w-auto md:h-34 lg:h-42 rounded-xl drop-shadow-[0_10px_40px_rgba(103,176,33,0.25)]"
           />
-          <div className="absolute -right-4 -bottom-4 flex flex-col gap-3">
+          <div className="absolute -right-4 top-1/2 -translate-y-1/2 flex flex-col gap-3">
             {socialLinks.map(({ Icon, href, label }) => (
                 <a key={label} href={href} aria-label={label} target="_blank" rel="noopener noreferrer"
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/30 bg-background/60 text-foreground transition-all hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground backdrop-blur">
