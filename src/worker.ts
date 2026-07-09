@@ -9,6 +9,9 @@ interface Env {
   MEDIA_PUBLIC_URL?: string;
 }
 
+import { handleContentRoutes } from './worker-content';
+export type { Env };
+
 // Helper to add CORS headers
 function corsHeaders(response: Response): Response {
   response.headers.set('Access-Control-Allow-Origin', '*');
