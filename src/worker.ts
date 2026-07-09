@@ -620,6 +620,10 @@ export default {
         }
       }
 
+      // Content endpoints (events + news + uploads)
+      const contentResp = await handleContentRoutes(request, env);
+      if (contentResp) return corsHeaders(contentResp);
+
       // 404
       return corsHeaders(
         new Response(JSON.stringify({ error: 'Not found' }), {
@@ -627,7 +631,6 @@ export default {
           headers: { 'Content-Type': 'application/json' },
         })
       );
-      // (content endpoints inserted above via runtime dispatch — see contentRouter)
     } catch (err) {
       console.error('Worker error:', err);
       return corsHeaders(
