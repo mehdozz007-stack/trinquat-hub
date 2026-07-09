@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "./Reveal";
 import { ArrowUpRight, X } from "lucide-react";
@@ -8,7 +8,9 @@ import g10 from "@/assets/gallery-10.jpg";
 import g9 from "@/assets/gallery-9.jpg";
 import g11 from "@/assets/gallery-11.jpg";
 
-const news = [
+type NewsItem = { img: string; tag?: string; date: string; title: string; excerpt: string };
+
+const staticNews: NewsItem[] = [
 { img: VideGrenier, tag: "Vie de quartier", date: "12 Avril 2026", title: "Le vide-grenier de printemps approche !",
     excerpt: "Un vide-grenier à ne pas manquer pour dénicher des trésors et rencontrer vos voisins." },
       { img: g10, tag: "Vie de quartier", date: "15 Mars 2026", title: "Marathon Photo : capturez l'essence du quartier !",
@@ -16,14 +18,41 @@ const news = [
 { img: g7, tag: "Jardin", date: "1 Janvier 2026", title: "Un nouveau composteur pour le quartier, à côté du city stade !",
     excerpt: "Un composteur a été installé pour encourager le compostage et réduire les déchets organiques." },
       {
-    img: g11, badge: "Fête", date: "16 Novembre 2025", place: "Square des Aiguerelles", title: "Fête/faites de la soupe : un succès intergénérationnel !",
-    desc: "Les habitants se sont réunis pour partager des moments conviviaux autour de la soupe à cuisiner.",
+    img: g11, tag: "Fête", date: "16 Novembre 2025", title: "Fête/faites de la soupe : un succès intergénérationnel !",
+    excerpt: "Les habitants se sont réunis pour partager des moments conviviaux autour de la soupe à cuisiner.",
   },
     
 ];
 
+function formatFrDate(iso: string): string {
+  try {
+    return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+  } catch { return iso; }
+}
+
 export function News() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [news, setNews] = useState<NewsItem[]>(staticNews);
+
+  useEffect(() => {
+    let mounted = true;
+    fetch("/api/news")
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((data: any) => {
+        const list = Array.isArray(data?.news) ? data.news : [];
+        if (mounted && list.length > 0) {
+          setNews(list.map((n: any) => ({
+            img: n.image_url || VideGrenier,
+            tag: n.tag || undefined,
+            date: formatFrDate(n.news_date),
+            title: n.title,
+            excerpt: n.excerpt || "",
+          })));
+        }
+      })
+      .catch(() => {});
+    return () => { mounted = false; };
+  }, []);
 
   return (
     <section id="news" className="py-12 md:py-20 bg-secondary/70">
