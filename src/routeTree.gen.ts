@@ -17,6 +17,7 @@ import { Route as ActualitesRouteImport } from './routes/actualites'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminNewsletterRouteImport } from './routes/admin.newsletter'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminContentRouteImport } from './routes/admin.content'
 
 const GalerieRoute = GalerieRouteImport.update({
   id: '/galerie',
@@ -58,6 +59,11 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminContentRoute = AdminContentRouteImport.update({
+  id: '/admin/content',
+  path: '/admin/content',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 // Export route tree without API routes (to avoid server import issues)
 export const routeTree = rootRouteImport.addChildren([
@@ -69,6 +75,7 @@ export const routeTree = rootRouteImport.addChildren([
   GalerieRoute,
   AdminNewsletterRoute,
   AdminLoginRoute,
+  AdminContentRoute,
 ]) as any
 
 export interface FileRoutesByFullPath {
@@ -80,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/galerie': typeof GalerieRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
+  '/admin/content': typeof AdminContentRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -90,6 +98,7 @@ export interface FileRoutesByTo {
   '/galerie': typeof GalerieRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
+  '/admin/content': typeof AdminContentRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -101,6 +110,7 @@ export interface FileRoutesById {
   '/galerie': typeof GalerieRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
+  '/admin/content': typeof AdminContentRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -113,6 +123,7 @@ export interface FileRouteTypes {
     | '/galerie'
     | '/admin/login'
     | '/admin/newsletter'
+    | '/admin/content'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -123,6 +134,7 @@ export interface FileRouteTypes {
     | '/galerie'
     | '/admin/login'
     | '/admin/newsletter'
+    | '/admin/content'
   id:
     | '__root__'
     | '/'
@@ -133,6 +145,7 @@ export interface FileRouteTypes {
     | '/galerie'
     | '/admin/login'
     | '/admin/newsletter'
+    | '/admin/content'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -144,6 +157,7 @@ export interface RootRouteChildren {
   GalerieRoute: typeof GalerieRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminNewsletterRoute: typeof AdminNewsletterRoute
+  AdminContentRoute: typeof AdminContentRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -204,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminNewsletterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/content': {
+      id: '/admin/content'
+      path: '/admin/content'
+      fullPath: '/admin/content'
+      preLoaderRoute: typeof AdminContentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -216,6 +237,7 @@ const rootRouteChildren: RootRouteChildren = {
   GalerieRoute: GalerieRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminNewsletterRoute: AdminNewsletterRoute,
+  AdminContentRoute: AdminContentRoute,
 }
 declare module '@tanstack/react-router' {
   interface FileRouteTypes extends FileRouteTypes {}

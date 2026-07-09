@@ -5,7 +5,12 @@ interface Env {
   BREVO_API_KEY?: string;
   BREVO_SENDER_EMAIL?: string;
   BREVO_SENDER_NAME?: string;
+  MEDIA?: R2Bucket;
+  MEDIA_PUBLIC_URL?: string;
 }
+
+import { handleContentRoutes } from './worker-content';
+export type { Env };
 
 // Helper to add CORS headers
 function corsHeaders(response: Response): Response {
@@ -617,6 +622,10 @@ export default {
           );
         }
       }
+
+      // Content endpoints (events + news + uploads)
+      const contentResp = await handleContentRoutes(request, env);
+      if (contentResp) return corsHeaders(contentResp);
 
       // 404
       return corsHeaders(

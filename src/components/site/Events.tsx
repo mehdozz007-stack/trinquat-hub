@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "./Reveal";
 import { Link } from "@tanstack/react-router";
@@ -9,7 +9,9 @@ import VideGrenier from "@/assets/vide-grenier1.jpg";
 import g7 from "@/assets/gallery-7.jpg";
 import g9 from "@/assets/gallery-9.jpg";
 
-const events = [
+type EventItem = { img: string; badge?: string; date: string; title: string; place?: string; desc: string };
+
+const staticEvents: EventItem[] = [
   {
     img: imgFete, badge: "À venir",
     date: "9 Juillet 2026", title: "Rencontre", place: "Square des Aiguerelles",
@@ -33,8 +35,36 @@ const more = [
   { date: "15 Mars", label: "Marathon Photo" },
 ];
 
+function formatFrDate(iso: string): string {
+  try {
+    return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+  } catch { return iso; }
+}
+
 export function Events() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [events, setEvents] = useState<EventItem[]>(staticEvents);
+
+  useEffect(() => {
+    let mounted = true;
+    fetch("/api/events")
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((data: any) => {
+        const list = Array.isArray(data?.events) ? data.events : [];
+        if (mounted && list.length > 0) {
+          setEvents(list.map((e: any) => ({
+            img: e.image_url || imgFete,
+            badge: e.badge || undefined,
+            date: formatFrDate(e.event_date),
+            title: e.title,
+            place: e.place || undefined,
+            desc: e.description || "",
+          })));
+        }
+      })
+      .catch(() => {});
+    return () => { mounted = false; };
+  }, []);
 
   return (
     <section id="events" className="relative bg-secondary/40 py-12 md:py-20">
