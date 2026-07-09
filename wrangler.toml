@@ -12,12 +12,12 @@ migrations_dir = "migrations"
 # Bucket R2 pour images (événements + actualités)
 # Créez le bucket : `wrangler r2 bucket create trinquat-media`
 # Activez l'accès public dans le dashboard puis renseignez MEDIA_PUBLIC_URL ci-dessous.
-[[r2_buckets]]
-binding = "MEDIA"
-bucket_name = "trinquat-media"
+# [[r2_buckets]]
+# binding = "MEDIA"
+# bucket_name = "trinquat-media"
 
-[vars]
-MEDIA_PUBLIC_URL = "https://pub-REPLACE_ME.r2.dev"
+# [vars]
+# MEDIA_PUBLIC_URL = "https://pub-REPLACE_ME.r2.dev"
 
 [env.production]
 vars = { ENVIRONMENT = "production" }
@@ -26,9 +26,9 @@ binding = "DB"
 database_name = "trinquat_newsletter"
 database_id = "db2895c7-7a16-4bf3-90b6-72485f80ea94"
 
-[[env.production.r2_buckets]]
-binding = "MEDIA"
-bucket_name = "trinquat-media"
+# [[env.production.r2_buckets]]
+# binding = "MEDIA"
+# bucket_name = "trinquat-media"
 
 # Secrets configuration (for production use):
 # wrangler secret put JWT_SECRET --env production

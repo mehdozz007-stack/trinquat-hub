@@ -9,7 +9,7 @@ interface Env {
   MEDIA_PUBLIC_URL?: string;
 }
 
-import { handleContentRoutes } from './worker-content';
+// import { handleContentRoutes } from './worker-content';
 export type { Env };
 
 // Helper to add CORS headers
@@ -676,8 +676,9 @@ export default {
       }
 
       // Content endpoints (events + news + uploads)
-      const contentResp = await handleContentRoutes(request, env);
-      if (contentResp) return corsHeaders(contentResp);
+      // Commented out: R2 bucket not configured yet
+      // const contentResp = await handleContentRoutes(request, env);
+      // if (contentResp) return corsHeaders(contentResp);
 
       // 404
       return corsHeaders(
