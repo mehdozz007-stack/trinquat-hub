@@ -627,6 +627,7 @@ export default {
           headers: { 'Content-Type': 'application/json' },
         })
       );
+      // (content endpoints inserted above via runtime dispatch — see contentRouter)
     } catch (err) {
       console.error('Worker error:', err);
       return corsHeaders(
