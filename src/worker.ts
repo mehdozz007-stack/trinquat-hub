@@ -5,6 +5,8 @@ interface Env {
   BREVO_API_KEY?: string;
   BREVO_SENDER_EMAIL?: string;
   BREVO_SENDER_NAME?: string;
+  MEDIA?: R2Bucket;
+  MEDIA_PUBLIC_URL?: string;
 }
 
 // Helper to add CORS headers
