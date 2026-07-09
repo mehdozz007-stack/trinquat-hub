@@ -23,20 +23,15 @@ export function Contact() {
     if (Object.keys(errs).length === 0) {
       setLoading(true);
       try {
-        const response = await fetch("https://formsubmit.co/ajax/mehdozz007@gmail.com", {
+        const response = await fetch("/api/contact", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Accept": "application/json",
           },
           body: JSON.stringify({
             name,
             email,
             message,
-            _captcha: "false",
-            _template: "box",
-            _subject: "📩 Nouveau message depuis le site 🌳 Trinquat & Compagnie 🌳",
-            _replyto: email,
           }),
         });
 

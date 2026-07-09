@@ -623,6 +623,58 @@ export default {
         }
       }
 
+      // Contact form submission
+      if (pathname === '/api/contact' && method === 'POST') {
+        const body = await getJsonBody<{ name: string; email: string; message: string }>(request);
+        if (!body || !body.name || !body.email || !body.message) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Name, email, and message required' }), {
+              status: 400,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        try {
+          // Forward to formsubmit.co
+          const formsubmitResponse = await fetch('https://formsubmit.co/ajax/contact@trinquatetcompagnie.fr', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+              name: body.name,
+              email: body.email,
+              message: body.message,
+              _captcha: 'false',
+              _template: 'box',
+              _subject: '📩 Nouveau message depuis le site 🌳 Trinquat & Compagnie 🌳',
+              _replyto: body.email,
+            }),
+          });
+
+          if (formsubmitResponse.ok) {
+            return corsHeaders(
+              new Response(JSON.stringify({ ok: true, message: 'Email sent successfully' }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+              })
+            );
+          } else {
+            throw new Error('Formsubmit failed');
+          }
+        } catch (err) {
+          console.error('Contact form error:', err);
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Failed to send email', detail: String(err) }), {
+              status: 500,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+      }
+
       // Content endpoints (events + news + uploads)
       const contentResp = await handleContentRoutes(request, env);
       if (contentResp) return corsHeaders(contentResp);
