@@ -4,10 +4,8 @@ import { Reveal } from "./Reveal";
 import { Link } from "@tanstack/react-router";
 import { Calendar, MapPin, ArrowUpRight, X, Search, Filter, FileText } from "lucide-react";
 import imgFete from "@/assets/gallery-8.jpg";
-import imgRepas from "@/assets/gallery-9.jpg";
 import VideGrenier from "@/assets/vide-grenier1.jpg";
 import g7 from "@/assets/gallery-7.jpg";
-import g9 from "@/assets/gallery-9.jpg";
 import g10 from "@/assets/gallery-10.jpg";
 import g11 from "@/assets/gallery-11.jpg";
 import VideGrenier2 from "@/assets/Vide-grenier.jpg";
@@ -46,7 +44,7 @@ const staticContent: ContentItem[] = [
     img: VideGrenier2,
     badge: "Passé",
     date: "2026-04-12",
-    title: "Le vide-grenier de printemps approche !",
+    title: "Affiche Vide Grenier",
     desc: "Un vide-grenier à ne pas manquer pour dénicher des trésors et rencontrer vos voisins.",
     excerpt: "Un vide-grenier à ne pas manquer pour dénicher des trésors et rencontrer vos voisins.",
     category: "Vie de quartier",
@@ -58,7 +56,7 @@ const staticContent: ContentItem[] = [
     img: g10,
     badge: "Passé",
     date: "2026-03-15",
-    title: "Marathon Photo : capturez l'essence du quartier !",
+    title: "Affiche Marathon Photo : capturez l'essence du quartier !",
     desc: "Rassemblez vos appareils photo et explorez le quartier à travers votre objectif.",
     excerpt: "Rassemblez vos appareils photo et explorez le quartier à travers votre objectif.",
     category: "Initiatives",
@@ -86,18 +84,6 @@ const staticContent: ContentItem[] = [
     title: "Fête/faites de la soupe : un succès intergénérationnel !",
     desc: "Les habitants se sont réunis pour partager des moments conviviaux autour de la soupe à cuisiner.",
     category: "Fête",
-    isPast: true,
-  },
-  {
-    id: "7",
-    type: "event",
-    img: VideGrenier,
-    badge: "Passé",
-    date: "2026-04-12",
-    place: "École Anne-Frank Charles Dickes",
-    title: "Le vide-grenier de printemps",
-    desc: "Un vide-grenier à l'école du quartier, pour dénicher des trésors et rencontrer vos voisins.",
-    category: "Vie de quartier",
     isPast: true,
   },
 ];

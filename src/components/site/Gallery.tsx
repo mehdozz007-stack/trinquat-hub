@@ -13,6 +13,9 @@ import photo2 from "@/assets/2025-01-25_031.jpg";
 import photo3 from "@/assets/2025-11-16_024.jpg";
 import photo4 from "@/assets/2025-11-23_016.jpg";
 import photo5 from "@/assets/2026-03-08_006.jpg";
+import photo6 from "@/assets/2024-10-08_053.jpg";
+import photo7 from "@/assets/2024-10-09_001.jpg";
+import photo8 from "@/assets/2024-11-17_011.jpg";
 const photos = [
   { src: g1, alt: "Composteur installé dans le quartier", h: "row-span-2" },
   { src: g8, alt: "Voisins réunis sous un arbre", h: "" },
@@ -24,6 +27,9 @@ const photos = [
   { src: photo3, alt: "Fête de la soupe - 16 Novembre 2025", h: "row-span-2" },
   { src: photo4, alt: "Moments du quartier - 23 Novembre 2025", h: "" },
   { src: photo5, alt: "Moments du quartier - 8 Mars 2026", h: "" },
+  { src: photo6, alt: "Événement du quartier - 8 Octobre 2024", h: "" },
+  { src: photo7, alt: "Événement du quartier - 9 Octobre 2024", h: "row-span-2" },
+  { src: photo8, alt: "Événement du quartier - 17 Novembre 2024", h: "" },
 ];
 
 export function Gallery() {
