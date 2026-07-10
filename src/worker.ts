@@ -638,17 +638,20 @@ export default {
             email: body.email,
           });
 
-          // Send email via FormSubmit
-          const formData = new FormData();
-          formData.append('name', body.name);
-          formData.append('email', body.email);
-          formData.append('message', body.message);
-          formData.append('_subject', '📩 Nouveau message depuis le site');
-          formData.append('_reply_to', body.email);
+          // Send email via FormSubmit using URL-encoded format
+          const formBody = new URLSearchParams();
+          formBody.append('name', body.name);
+          formBody.append('email', body.email);
+          formBody.append('message', body.message);
+          formBody.append('_subject', '📩 Nouveau message depuis le site trinquatetcompagnie.fr 🏡🌳');
+          formBody.append('_reply_to', body.email);
 
           const formsubmitResponse = await fetch('https://formsubmit.co/contact@trinquatetcompagnie.fr', {
             method: 'POST',
-            body: formData,
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formBody.toString(),
           });
 
           console.log('FormSubmit response status:', formsubmitResponse.status);
