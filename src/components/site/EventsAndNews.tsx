@@ -343,7 +343,7 @@ export function EventsAndNews() {
         ) : (
           <Reveal>
             <div className="py-16 mb-16 text-center bg-card/50 border border-border/70 rounded-3xl">
-              <Calendar className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
+              <Calendar className="h-12 w-12 mx-auto text-muted-foreground/70 mb-4" />
               <h3 className="text-xl font-semibold text-foreground mb-2">Aucun événement à venir</h3>
               <p className="text-muted-foreground">
                 Revenez bientôt pour découvrir les prochains rendez-vous de Trinquat & Compagnie.
@@ -356,7 +356,7 @@ export function EventsAndNews() {
         {filteredContent.length === 0 && (
           <Reveal>
             <div className="py-16 text-center">
-              <FileText className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
+              <FileText className="h-12 w-12 mx-auto text-muted-foreground/70 mb-4" />
               <p className="text-muted-foreground text-lg">
                 Aucun résultat ne correspond à votre recherche.
               </p>
@@ -380,7 +380,7 @@ export function EventsAndNews() {
           <div className="mx-auto max-w-7xl px-6 lg:px-10 py-12 md:py-20">
             <Reveal>
               <h2 className="text-2xl md:text-3xl font-semibold mb-8">
-                Archives
+                Archives et événements passés
               </h2>
             </Reveal>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

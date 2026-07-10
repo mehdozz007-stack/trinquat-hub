@@ -43,7 +43,7 @@ export function Values() {
             <img 
               src={new URL("../../assets/Triquat_CompagnieVoisins.jpg", import.meta.url).href}
               alt="Trinquat & Compagnie - Notre communauté" 
-              className="w-full h-auto rounded-2xl shadow-2xl shadow-primary-deep/30 object-cover"
+              className="w-full h-auto rounded-3xl shadow-2xl shadow-primary-deep/30 object-cover"
             />
           </Reveal>
         </div>
