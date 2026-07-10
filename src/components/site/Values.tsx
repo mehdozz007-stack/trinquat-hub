@@ -49,17 +49,19 @@ export function Values() {
           </div>
 
           <Reveal className="lg:col-span-7">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               {communityPhotos.map((photo, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(idx)}
-                  className="group relative overflow-hidden rounded-3xl shadow-2xl shadow-primary-deep/30"
+                  className={`group relative overflow-hidden rounded-3xl shadow-2xl shadow-primary-deep/30 ${
+                    idx === 0 ? "col-span-2 row-span-2" : "col-span-1"
+                  }`}
                 >
                   <img 
                     src={photo.src}
                     alt={photo.alt}
-                    className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-foreground/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </button>
