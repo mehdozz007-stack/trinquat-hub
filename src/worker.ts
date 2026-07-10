@@ -1,5 +1,6 @@
 interface Env {
   trinquat_newsletter: D1Database;
+  RESEND_API_KEY?: string;
   JWT_SECRET?: string;
   ADMIN_BOOTSTRAP_TOKEN?: string;
   MEDIA?: R2Bucket;
@@ -620,7 +621,7 @@ export default {
         }
       }
 
-      // Contact form submission - proxy to FormSubmit
+      // Contact form submission - send via FormSubmit
       if (pathname === '/api/contact' && method === 'POST') {
         const body = await getJsonBody<{ name: string; email: string; message: string }>(request);
         if (!body || !body.name || !body.email || !body.message) {
@@ -643,7 +644,7 @@ export default {
           formBody.append('name', body.name);
           formBody.append('email', body.email);
           formBody.append('message', body.message);
-          formBody.append('_subject', '📩 Nouveau message depuis le site trinquatetcompagnie.fr 🏡🌳');
+          formBody.append('_subject', 'Nouveau message depuis le site trinquatetcompagnie.fr');
           formBody.append('_reply_to', body.email);
 
           const formsubmitResponse = await fetch('https://formsubmit.co/contact@trinquatetcompagnie.fr', {
@@ -667,7 +668,7 @@ export default {
           } else {
             const errorText = await formsubmitResponse.text();
             console.error('FormSubmit error status:', formsubmitResponse.status);
-            console.error('FormSubmit error response:', errorText);
+            console.error('FormSubmit error response:', errorText.substring(0, 200));
             throw new Error(`FormSubmit error: ${formsubmitResponse.status}`);
           }
         } catch (err) {
