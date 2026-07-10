@@ -86,7 +86,7 @@ export function EventsAndNewsPreview() {
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16">
             <Reveal>
-              <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">Agenda</span>
+              <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">Agenda & Actualités</span>
               <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
                 Les <span className="text-gradient">rendez-vous</span> du quartier
               </h2>
