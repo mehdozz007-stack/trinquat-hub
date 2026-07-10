@@ -33,7 +33,7 @@ export function Contact() {
         formData.append("name", name);
         formData.append("email", email);
         formData.append("message", message);
-        formData.append("_subject", "Nouveau message depuis le site trinquatetcompagnie.fr");
+        formData.append("_subject", "🌿 Nouveau message depuis le site trinquatetcompagnie.fr 🏡🌳");
         formData.append("_reply_to", email);
         formData.append("_captcha", "false");
         
