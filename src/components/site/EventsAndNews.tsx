@@ -41,18 +41,6 @@ const staticContent: ContentItem[] = [
     isPast: true,
   },
   {
-    id: "2",
-    type: "event",
-    img: g7,
-    badge: "Passé",
-    date: "2026-07-31",
-    title: "Apéro compost & jardinage",
-    place: "City Stade des Aiguerelles",
-    desc: "Un moment convivial pour apprendre à composter et entretenir vos jardins. Apportez vos déchets organiques et votre bonne humeur !",
-    category: "Jardinage",
-    isPast: true,
-  },
-  {
     id: "3",
     type: "news",
     img: VideGrenier2,
@@ -147,7 +135,7 @@ export function EventsAndNews() {
       fetch("/api/news")
         .then((r) => (r.ok ? r.json() : Promise.reject()))
         .catch(() => ({ news: [] })),
-    ]).then(([eventsData, newsData]) => {
+    ]).then(([eventsData, newsData]: any[]) => {
       if (!mounted) return;
       const items: ContentItem[] = [];
 
