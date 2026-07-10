@@ -39,26 +39,13 @@ export function Values() {
             </Reveal>
           </div>
 
-          <div className="lg:col-span-7 grid sm:grid-cols-2 gap-4">
-                      {values.map((v, i) => (
-                        <Reveal key={v.title} delay={i * 0.05}>
-                          <div 
-                            className={`group relative h-full rounded-2xl border border-border/70 bg-card p-7 shadow-lg shadow-primary-deep/15 transition-all duration-300 cursor-pointer hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary-deep/40 hover:border-primary/60 hover:scale-[1.02] ${
-                              selectedCard === v.title 
-                                ? 'scale-110 shadow-2xl shadow-primary-deep/50 border-primary/80' 
-                                : ''
-                            }`}>
-                            <div className="flex items-center gap-4">
-                              <div className="flex h-12 w-12 min-w-12 items-center justify-center rounded-xl bg-primary-soft text-primary-deep transition-colors group-hover:bg-gradient-leaf group-hover:text-primary-foreground">
-                                <v.icon className="h-5 w-5" />
-                              </div>
-                              <h3 className="text-xl font-semibold text-foreground">{v.title}</h3>
-                            </div>
-                            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{v.text}</p>
-                          </div>
-                        </Reveal>
-                      ))}
-                    </div>
+          <Reveal className="lg:col-span-7">
+            <img 
+              src={new URL("../../assets/Triquat_CompagnieVoisins.jpg", import.meta.url).href}
+              alt="Trinquat & Compagnie - Notre communauté" 
+              className="w-full h-auto rounded-2xl shadow-2xl shadow-primary-deep/30 object-cover"
+            />
+          </Reveal>
         </div>
       </div>
     </section>

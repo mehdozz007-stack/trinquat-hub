@@ -636,25 +636,41 @@ export default {
         }
 
         try {
-          // Forward to formsubmit.co
-          const formsubmitResponse = await fetch('https://formsubmit.co/ajax/contact@trinquatetcompagnie.fr', {
+          // Check if Brevo API key is configured
+          if (!env.BREVO_API_KEY) {
+            console.error('BREVO_API_KEY not configured');
+            return corsHeaders(
+              new Response(JSON.stringify({ error: 'Email service not configured' }), {
+                status: 503,
+                headers: { 'Content-Type': 'application/json' },
+              })
+            );
+          }
+
+          // Send email via Brevo API
+          const brevoResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Accept': 'application/json',
+              'api-key': env.BREVO_API_KEY,
             },
             body: JSON.stringify({
-              name: body.name,
-              email: body.email,
-              message: body.message,
-              _captcha: 'false',
-              _template: 'box',
-              _subject: '📩 Nouveau message depuis le site 🌳 Trinquat & Compagnie 🌳',
-              _replyto: body.email,
+              to: [{ email: 'contact@trinquatetcompagnie.fr', name: 'Trinquat & Compagnie' }],
+              replyTo: { email: body.email, name: body.name },
+              subject: '📩 Nouveau message depuis le site',
+              htmlContent: `
+                <h2>Nouveau message de ${body.name}</h2>
+                <p><strong>Email:</strong> ${body.email}</p>
+                <hr>
+                <h3>Message:</h3>
+                <p>${body.message.replace(/\n/g, '<br>')}</p>
+              `,
+              textContent: `Nouveau message de ${body.name}\n\nEmail: ${body.email}\n\n${body.message}`,
+              sender: { email: 'noreply@trinquatetcompagnie.fr', name: 'Trinquat & Compagnie' },
             }),
           });
 
-          if (formsubmitResponse.ok) {
+          if (brevoResponse.ok) {
             return corsHeaders(
               new Response(JSON.stringify({ ok: true, message: 'Email sent successfully' }), {
                 status: 200,
@@ -662,7 +678,17 @@ export default {
               })
             );
           } else {
-            throw new Error('Formsubmit failed');
+            const errorText = await brevoResponse.text();
+            console.error('Brevo error status:', brevoResponse.status);
+            console.error('Brevo error response:', errorText);
+            let errorMsg = 'Brevo API error';
+            try {
+              const error = JSON.parse(errorText);
+              errorMsg = error.message || error.code || errorText;
+            } catch {
+              errorMsg = errorText;
+            }
+            throw new Error(errorMsg);
           }
         } catch (err) {
           console.error('Contact form error:', err);
