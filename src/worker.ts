@@ -2,9 +2,6 @@ interface Env {
   trinquat_newsletter: D1Database;
   JWT_SECRET?: string;
   ADMIN_BOOTSTRAP_TOKEN?: string;
-  BREVO_API_KEY?: string;
-  BREVO_SENDER_EMAIL?: string;
-  BREVO_SENDER_NAME?: string;
   MEDIA?: R2Bucket;
   MEDIA_PUBLIC_URL?: string;
 }
@@ -623,7 +620,7 @@ export default {
         }
       }
 
-      // Contact form submission
+      // Contact form submission - proxy to FormSubmit
       if (pathname === '/api/contact' && method === 'POST') {
         const body = await getJsonBody<{ name: string; email: string; message: string }>(request);
         if (!body || !body.name || !body.email || !body.message) {
@@ -636,51 +633,28 @@ export default {
         }
 
         try {
-          // Check if Brevo API key is configured
-          if (!env.BREVO_API_KEY) {
-            console.error('BREVO_API_KEY not configured');
-            return corsHeaders(
-              new Response(JSON.stringify({ error: 'Email service not configured' }), {
-                status: 503,
-                headers: { 'Content-Type': 'application/json' },
-              })
-            );
-          }
-
-          console.log('Sending contact form email:', {
-            to: 'contact@trinquatetcompagnie.fr',
-            from: 'noreply@trinquatetcompagnie.fr',
+          console.log('Sending contact form via FormSubmit:', {
             name: body.name,
             email: body.email,
           });
 
-          // Send email via Brevo API
-          const brevoResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
+          // Send email via FormSubmit
+          const formData = new FormData();
+          formData.append('name', body.name);
+          formData.append('email', body.email);
+          formData.append('message', body.message);
+          formData.append('_subject', '📩 Nouveau message depuis le site');
+          formData.append('_reply_to', body.email);
+
+          const formsubmitResponse = await fetch('https://formsubmit.co/contact@trinquatetcompagnie.fr', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'api-key': env.BREVO_API_KEY,
-            },
-            body: JSON.stringify({
-              to: [{ email: 'contact@trinquatetcompagnie.fr', name: 'Trinquat & Compagnie' }],
-              replyTo: { email: body.email, name: body.name },
-              subject: '📩 Nouveau message depuis le site',
-              htmlContent: `
-                <h2>Nouveau message de ${body.name}</h2>
-                <p><strong>Email:</strong> ${body.email}</p>
-                <hr>
-                <h3>Message:</h3>
-                <p>${body.message.replace(/\n/g, '<br>')}</p>
-              `,
-              textContent: `Nouveau message de ${body.name}\n\nEmail: ${body.email}\n\n${body.message}`,
-              sender: { email: 'noreply@trinquatetcompagnie.fr', name: 'Trinquat & Compagnie' },
-            }),
+            body: formData,
           });
 
-          console.log('Brevo response status:', brevoResponse.status);
+          console.log('FormSubmit response status:', formsubmitResponse.status);
 
-          if (brevoResponse.ok) {
-            console.log('Email sent successfully');
+          if (formsubmitResponse.ok) {
+            console.log('Email sent successfully via FormSubmit');
             return corsHeaders(
               new Response(JSON.stringify({ ok: true, message: 'Email sent successfully' }), {
                 status: 200,
@@ -688,17 +662,10 @@ export default {
               })
             );
           } else {
-            const errorText = await brevoResponse.text();
-            console.error('Brevo error status:', brevoResponse.status);
-            console.error('Brevo error response:', errorText);
-            let errorMsg = 'Brevo API error';
-            try {
-              const error = JSON.parse(errorText);
-              errorMsg = error.message || error.code || errorText;
-            } catch {
-              errorMsg = errorText;
-            }
-            throw new Error(errorMsg);
+            const errorText = await formsubmitResponse.text();
+            console.error('FormSubmit error status:', formsubmitResponse.status);
+            console.error('FormSubmit error response:', errorText);
+            throw new Error(`FormSubmit error: ${formsubmitResponse.status}`);
           }
         } catch (err) {
           console.error('Contact form error:', err);
