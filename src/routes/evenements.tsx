@@ -19,7 +19,7 @@ export const Route = createFileRoute("/evenements")({
 
 function EvenementsPage() {
   return (
-    <main className="min-h-dvh bg-background text-foreground">
+    <main className="flex flex-col min-h-screen">
       <Navbar />
       <PageHeader
         eyebrow="Agenda & Actualités"

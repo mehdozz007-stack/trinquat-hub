@@ -225,7 +225,7 @@ export function EventsAndNews() {
               loading="lazy"
               className="h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-foreground/40 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-foreground/40 via-transparent to-transparent" />
             <span className="absolute left-4 top-4 inline-flex items-center rounded-full bg-background/90 px-3 py-1 text-xs font-medium text-foreground backdrop-blur">
               {item.badge}
             </span>
@@ -353,7 +353,7 @@ export function EventsAndNews() {
 
         {/* Past Section */}
         {pastItems.length > 0 && (
-          <div>
+          <div className="bg-secondary/50 -mx-6 lg:-mx-10 px-6 lg:px-10 py-16 md:py-20 mt-16">
             <Reveal>
               <h2 className="text-2xl md:text-3xl font-semibold mb-8 opacity-70">
                 Archives
