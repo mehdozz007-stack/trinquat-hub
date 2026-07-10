@@ -223,7 +223,9 @@ export function EventsAndNews() {
 
   // Split by past/upcoming
   const upcomingItems = filteredContent.filter((item) => !item.isPast);
-  const pastItems = filteredContent.filter((item) => item.isPast);
+  const pastItems = filteredContent
+    .filter((item) => item.isPast)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const renderItem = (item: ContentItem, index: number) => (
     <Reveal key={item.id} delay={index * 0.05}>
