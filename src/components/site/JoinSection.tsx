@@ -16,7 +16,7 @@ const perks = [
   },
   {
     icon: TreePine,
-    title: "Jardin partagé",
+    title: "Futur Jardin partagé",
     text: "Participez à l'entretien du jardin collectif et profitez de ses récoltes.",
   },
 ];

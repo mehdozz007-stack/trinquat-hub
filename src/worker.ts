@@ -647,6 +647,13 @@ export default {
             );
           }
 
+          console.log('Sending contact form email:', {
+            to: 'contact@trinquatetcompagnie.fr',
+            from: 'noreply@trinquatetcompagnie.fr',
+            name: body.name,
+            email: body.email,
+          });
+
           // Send email via Brevo API
           const brevoResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
             method: 'POST',
@@ -670,7 +677,10 @@ export default {
             }),
           });
 
+          console.log('Brevo response status:', brevoResponse.status);
+
           if (brevoResponse.ok) {
+            console.log('Email sent successfully');
             return corsHeaders(
               new Response(JSON.stringify({ ok: true, message: 'Email sent successfully' }), {
                 status: 200,
