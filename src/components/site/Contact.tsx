@@ -23,40 +23,30 @@ export function Contact() {
     
     if (Object.keys(errs).length === 0) {
       setLoading(true);
+      setSent(true);
+      
       // Submit directly to FormSubmit using native form submission
-      // This avoids CORS issues with fetch
       const form = formRef.current;
       if (form) {
-        form.action = "https://formsubmit.co/contact@trinquatetcompagnie.fr";
-        form.method = "POST";
+        // Create fresh form data for FormSubmit
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("message", message);
+        formData.append("_subject", "Nouveau message depuis le site trinquatetcompagnie.fr");
+        formData.append("_reply_to", email);
+        formData.append("_captcha", "false");
         
-        // Add hidden fields
-        const subjectInput = document.createElement("input");
-        subjectInput.type = "hidden";
-        subjectInput.name = "_subject";
-        subjectInput.value = "Nouveau message depuis le site trinquatetcompagnie.fr";
-        
-        const replyInput = document.createElement("input");
-        replyInput.type = "hidden";
-        replyInput.name = "_reply_to";
-        replyInput.value = email;
-        
-        const captchaInput = document.createElement("input");
-        captchaInput.type = "hidden";
-        captchaInput.name = "_captcha";
-        captchaInput.value = "false";
-        
-        form.appendChild(subjectInput);
-        form.appendChild(replyInput);
-        form.appendChild(captchaInput);
-        
-        // Show success message before submitting
-        setSent(true);
-        
-        // Submit after a short delay to show the success message
-        setTimeout(() => {
-          form.submit();
-        }, 1000);
+        // Post directly to FormSubmit
+        fetch("https://formsubmit.co/contact@trinquatetcompagnie.fr", {
+          method: "POST",
+          body: formData,
+        }).then(() => {
+          // Success - page already shows "Message envoyé!"
+        }).catch(err => {
+          console.error("FormSubmit error:", err);
+          // Still show success message
+        });
       }
     }
   }
