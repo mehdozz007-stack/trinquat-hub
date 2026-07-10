@@ -644,7 +644,7 @@ export default {
           formBody.append('name', body.name);
           formBody.append('email', body.email);
           formBody.append('message', body.message);
-          formBody.append('_subject', 'Nouveau message depuis le site trinquatetcompagnie.fr');
+          formBody.append('_subject', '📩 Nouveau message depuis le site trinquatetcompagnie.fr 🏡🌳');
           formBody.append('_reply_to', body.email);
 
           const formsubmitResponse = await fetch('https://formsubmit.co/contact@trinquatetcompagnie.fr', {
