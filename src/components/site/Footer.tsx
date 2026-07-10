@@ -58,7 +58,7 @@ export function Footer() {
           <div className="md:col-span-3">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground/80">Naviguer</h3>
             <ul className="mt-5 space-y-3 text-sm">
-              {[["/association","L'association"],["/evenements","Événements"],["/galerie","Galerie"],["/actualites","Actualités"],["/contact","Contact"]].map(([h,l]) => (
+              {[["/association","L'association"],["/evenements","Événements"],["/galerie","Galerie"],["/contact","Contact"]].map(([h,l]) => (
                 <li key={h}><Link to={h} className="text-muted-foreground hover:text-foreground transition-colors">{l}</Link></li>
               ))}
             </ul>
