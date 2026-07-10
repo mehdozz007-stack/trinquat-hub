@@ -23,16 +23,18 @@ export function Contact() {
     if (Object.keys(errs).length === 0) {
       setLoading(true);
       try {
-        const response = await fetch("/api/contact", {
+        // Send directly to FormSubmit to avoid Cloudflare Workers IP blocking
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("message", message);
+        formData.append("_subject", "Nouveau message depuis le site trinquatetcompagnie.fr");
+        formData.append("_reply_to", email);
+        formData.append("_captcha", "false"); // Disable CAPTCHA
+
+        const response = await fetch("https://formsubmit.co/contact@trinquatetcompagnie.fr", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name,
-            email,
-            message,
-          }),
+          body: formData,
         });
 
         if (response.ok) {
