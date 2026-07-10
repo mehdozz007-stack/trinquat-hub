@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, useRef, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "./Reveal";
 import { Check, Mail, MapPin, Send } from "lucide-react";
@@ -7,6 +7,7 @@ export function Contact() {
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const formRef = useRef<HTMLFormElement>(null);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -22,31 +23,40 @@ export function Contact() {
     
     if (Object.keys(errs).length === 0) {
       setLoading(true);
-      try {
-        // Send directly to FormSubmit to avoid Cloudflare Workers IP blocking
-        const formData = new FormData();
-        formData.append("name", name);
-        formData.append("email", email);
-        formData.append("message", message);
-        formData.append("_subject", "Nouveau message depuis le site trinquatetcompagnie.fr");
-        formData.append("_reply_to", email);
-        formData.append("_captcha", "false"); // Disable CAPTCHA
-
-        const response = await fetch("https://formsubmit.co/contact@trinquatetcompagnie.fr", {
-          method: "POST",
-          body: formData,
-        });
-
-        if (response.ok) {
-          setSent(true);
-          (e.currentTarget as HTMLFormElement).reset();
-        } else {
-          setErrors({ submit: "Erreur lors de l'envoi. Veuillez réessayer." });
-        }
-      } catch (error) {
-        setErrors({ submit: "Erreur de connexion. Veuillez réessayer." });
-      } finally {
-        setLoading(false);
+      // Submit directly to FormSubmit using native form submission
+      // This avoids CORS issues with fetch
+      const form = formRef.current;
+      if (form) {
+        form.action = "https://formsubmit.co/contact@trinquatetcompagnie.fr";
+        form.method = "POST";
+        
+        // Add hidden fields
+        const subjectInput = document.createElement("input");
+        subjectInput.type = "hidden";
+        subjectInput.name = "_subject";
+        subjectInput.value = "Nouveau message depuis le site trinquatetcompagnie.fr";
+        
+        const replyInput = document.createElement("input");
+        replyInput.type = "hidden";
+        replyInput.name = "_reply_to";
+        replyInput.value = email;
+        
+        const captchaInput = document.createElement("input");
+        captchaInput.type = "hidden";
+        captchaInput.name = "_captcha";
+        captchaInput.value = "false";
+        
+        form.appendChild(subjectInput);
+        form.appendChild(replyInput);
+        form.appendChild(captchaInput);
+        
+        // Show success message before submitting
+        setSent(true);
+        
+        // Submit after a short delay to show the success message
+        setTimeout(() => {
+          form.submit();
+        }, 1000);
       }
     }
   }
@@ -115,8 +125,12 @@ export function Contact() {
                   </motion.div>
                 ) : (
                   <motion.form
-                    key="form" onSubmit={onSubmit} noValidate
-                    initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                    ref={formRef}
+                    key="form" 
+                    onSubmit={onSubmit} 
+                    noValidate
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }}
                     className="space-y-5"
                   >
                     {errors.submit && (
