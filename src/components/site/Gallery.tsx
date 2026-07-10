@@ -4,7 +4,6 @@ import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Reveal } from "./Reveal";
 //import g1 from "@/assets/gallery-1.jpg";
 import g1 from "@/assets/gallery-1.jpg";
-import g5 from "@/assets/gallery-5.jpg";
 import g8 from "@/assets/gallery-8.jpg";
 import g9 from "@/assets/gallery-9.jpg";
 import g10 from "@/assets/vide-grenier1.jpg";
@@ -12,7 +11,6 @@ import g11 from "@/assets/Vide-grenier2.jpg";
 const photos = [
   { src: g1, alt: "Composteur installé dans le quartier", h: "row-span-2" },
   { src: g8, alt: "Voisins réunis sous un arbre", h: "" },
-  { src: g5, alt: "Atelier créatif enfants", h: "" },
   { src: g9, alt: "La fête intergénérationnelle de la soupe", h: "" },
   { src: g10, alt: "Vide-grenier de printemps", h: "" },
   { src: g11, alt: "Vide-grenier de printemps", h: "" },

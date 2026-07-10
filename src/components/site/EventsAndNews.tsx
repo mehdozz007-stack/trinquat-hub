@@ -263,8 +263,9 @@ export function EventsAndNews() {
   );
 
   return (
-    <section className="relative py-12 md:py-20">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
+    <section className="relative">
+      {/* Main Content */}
+      <div className="mx-auto max-w-7xl px-6 lg:px-10 py-12 md:py-20">
         {/* Header */}
         <Reveal>
           <div className="mb-12">
@@ -351,20 +352,6 @@ export function EventsAndNews() {
           </Reveal>
         )}
 
-        {/* Past Section */}
-        {pastItems.length > 0 && (
-          <div className="bg-secondary/50 -mx-6 lg:-mx-10 px-6 lg:px-10 py-16 md:py-20 mt-16">
-            <Reveal>
-              <h2 className="text-2xl md:text-3xl font-semibold mb-8 opacity-70">
-                Archives
-              </h2>
-            </Reveal>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 opacity-70">
-              {pastItems.map((item, i) => renderItem(item, upcomingItems.length + i))}
-            </div>
-          </div>
-        )}
-
         {/* Empty State */}
         {filteredContent.length === 0 && (
           <Reveal>
@@ -386,6 +373,22 @@ export function EventsAndNews() {
           </Reveal>
         )}
       </div>
+
+      {/* Past Section - Full Width Background */}
+      {pastItems.length > 0 && (
+        <div className="w-full bg-secondary/50">
+          <div className="mx-auto max-w-7xl px-6 lg:px-10 py-12 md:py-20">
+            <Reveal>
+              <h2 className="text-2xl md:text-3xl font-semibold mb-8">
+                Archives
+              </h2>
+            </Reveal>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {pastItems.map((item, i) => renderItem(item, upcomingItems.length + i))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Lightbox Modal */}
       <AnimatePresence>
