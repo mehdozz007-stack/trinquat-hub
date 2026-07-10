@@ -27,64 +27,60 @@ type ContentItem = {
 };
 
 const staticContent: ContentItem[] = [
-  // Upcoming Events
+  // Past Events
   {
     id: "1",
     type: "event",
     img: imgFete,
-    badge: "À venir",
+    badge: "Passé",
     date: "2026-07-09",
     title: "Rencontre",
     place: "Square des Aiguerelles",
     desc: "Une rencontre magique avec la communauté locale.",
     category: "Événement",
-    isPast: false,
+    isPast: true,
   },
   {
     id: "2",
     type: "event",
     img: g7,
-    badge: "À venir",
+    badge: "Passé",
     date: "2026-07-31",
     title: "Apéro compost & jardinage",
     place: "City Stade des Aiguerelles",
     desc: "Un moment convivial pour apprendre à composter et entretenir vos jardins. Apportez vos déchets organiques et votre bonne humeur !",
     category: "Jardinage",
-    isPast: false,
+    isPast: true,
   },
-
-  // News
   {
     id: "3",
     type: "news",
     img: VideGrenier2,
-    badge: "Vie de quartier",
+    badge: "Passé",
     date: "2026-04-12",
     title: "Le vide-grenier de printemps approche !",
     desc: "Un vide-grenier à ne pas manquer pour dénicher des trésors et rencontrer vos voisins.",
     excerpt: "Un vide-grenier à ne pas manquer pour dénicher des trésors et rencontrer vos voisins.",
     category: "Vie de quartier",
-    isPast: false,
+    isPast: true,
   },
   {
     id: "4",
     type: "news",
     img: g10,
-    badge: "Vie de quartier",
+    badge: "Passé",
     date: "2026-03-15",
     title: "Marathon Photo : capturez l'essence du quartier !",
     desc: "Rassemblez vos appareils photo et explorez le quartier à travers votre objectif.",
     excerpt: "Rassemblez vos appareils photo et explorez le quartier à travers votre objectif.",
     category: "Initiatives",
-    isPast: false,
+    isPast: true,
   },
-
-  // Past Events
   {
     id: "5",
     type: "news",
     img: g7,
-    badge: "Jardin",
+    badge: "Passé",
     date: "2026-01-01",
     title: "Un nouveau composteur pour le quartier, à côté du city stade !",
     desc: "Un composteur a été installé pour encourager le compostage et réduire les déchets organiques.",
@@ -96,7 +92,7 @@ const staticContent: ContentItem[] = [
     id: "6",
     type: "event",
     img: g11,
-    badge: "Fête",
+    badge: "Passé",
     date: "2025-11-16",
     place: "Square des Aiguerelles",
     title: "Fête/faites de la soupe : un succès intergénérationnel !",
@@ -108,13 +104,13 @@ const staticContent: ContentItem[] = [
     id: "7",
     type: "event",
     img: VideGrenier,
-    badge: "Vie de quartier",
+    badge: "Passé",
     date: "2026-04-12",
     place: "École Anne-Frank Charles Dickes",
     title: "Le vide-grenier de printemps",
     desc: "Un vide-grenier à l'école du quartier, pour dénicher des trésors et rencontrer vos voisins.",
     category: "Vie de quartier",
-    isPast: false,
+    isPast: true,
   },
 ];
 
@@ -343,7 +339,7 @@ export function EventsAndNews() {
         </Reveal>
 
         {/* Upcoming Section */}
-        {upcomingItems.length > 0 && (
+        {upcomingItems.length > 0 ? (
           <div>
             <Reveal>
               <h2 className="text-2xl md:text-3xl font-semibold mb-8 flex items-center gap-3">
@@ -355,6 +351,16 @@ export function EventsAndNews() {
               {upcomingItems.map((item, i) => renderItem(item, i))}
             </div>
           </div>
+        ) : (
+          <Reveal>
+            <div className="py-16 mb-16 text-center bg-card/50 border border-border/70 rounded-3xl">
+              <Calendar className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">Aucun événement à venir</h3>
+              <p className="text-muted-foreground">
+                Revenez bientôt pour découvrir les prochains rendez-vous de Trinquat & Compagnie.
+              </p>
+            </div>
+          </Reveal>
         )}
 
         {/* Past Section */}
