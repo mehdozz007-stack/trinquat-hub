@@ -54,9 +54,7 @@ export function Values() {
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(idx)}
-                  className={`group relative overflow-hidden rounded-3xl shadow-2xl shadow-primary-deep/30 ${
-                    idx === 0 ? "h-80 md:h-96" : "h-64 md:h-72"
-                  }`}
+                  className="group relative overflow-hidden rounded-3xl shadow-2xl shadow-primary-deep/30 h-56 md:h-64"
                 >
                   <img 
                     src={photo.src}
