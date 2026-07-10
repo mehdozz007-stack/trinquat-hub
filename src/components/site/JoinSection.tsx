@@ -14,6 +14,11 @@ const perks = [
     title: "Événements prioritaires",
     text: "Accès réservé aux repas de quartier, ateliers et animations pour toute la famille.",
   },
+  {
+    icon: TreePine,
+    title: "Jardin partagé",
+    text: "Participez à l'entretien du jardin collectif et profitez de ses récoltes.",
+  },
 ];
 
 const floatingIcons = [
@@ -26,7 +31,7 @@ const floatingIcons = [
 
 export function JoinSection() {
   return (
-    <section className="relative py-12 md:py-20 overflow-hidden bg-secondary/50">
+    <section className="relative py-12 md:py-20 overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-gradient-hero opacity-60" />
       <div className="absolute inset-0 -z-10 grain" />
 

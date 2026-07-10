@@ -77,7 +77,7 @@ export function Newsletter() {
   };
 
   return (
-    <section className="relative py-16 md:py-24 overflow-hidden">
+    <section className="relative py-16 md:py-24 overflow-hidden bg-secondary/70">
       <div className="absolute inset-0 -z-10 bg-gradient-leaf opacity-[0.06]" />
       <div className="absolute inset-0 -z-10 grain" />
       

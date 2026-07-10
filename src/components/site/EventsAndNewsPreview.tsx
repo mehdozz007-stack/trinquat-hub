@@ -82,7 +82,7 @@ export function EventsAndNewsPreview() {
   return (
     <>
       {/* Events Preview Section */}
-      <section id="events-preview" className="relative bg-secondary/50 py-12 md:py-20">
+      <section id="events-preview" className="relative bg-secondary/70 py-12 md:py-20">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16">
             <Reveal>
@@ -164,63 +164,7 @@ export function EventsAndNewsPreview() {
         </div>
       </section>
 
-      {/* News Preview Section */}
-      <section id="news-preview" className="py-12 md:py-20 bg-secondary/10">
-        <div className="mx-auto max-w-7xl px-6 lg:px-10">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
-            <Reveal>
-              <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">Actualités</span>
-              <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-                Les <span className="text-gradient">dernières</span> nouvelles
-              </h2>
-              <p className="mt-4 text-base md:text-lg leading-relaxed text-muted-foreground max-w-md">
-                Suivez les nouvelles qui font vivre notre quartier.
-              </p>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <Link
-                to="/evenements"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-primary-deep hover:text-primary"
-              >
-                Voir toutes les actualités
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
-            </Reveal>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {allNews.map((n, i) => (
-              <Reveal key={n.title} delay={i * 0.08}>
-                <article className="group h-full flex flex-col overflow-hidden rounded-3xl bg-card border border-border/70 transition-all duration-500 hover:-translate-y-1 hover:shadow-elegant">
-                  <div
-                    className="aspect-16/10 overflow-hidden cursor-pointer"
-                    onClick={() => setSelectedImage(n.img)}
-                  >
-                    <img
-                      src={n.img}
-                      alt={n.title}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="flex flex-1 flex-col p-7">
-                    <div className="flex items-center gap-3 text-xs">
-                      <span className="rounded-full bg-primary-soft px-2.5 py-1 font-medium text-primary-deep">
-                        {n.tag}
-                      </span>
-                      <span className="text-muted-foreground">{n.date}</span>
-                    </div>
-                    <h3 className="mt-4 text-xl font-semibold leading-snug">{n.title}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground flex-1">
-                      {n.excerpt}
-                    </p>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
+      
       {/* Lightbox Modal */}
       <AnimatePresence>
         {selectedImage && (

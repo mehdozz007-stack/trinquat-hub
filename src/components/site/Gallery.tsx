@@ -8,12 +8,22 @@ import g8 from "@/assets/gallery-8.jpg";
 import g9 from "@/assets/gallery-9.jpg";
 import g10 from "@/assets/vide-grenier1.jpg";
 import g11 from "@/assets/Vide-grenier2.jpg";
+import photo1 from "@/assets/2025-01-25_029.jpg";
+import photo2 from "@/assets/2025-01-25_031.jpg";
+import photo3 from "@/assets/2025-11-16_024.jpg";
+import photo4 from "@/assets/2025-11-23_016.jpg";
+import photo5 from "@/assets/2026-03-08_006.jpg";
 const photos = [
   { src: g1, alt: "Composteur installé dans le quartier", h: "row-span-2" },
   { src: g8, alt: "Voisins réunis sous un arbre", h: "" },
   { src: g9, alt: "La fête intergénérationnelle de la soupe", h: "" },
   { src: g10, alt: "Vide-grenier de printemps", h: "" },
   { src: g11, alt: "Vide-grenier de printemps", h: "" },
+  { src: photo1, alt: "Moments partagés - 25 Janvier 2025", h: "" },
+  { src: photo2, alt: "Moments partagés - 25 Janvier 2025", h: "" },
+  { src: photo3, alt: "Fête de la soupe - 16 Novembre 2025", h: "row-span-2" },
+  { src: photo4, alt: "Moments du quartier - 23 Novembre 2025", h: "" },
+  { src: photo5, alt: "Moments du quartier - 8 Mars 2026", h: "" },
 ];
 
 export function Gallery() {
