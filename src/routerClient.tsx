@@ -4,7 +4,6 @@ import { Route as RootRouteComponent } from "./routes/__root";
 import { Route as IndexRouteComponent } from "./routes/index";
 import { Route as AssociationRouteComponent } from "./routes/association";
 import { Route as EvenementsRouteComponent } from "./routes/evenements";
-import { Route as ActualitesRouteComponent } from "./routes/actualites";
 import { Route as GalerieRouteComponent } from "./routes/galerie";
 import { Route as ContactRouteComponent } from "./routes/contact";
 import { Route as MentionsLegalesRouteComponent } from "./routes/mentions-legales";
@@ -31,12 +30,6 @@ const associationRoute = AssociationRouteComponent.update({
 const evenementsRoute = EvenementsRouteComponent.update({
   id: "/evenements",
   path: "/evenements",
-  getParentRoute: () => rootRoute,
-} as any);
-
-const actualitesRoute = ActualitesRouteComponent.update({
-  id: "/actualites",
-  path: "/actualites",
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -80,7 +73,6 @@ const routeTree = rootRoute.addChildren([
   indexRoute,
   associationRoute,
   evenementsRoute,
-  actualitesRoute,
   galerieRoute,
   contactRoute,
   mentionsLegalesRoute,

@@ -10,7 +10,6 @@ const links = [
   { to: "/association", label: "L'association" },
   { to: "/evenements", label: "Événements" },
   { to: "/galerie", label: "Galerie" },
-  { to: "/actualites", label: "Actualités" },
   { to: "/contact", label: "Contact" },
 ];
 
