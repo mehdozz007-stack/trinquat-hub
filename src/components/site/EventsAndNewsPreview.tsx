@@ -9,6 +9,19 @@ import g7 from "@/assets/gallery-7.jpg";
 import g10 from "@/assets/gallery-10.jpg";
 import g1 from "@/assets/gallery-1.jpg";
 
+// Parse French date format "31 Juillet 2026" to Date object
+const parseFrenchDate = (dateStr: string): Date => {
+  const months: Record<string, number> = {
+    "janvier": 0, "février": 1, "mars": 2, "avril": 3, "mai": 4, "juin": 5,
+    "juillet": 6, "août": 7, "septembre": 8, "octobre": 9, "novembre": 10, "décembre": 11
+  };
+  const parts = dateStr.split(" ");
+  const day = parseInt(parts[0]);
+  const month = months[parts[1].toLowerCase()];
+  const year = parseInt(parts[2]);
+  return new Date(year, month, day);
+};
+
 type PreviewItem = {
   id: string;
   type: "event" | "news";
@@ -34,7 +47,7 @@ const events = [
   {
     img: g7,
     badge: "À venir",
-    date: "31 Juillet 2026",
+    date: "1 Juillet 2026",
     title: "Apero compost & jardinage",
     place: "City Stade des Aiguerelles",
     desc: "Un moment convivial pour apprendre à composter et entretenir vos jardins. Apportez vos déchets organiques et votre bonne humeur !",
@@ -76,7 +89,7 @@ const news = [
 export function EventsAndNewsPreview() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const upcomingEvents = events.filter((e) => new Date(e.date) >= new Date());
+  const upcomingEvents = events.filter((e) => parseFrenchDate(e.date) >= new Date());
   const allNews = news;
 
   return (
