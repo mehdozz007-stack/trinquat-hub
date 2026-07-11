@@ -16,7 +16,12 @@ import photo5 from "@/assets/2026-03-08_006.jpg";
 import photo6 from "@/assets/2024-10-08_053.jpg";
 import photo7 from "@/assets/2024-10-09_001.jpg";
 import photo8 from "@/assets/2024-11-17_011.jpg";
+import communityImg from "@/assets/Triquat_CompagnieVoisins.jpg";
+import gallery6 from "@/assets/gallery-6.jpg";
+import photo9 from "@/assets/2024-11-17_051.jpg";
+import photo10 from "@/assets/2026-03-08_015.jpg"
 const photos = [
+  { src: gallery6, alt: "Trinquat & Compagnie - Moments en commun", h: "" },
   { src: g1, alt: "Composteur installé dans le quartier", h: "row-span-2" },
   { src: g8, alt: "Voisins réunis sous un arbre", h: "" },
   { src: g9, alt: "La fête intergénérationnelle de la soupe", h: "" },
@@ -30,6 +35,9 @@ const photos = [
   { src: photo6, alt: "Événement du quartier - 8 Octobre 2024", h: "" },
   { src: photo7, alt: "Événement du quartier - 9 Octobre 2024", h: "row-span-2" },
   { src: photo8, alt: "Événement du quartier - 17 Novembre 2024", h: "" },
+  { src: photo9, alt: "Moments du quartier - 17 Novembre 2024", h: "" },
+  { src: photo10, alt: "Moments du quartier - 8 Mars 2026", h: "" },
+  { src: communityImg, alt: "Trinquat & Compagnie - Notre communauté", h: "" },
 ];
 
 export function Gallery() {
