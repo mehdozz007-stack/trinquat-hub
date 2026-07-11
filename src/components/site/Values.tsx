@@ -4,6 +4,8 @@ import { Leaf, Users, HandHeart, Sparkles, TreePine, Heart, X, ChevronLeft, Chev
 import { AnimatePresence, motion } from "framer-motion";
 import communityImg from "@/assets/Triquat_CompagnieVoisins.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
+import photo1 from "@/assets/2024-11-17_051.jpg";
+import photo2 from "@/assets/2026-03-08_015.jpg";
 
 const values = [
   { icon: Users, title: "Voisinage", text: "Faire connaissance, tisser des liens durables entre habitants de tous âges." },
@@ -17,6 +19,8 @@ const values = [
 const communityPhotos = [
   { src: communityImg, alt: "Trinquat & Compagnie - Notre communauté" },
   { src: gallery6, alt: "Trinquat & Compagnie - Moments en commun" },
+  { src: photo1, alt: "Moments du quartier - 17 Novembre 2024" },
+  { src: photo2, alt: "Moments du quartier - 8 Mars 2026" },
 ];
 
 export function Values() {
@@ -49,12 +53,12 @@ export function Values() {
           </div>
 
           <Reveal className="lg:col-span-7">
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               {communityPhotos.map((photo, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(idx)}
-                  className="group relative overflow-hidden rounded-3xl shadow-2xl shadow-primary-deep/30 h-56 md:h-64"
+                  className="group relative overflow-hidden rounded-2xl shadow-lg shadow-primary-deep/20 h-48 md:h-56 flex items-center justify-center"
                 >
                   <img 
                     src={photo.src}
