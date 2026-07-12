@@ -99,7 +99,7 @@ export default {
         const body = await getJsonBody<{ email: string }>(request);
         if (!body || !body.email) {
           return corsHeaders(
-            new Response(JSON.stringify({ error: 'Email required' }), {
+            new Response(JSON.stringify({ error: 'Veuillez entrer votre adresse email.' }), {
               status: 400,
               headers: { 'Content-Type': 'application/json' },
             })
@@ -109,7 +109,7 @@ export default {
         // Check if email is valid
         if (!body.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
           return corsHeaders(
-            new Response(JSON.stringify({ error: 'Invalid email' }), {
+            new Response(JSON.stringify({ error: 'Veuillez entrer une adresse email valide.' }), {
               status: 400,
               headers: { 'Content-Type': 'application/json' },
             })
@@ -135,7 +135,7 @@ export default {
 
           if (success) {
             return corsHeaders(
-              new Response(JSON.stringify({ ok: true, message: 'Subscribed successfully' }), {
+              new Response(JSON.stringify({ ok: true, message: 'Inscription confirmée.' }), {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' },
               })
@@ -143,10 +143,22 @@ export default {
           } else {
             throw new Error('Database insert failed');
           }
-        } catch (dbErr) {
+        } catch (dbErr: any) {
           console.error('Database error:', dbErr);
+          
+          // Check for specific database errors
+          const errorMsg = String(dbErr);
+          if (errorMsg.includes('UNIQUE constraint failed') || errorMsg.includes('duplicate')) {
+            return corsHeaders(
+              new Response(JSON.stringify({ error: 'Cet email est déjà inscrit à la newsletter.' }), {
+                status: 409,
+                headers: { 'Content-Type': 'application/json' },
+              })
+            );
+          }
+          
           return corsHeaders(
-            new Response(JSON.stringify({ error: 'Database error', detail: String(dbErr) }), {
+            new Response(JSON.stringify({ error: 'Une erreur serveur s\'est produite. Veuillez réessayer.' }), {
               status: 500,
               headers: { 'Content-Type': 'application/json' },
             })

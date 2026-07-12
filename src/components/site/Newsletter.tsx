@@ -60,11 +60,11 @@ export function Newsletter() {
         body: JSON.stringify({ email: email.trim() }),
       });
 
-      const data = await res.json() as { error?: string };
+      const data = await res.json() as { error?: string; message?: string };
 
       if (!res.ok) {
         setStatus("error");
-        setMessage(data.error || "Erreur lors de l'inscription.");
+        setMessage(data.error || "Erreur lors de l'inscription. Veuillez réessayer.");
         return;
       }
 
@@ -113,13 +113,13 @@ export function Newsletter() {
                       animate="visible"
                       className="mt-6 text-3xl font-semibold"
                     >
-                      Newsletter <span className="text-gradient">confirmée</span>
+                      C'est <span className="text-gradient">confirmé</span>!
                     </motion.h3>
                     <motion.p
                       variants={itemVariants}
                       initial="hidden"
                       animate="visible"
-                      className="mt-2 max-w-sm text-muted-foreground"
+                      className="mt-3 max-w-sm text-muted-foreground text-base leading-relaxed"
                     >
                       Merci pour votre inscription. Vous recevrez bientôt nos actualités et nos événements.
                     </motion.p>
@@ -163,13 +163,13 @@ export function Newsletter() {
                       animate="visible"
                       className="mt-6 text-2xl font-semibold"
                     >
-                      Oups, une erreur
+                      Erreur
                     </motion.h3>
                     <motion.p
                       variants={itemVariants}
                       initial="hidden"
                       animate="visible"
-                      className="mt-2 max-w-sm text-muted-foreground"
+                      className="mt-3 max-w-sm text-muted-foreground text-base leading-relaxed"
                     >
                       {message}
                     </motion.p>
