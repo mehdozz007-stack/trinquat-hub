@@ -13,6 +13,8 @@ import photo2 from "@/assets/2025-01-25_031.jpg";
 import photo3 from "@/assets/2025-11-16_024.jpg";
 import photo4 from "@/assets/2025-11-23_016.jpg";
 import photo5 from "@/assets/2026-03-08_006.jpg";
+import g7 from "@/assets/2025-01-25_062.jpg";
+import g12 from "@/assets/2025-01-25_039.jpg";
 import photo6 from "@/assets/2024-10-08_053.jpg";
 import photo7 from "@/assets/2024-10-09_001.jpg";
 import photo8 from "@/assets/2024-11-17_011.jpg";
@@ -20,6 +22,8 @@ import communityImg from "@/assets/Triquat_CompagnieVoisins.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
 import photo9 from "@/assets/2024-11-17_051.jpg";
 import photo10 from "@/assets/2026-03-08_015.jpg"
+import g13 from "@/assets/2026-03-08_017.jpg";
+
 const photos = [
   { src: gallery6, alt: "Trinquat & Compagnie - Moments en commun", h: "" },
   { src: g1, alt: "Composteur installé dans le quartier", h: "row-span-2" },
@@ -38,6 +42,9 @@ const photos = [
   { src: photo9, alt: "Moments du quartier - 17 Novembre 2024", h: "" },
   { src: photo10, alt: "Moments du quartier - 8 Mars 2026", h: "" },
   { src: communityImg, alt: "Trinquat & Compagnie - Notre communauté", h: "" },
+  { src: g7, alt: "Moments du quartier - 25 Janvier 2025", h: "" },
+  { src: g12, alt: "Moments du quartier - 25 Janvier 2025", h: "" },
+  { src: g13, alt: "Moments du quartier - 8 Mars 2026", h: "" },
 ];
 
 export function Gallery() {

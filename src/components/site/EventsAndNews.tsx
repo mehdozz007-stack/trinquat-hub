@@ -5,7 +5,7 @@ import { Link } from "@tanstack/react-router";
 import { Calendar, MapPin, ArrowUpRight, X, Search, Filter, FileText } from "lucide-react";
 import imgFete from "@/assets/gallery-8.jpg";
 import VideGrenier from "@/assets/vide-grenier1.jpg";
-import g7 from "@/assets/gallery-7.jpg";
+import g7 from "@/assets/2025-01-25_062.jpg";
 import g10 from "@/assets/gallery-10.jpg";
 import g11 from "@/assets/gallery-11.jpg";
 import VideGrenier2 from "@/assets/Vide-grenier.jpg";
