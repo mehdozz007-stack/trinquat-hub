@@ -61,7 +61,7 @@ export function Contact() {
               Nous <span className="text-gradient">contacter</span> ?
             </h2>
             <p className="mt-8 text-base md:text-lg leading-relaxed text-muted-foreground max-w-md">
-              Une question, une idée, l'envie d'aider sur un événement ? Écrivez-nous,
+              Une question, une idée, l'envie d'aider sur un événement ? Envoyez-nous un message,
               nous répondons toujours, c'est promis !
             </p>
             <ul className="mt-10 space-y-5">
@@ -131,6 +131,7 @@ export function Contact() {
                     </button>
                   </motion.div>
                 ) : (
+                  
                   <motion.form
                     ref={formRef}
                     key="form" 
@@ -140,6 +141,7 @@ export function Contact() {
                     animate={{ opacity: 1 }}
                     className="space-y-5"
                   >
+                    <h2 className="mb-8 sm:mb-8 text-3xl sm:text-2xl md:text-3xl text-center">Écrivez-nous</h2>
                     {errors.submit && (
                       <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
                         {errors.submit}
