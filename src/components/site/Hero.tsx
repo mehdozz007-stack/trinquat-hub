@@ -8,7 +8,7 @@ import hero from "@/assets/hero-bg.jpg";
 const socialLinks = [
   { Icon: Facebook, href: "https://www.facebook.com/Trinquatetcompagnie/", label: "Facebook" },
   { Icon: Instagram, href: "https://www.instagram.com/p/DQE1LeOgvRs/", label: "Instagram" },
-  /*{ Icon: Mail, href: "mailto:contact@trinquatetcompagnie.fr", label: "Email" },*/
+  { Icon: Mail, href: "mailto:contact@trinquatetcompagnie.fr", label: "Email" },
 ];
 
 export function Hero() {

@@ -7,7 +7,7 @@ width, height = 1200, 630
 # Créer une image de fond blanc
 image = Image.new('RGB', (width, height), color=(255, 255, 255))
 
-# Charger le logo
+
 logo_path = 'src/assets/logo.png'
 if os.path.exists(logo_path):
     try:
