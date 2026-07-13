@@ -1,6 +1,6 @@
 import logo from "@/assets/logo.png";
 import { Link } from "@tanstack/react-router";
-import { Facebook, Instagram, Mail, MapPin } from "lucide-react";
+import { Facebook, Instagram, Mail, Heart, MapPin } from "lucide-react";
 import logoBorisVian from "@/assets/partners/logo-boris-vian.jpg";
 import logoptitsTrinquat from "@/assets/partners/logoAsso.png";
 import logoMairie from "@/assets/partners/logo-mairie-montpellier.png";
@@ -74,7 +74,7 @@ export function Footer() {
                   <p className="text-sm font-semibold">Par email</p>
                   <a href="mailto:contact@trinquatetcompagnie.fr" className="text-muted-foreground hover:text-foreground">contact@trinquatetcompagnie.fr</a>
                 </div>
-              </li>
+              </li>$
               {/*<li className="flex items-start gap-4">
                 <span className="shrink-0 mt-1 flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary-deep">
                   <MapPin className="h-5 w-5 -mt-0.5" />

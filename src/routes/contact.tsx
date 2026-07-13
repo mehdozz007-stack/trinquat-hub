@@ -4,6 +4,7 @@ import { Footer } from "@/components/site/Footer";
 import { Contact } from "@/components/site/Contact";
 import { FAQ } from "@/components/site/FAQ";
 import { PageHeader } from "@/components/site/PageHeader";
+import { JoinSection } from "@/components/site/JoinSection";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -24,7 +25,7 @@ function ContactPage() {
       <Navbar />
       <PageHeader
         eyebrow="Contact"
-        title={<>Envie de nous <span className="text-gradient">rejoindre</span> ?</>}
+        title={<>Envie de <span className="text-gradient">nous rejoindre</span> ?</>}
         lead="Une question, une idée, l'envie d'aider sur un événement ? On répond toujours."
       />
       <Contact />

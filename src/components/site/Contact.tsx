@@ -1,7 +1,7 @@
 import { useState, useRef, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "./Reveal";
-import { Check, Mail, MapPin, Send } from "lucide-react";
+import { Check, Mail, MapPin, Send, Facebook, Instagram, Heart } from "lucide-react";
 
 export function Contact() {
   const [sent, setSent] = useState(false);
@@ -72,6 +72,22 @@ export function Contact() {
                 <div>
                   <p className="text-sm font-semibold">Par email</p>
                   <a href="mailto:contact@trinquatetcompagnie.fr" className="text-muted-foreground hover:text-foreground">contact@trinquatetcompagnie.fr</a>
+                </div>
+              </li>
+              <li className="flex items-center gap-4 justify-between">
+                <div className="flex items-center gap-4">
+                  <span className="shrink-0 flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary-deep">
+                    <Heart className="h-5 w-5 -mt-0.5" />
+                  </span>
+                  <p className="text-sm font-semibold">Suivez-nous</p>
+                </div>
+                <div className="flex gap-3">
+                  <a href="https://www.facebook.com/Trinquatetcompagnie/" aria-label="Facebook" target="_blank" rel="noopener noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/30 bg-background/60 text-foreground transition-all hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground backdrop-blur">
+                    <Facebook className="h-4 w-4" />
+                  </a>
+                  <a href="https://www.instagram.com/p/DQE1LeOgvRs/" aria-label="Instagram" target="_blank" rel="noopener noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/30 bg-background/60 text-foreground transition-all hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground backdrop-blur">
+                    <Instagram className="h-4 w-4" />
+                  </a>
                 </div>
               </li>
               {/*<li className="flex items-start gap-4">
