@@ -4,8 +4,8 @@ import { Leaf, Users, HandHeart, Sparkles, TreePine, Heart, X, ChevronLeft, Chev
 import { AnimatePresence, motion } from "framer-motion";
 import communityImg from "@/assets/Triquat_CompagnieVoisins.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
-import photo1 from "@/assets/2024-11-17_051.jpg";
-import photo2 from "@/assets/2026-03-08_015.jpg";
+import photo1 from "@/assets/2026-03-08_006.jpg";
+import photo2 from "@/assets/2025-11-16_024.jpg";
 
 const values = [
   { icon: Users, title: "Voisinage", text: "Faire connaissance, tisser des liens durables entre habitants de tous âges." },
@@ -17,10 +17,10 @@ const values = [
 ];
 
 const communityPhotos = [
-  { src: communityImg, alt: "Trinquat & Compagnie - Notre communauté" },
   { src: gallery6, alt: "Trinquat & Compagnie - Moments en commun" },
-  { src: photo1, alt: "Moments du quartier - 17 Novembre 2024" },
-  { src: photo2, alt: "Moments du quartier - 8 Mars 2026" },
+  { src: communityImg, alt: "Trinquat & Compagnie - Notre communauté" }, 
+  { src: photo1, alt: "Moments du quartier - 8 Mars 2026" },
+  { src: photo2, alt: "Moments du quartier - 17 Mars 2026" },
 ];
 
 export function Values() {
@@ -42,7 +42,7 @@ export function Values() {
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-8 text-base md:text-lg leading-relaxed text-muted-foreground">
-                Notre association s'appuie sur des valeurs simples mais essentielles : la solidarité, 
+                Trinquat & Compagnie s'appuie sur des valeurs simples mais essentielles, la solidarité, 
                 le respect de la nature et la convivialité. Nous croyons que chaque geste, 
                 même modeste, peut renforcer les liens entre voisins et embellir notre cadre de vie.
                 <br />
