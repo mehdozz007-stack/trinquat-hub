@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Reveal } from "./Reveal";
 import { motion, AnimatePresence, cubicBezier } from "framer-motion";
 import { Send, Mail, AlertCircle, CheckCircle2 } from "lucide-react";
@@ -45,6 +45,14 @@ export function Newsletter() {
   const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,8 +93,9 @@ export function Newsletter() {
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <Reveal>
           <div className="relative overflow-hidden rounded-[2.5rem] border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant">
-            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-leaf opacity-10 blur-3xl will-change-transform transform-gpu" />
-            <div className="absolute -left-16 -bottom-16 h-48 w-48 rounded-full bg-primary-soft opacity-30 blur-2xl will-change-transform transform-gpu" />
+            {/* Optimized for mobile: reduced blur effects */}
+            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-leaf opacity-10 md:blur-3xl blur-xl will-change-transform transform-gpu" />
+            <div className="absolute -left-16 -bottom-16 h-48 w-48 rounded-full bg-primary-soft opacity-30 md:blur-2xl blur-lg will-change-transform transform-gpu" />
 
             <div className="relative z-10 flex flex-col items-center text-center px-8 py-14 md:px-16 md:py-20">
               <AnimatePresence mode="wait">
@@ -200,8 +209,7 @@ export function Newsletter() {
                   >
                     <motion.div
                       initial={{ scale: 0.8, opacity: 0 }}
-                      whileInView={{ scale: 1, opacity: 1 }}
-                      viewport={{ once: true }}
+                      animate={{ scale: 1, opacity: 1 }}
                       transition={{ duration: 0.5, ease: easeCustom }}
                       className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-leaf text-primary-foreground shadow-soft mb-8"
                     >
@@ -210,8 +218,7 @@ export function Newsletter() {
 
                     <motion.h2
                       initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.1 }}
                       className="text-3xl md:text-4xl lg:text-5xl font-medium leading-[1.1]"
                     >
@@ -219,8 +226,7 @@ export function Newsletter() {
                     </motion.h2>
                     <motion.p
                       initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.2 }}
                       className="mt-5 max-w-lg text-sm md:text-lg leading-relaxed text-muted-foreground"
                     >
@@ -231,8 +237,7 @@ export function Newsletter() {
                     <motion.form
                       onSubmit={handleSubmit}
                       initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.3 }}
                       className="mt-10 w-full max-w-md"
                     >
@@ -275,8 +280,7 @@ export function Newsletter() {
 
                     <motion.p
                       initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      viewport={{ once: true }}
+                      animate={{ opacity: 1 }}
                       transition={{ duration: 0.5, delay: 0.4 }}
                       className="mt-4 text-xs text-muted-foreground/70"
                     >
