@@ -1,7 +1,7 @@
 import { useState, useRef, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "./Reveal";
-import { Check, Mail, MapPin, Send, Facebook, Instagram, Heart } from "lucide-react";
+import { Check, Mail, MapPin, Send, Facebook, Instagram, Heart, FileSignature } from "lucide-react";
 
 export function Contact() {
   const [sent, setSent] = useState(false);
@@ -81,7 +81,7 @@ export function Contact() {
                   </span>
                   <p className="text-sm font-semibold">Suivez-nous</p>
                 </div>
-                <div className="flex gap-6">
+                <div className="flex gap-2">
                   <a href="https://www.facebook.com/Trinquatetcompagnie/" aria-label="Facebook" target="_blank" rel="noopener noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/30 bg-background/60 text-foreground transition-all hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground backdrop-blur">
                     <Facebook className="h-4 w-4" />
                   </a>
@@ -141,7 +141,17 @@ export function Contact() {
                     animate={{ opacity: 1 }}
                     className="space-y-5"
                   >
-                    <h2 className="mb-8 sm:mb-8 text-3xl sm:text-2xl md:text-3xl text-center">Écrivez-nous</h2>
+                    <div className="flex items-center justify-center gap-4 mb-7">
+                      <motion.div
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                        className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-leaf text-primary-foreground shadow-soft shrink-0"
+                      >
+                       <Mail className="h-6 w-6" />
+                      </motion.div>
+                      <h2 className="text-3xl sm:text-2xl md:text-3xl">Écrivez-nous</h2>
+                    </div>
                     {errors.submit && (
                       <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
                         {errors.submit}
