@@ -365,8 +365,8 @@ export function EventsAndNews() {
         <div className="w-full bg-secondary/50">
           <div className="mx-auto max-w-7xl px-6 lg:px-10 py-12 md:py-20">
             <Reveal>
-              <h2 className="text-2xl md:text-3xl font-semibold mb-8">
-                Archives et événements passés
+              <h2 className="text-3xl md:text-4xl mb-16 font-semibold">
+                Archives et <span className="text-gradient">événements passés</span>
               </h2>
             </Reveal>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

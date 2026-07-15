@@ -74,14 +74,14 @@ export function Contact() {
                   <a href="mailto:contact@trinquatetcompagnie.fr" className="text-muted-foreground hover:text-foreground">contact@trinquatetcompagnie.fr</a>
                 </div>
               </li>
-              <li className="flex items-center gap-4 justify-between">
+              <li className="flex items-center gap-4">
                 <div className="flex items-center gap-4">
                   <span className="shrink-0 flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary-deep">
                     <Heart className="h-5 w-5 -mt-0.5" />
                   </span>
                   <p className="text-sm font-semibold">Suivez-nous</p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-3">
                   <a href="https://www.facebook.com/Trinquatetcompagnie/" aria-label="Facebook" target="_blank" rel="noopener noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/30 bg-background/60 text-foreground transition-all hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground backdrop-blur">
                     <Facebook className="h-4 w-4" />
                   </a>
@@ -141,14 +141,14 @@ export function Contact() {
                     animate={{ opacity: 1 }}
                     className="space-y-5"
                   >
-                    <div className="flex items-center justify-center gap-4 mb-7">
+                    <div className="flex items-center justify-center gap-4 mb-12 mt-4">
                       <motion.div
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 0.5 }}
                         className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-leaf text-primary-foreground shadow-soft shrink-0"
                       >
-                       <Mail className="h-6 w-6" />
+                       <Mail className="h-5 w-5" />
                       </motion.div>
                       <h2 className="text-3xl sm:text-2xl md:text-3xl">Écrivez-nous</h2>
                     </div>
@@ -163,7 +163,7 @@ export function Contact() {
                       <label className="block text-sm font-medium mb-2">Message</label>
                       <textarea
                         name="message" rows={5}
-                        placeholder="Bonjour Trinquat & Compagnie !"
+                        defaultValue="Bonjour Trinquat & Compagnie !"
                         className={`w-full rounded-xl border bg-background/60 px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 ${errors.message ? "border-destructive" : "border-border"}`}
                       />
                       {errors.message && <p className="mt-1.5 text-xs text-destructive">{errors.message}</p>}
@@ -171,7 +171,7 @@ export function Contact() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-4 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-leaf px-6 py-4 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {loading ? "Envoi..." : "Envoyer"}
                       <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
