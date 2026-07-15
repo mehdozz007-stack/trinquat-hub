@@ -694,10 +694,510 @@ export default {
         }
       }
 
-      // Content endpoints (events + news + uploads)
-      // Commented out: R2 bucket not configured yet
-      // const contentResp = await handleContentRoutes(request, env);
-      // if (contentResp) return corsHeaders(contentResp);
+      // ============ ADMIN EVENTS ============
+      // Get all events
+      if (pathname === '/api/admin/events' && method === 'GET') {
+        const adminId = getAdminIdFromCookie(request);
+        if (!adminId) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Unauthorized' }), {
+              status: 401,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        try {
+          const db = env.trinquat_newsletter;
+          const events = await db
+            .prepare('SELECT * FROM events ORDER BY event_date DESC')
+            .all();
+
+          return corsHeaders(
+            new Response(JSON.stringify({ events: events.results || [] }), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        } catch (err) {
+          console.error('Error fetching events:', err);
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Failed to fetch events' }), {
+              status: 500,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+      }
+
+      // Create event
+      if (pathname === '/api/admin/events' && method === 'POST') {
+        const adminId = getAdminIdFromCookie(request);
+        if (!adminId) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Unauthorized' }), {
+              status: 401,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        const body = await getJsonBody<{
+          title: string;
+          description: string;
+          event_date: string;
+          place?: string;
+          badge?: string;
+          image_url?: string;
+          image_key?: string;
+          status?: string;
+        }>(request);
+
+        if (!body || !body.title || !body.description || !body.event_date) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Missing required fields' }), {
+              status: 400,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        try {
+          const db = env.trinquat_newsletter;
+          const eventId = crypto.randomUUID();
+          const now = new Date().toISOString();
+          const status = body.status || 'draft';
+
+          await db
+            .prepare(
+              `INSERT INTO events (id, title, description, event_date, place, badge, image_url, image_key, status, published_at, created_at, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+            )
+            .bind(
+              eventId,
+              body.title,
+              body.description,
+              body.event_date,
+              body.place || null,
+              body.badge || null,
+              body.image_url || null,
+              body.image_key || null,
+              status,
+              status === 'published' ? now : null,
+              now,
+              now
+            )
+            .run();
+
+          return corsHeaders(
+            new Response(JSON.stringify({ id: eventId, ...body, created_at: now }), {
+              status: 201,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        } catch (err) {
+          console.error('Error creating event:', err);
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Failed to create event' }), {
+              status: 500,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+      }
+
+      // Update event
+      if (pathname.startsWith('/api/admin/events/') && method === 'PATCH') {
+        const adminId = getAdminIdFromCookie(request);
+        if (!adminId) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Unauthorized' }), {
+              status: 401,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        const eventId = pathname.split('/').pop();
+        const body = await getJsonBody<Record<string, any>>(request);
+
+        if (!eventId || !body) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Missing event ID or body' }), {
+              status: 400,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        try {
+          const db = env.trinquat_newsletter;
+          const now = new Date().toISOString();
+          const updates: string[] = [];
+          const values: any[] = [];
+
+          // Build dynamic UPDATE query
+          for (const [key, value] of Object.entries(body)) {
+            if (key !== 'id') {
+              updates.push(`${key} = ?`);
+              values.push(value);
+            }
+          }
+
+          updates.push('updated_at = ?');
+          values.push(now);
+          values.push(eventId);
+
+          await db
+            .prepare(
+              `UPDATE events SET ${updates.join(', ')} WHERE id = ?`
+            )
+            .bind(...values)
+            .run();
+
+          return corsHeaders(
+            new Response(JSON.stringify({ ok: true }), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        } catch (err) {
+          console.error('Error updating event:', err);
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Failed to update event' }), {
+              status: 500,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+      }
+
+      // Delete event
+      if (pathname.startsWith('/api/admin/events/') && method === 'DELETE') {
+        const adminId = getAdminIdFromCookie(request);
+        if (!adminId) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Unauthorized' }), {
+              status: 401,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        const eventId = pathname.split('/').pop();
+        if (!eventId) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Missing event ID' }), {
+              status: 400,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        try {
+          const db = env.trinquat_newsletter;
+          // First get the image_key to delete from R2
+          const event = await db
+            .prepare('SELECT image_key FROM events WHERE id = ?')
+            .bind(eventId)
+            .first<{ image_key: string | null }>();
+
+          // Delete from R2 if image exists
+          if (event?.image_key && env.MEDIA) {
+            try {
+              await env.MEDIA.delete(event.image_key);
+            } catch (e) {
+              console.warn('Failed to delete R2 object:', e);
+            }
+          }
+
+          // Delete from DB
+          await db.prepare('DELETE FROM events WHERE id = ?').bind(eventId).run();
+
+          return corsHeaders(
+            new Response(JSON.stringify({ ok: true }), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        } catch (err) {
+          console.error('Error deleting event:', err);
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Failed to delete event' }), {
+              status: 500,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+      }
+
+      // ============ ADMIN GALLERY ============
+      // Get all gallery images
+      if (pathname === '/api/admin/gallery' && method === 'GET') {
+        const adminId = getAdminIdFromCookie(request);
+        if (!adminId) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Unauthorized' }), {
+              status: 401,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        try {
+          const db = env.trinquat_newsletter;
+          const gallery = await db
+            .prepare('SELECT * FROM gallery ORDER BY order_index ASC')
+            .all();
+
+          return corsHeaders(
+            new Response(JSON.stringify({ gallery: gallery.results || [] }), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        } catch (err) {
+          console.error('Error fetching gallery:', err);
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Failed to fetch gallery' }), {
+              status: 500,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+      }
+
+      // Add image to gallery
+      if (pathname === '/api/admin/gallery' && method === 'POST') {
+        const adminId = getAdminIdFromCookie(request);
+        if (!adminId) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Unauthorized' }), {
+              status: 401,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        const body = await getJsonBody<{
+          title?: string;
+          description?: string;
+          image_url: string;
+          image_key: string;
+        }>(request);
+
+        if (!body || !body.image_url || !body.image_key) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Missing image_url or image_key' }), {
+              status: 400,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        try {
+          const db = env.trinquat_newsletter;
+          const imageId = crypto.randomUUID();
+          const now = new Date().toISOString();
+
+          // Get max order_index
+          const lastImage = await db
+            .prepare('SELECT MAX(order_index) as max_index FROM gallery')
+            .first<{ max_index: number | null }>();
+
+          const orderIndex = (lastImage?.max_index ?? -1) + 1;
+
+          await db
+            .prepare(
+              `INSERT INTO gallery (id, title, description, image_url, image_key, order_index, created_at, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+            )
+            .bind(
+              imageId,
+              body.title || null,
+              body.description || null,
+              body.image_url,
+              body.image_key,
+              orderIndex,
+              now,
+              now
+            )
+            .run();
+
+          return corsHeaders(
+            new Response(JSON.stringify({ id: imageId, ...body, order_index: orderIndex }), {
+              status: 201,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        } catch (err) {
+          console.error('Error adding gallery image:', err);
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Failed to add image' }), {
+              status: 500,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+      }
+
+      // Delete gallery image
+      if (pathname.startsWith('/api/admin/gallery/') && method === 'DELETE') {
+        const adminId = getAdminIdFromCookie(request);
+        if (!adminId) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Unauthorized' }), {
+              status: 401,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        const imageId = pathname.split('/').pop();
+        if (!imageId) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Missing image ID' }), {
+              status: 400,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        try {
+          const db = env.trinquat_newsletter;
+          // Get the image_key to delete from R2
+          const image = await db
+            .prepare('SELECT image_key FROM gallery WHERE id = ?')
+            .bind(imageId)
+            .first<{ image_key: string }>();
+
+          // Delete from R2
+          if (image?.image_key && env.MEDIA) {
+            try {
+              await env.MEDIA.delete(image.image_key);
+            } catch (e) {
+              console.warn('Failed to delete R2 object:', e);
+            }
+          }
+
+          // Delete from DB
+          await db.prepare('DELETE FROM gallery WHERE id = ?').bind(imageId).run();
+
+          return corsHeaders(
+            new Response(JSON.stringify({ ok: true }), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        } catch (err) {
+          console.error('Error deleting gallery image:', err);
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Failed to delete image' }), {
+              status: 500,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+      }
+
+      // ============ IMAGE UPLOADS ============
+      // Upload image to R2
+      if (pathname === '/api/admin/uploads' && method === 'POST') {
+        const adminId = getAdminIdFromCookie(request);
+        if (!adminId) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Unauthorized' }), {
+              status: 401,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        if (!env.MEDIA || !env.MEDIA_PUBLIC_URL) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Image storage not configured' }), {
+              status: 500,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        try {
+          const formData = await request.formData();
+          const file = formData.get('file') as File;
+
+          if (!file) {
+            return corsHeaders(
+              new Response(JSON.stringify({ error: 'No file provided' }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' },
+              })
+            );
+          }
+
+          const buffer = await file.arrayBuffer();
+          const key = `uploads/${Date.now()}-${file.name}`;
+
+          await env.MEDIA.put(key, buffer, {
+            httpMetadata: {
+              contentType: file.type,
+            },
+          });
+
+          const url = `${env.MEDIA_PUBLIC_URL}/${key}`;
+
+          return corsHeaders(
+            new Response(JSON.stringify({ url, key }), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        } catch (err) {
+          console.error('Upload error:', err);
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Upload failed' }), {
+              status: 500,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+      }
+
+      // Delete uploaded image from R2
+      if (pathname.startsWith('/api/admin/uploads/') && method === 'DELETE') {
+        const adminId = getAdminIdFromCookie(request);
+        if (!adminId) {
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Unauthorized' }), {
+              status: 401,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+
+        try {
+          const key = decodeURIComponent(pathname.split('/').slice(4).join('/'));
+
+          if (env.MEDIA) {
+            await env.MEDIA.delete(key);
+          }
+
+          return corsHeaders(
+            new Response(JSON.stringify({ ok: true }), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        } catch (err) {
+          console.error('Delete upload error:', err);
+          return corsHeaders(
+            new Response(JSON.stringify({ error: 'Delete failed' }), {
+              status: 500,
+              headers: { 'Content-Type': 'application/json' },
+            })
+          );
+        }
+      }
 
       // 404
       return corsHeaders(
