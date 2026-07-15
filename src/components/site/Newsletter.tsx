@@ -94,8 +94,16 @@ export function Newsletter() {
         <Reveal>
           <div className="relative overflow-hidden rounded-[2.5rem] border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant">
             {/* Optimized for mobile: reduced blur effects */}
-            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-leaf opacity-10 md:blur-3xl blur-xl will-change-transform transform-gpu" />
-            <div className="absolute -left-16 -bottom-16 h-48 w-48 rounded-full bg-primary-soft opacity-30 md:blur-2xl blur-lg will-change-transform transform-gpu" />
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-leaf opacity-10 md:blur-3xl blur-xl will-change-transform transform-gpu" />
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="absolute -left-16 -bottom-16 h-48 w-48 rounded-full bg-primary-soft opacity-30 md:blur-2xl blur-lg will-change-transform transform-gpu" />
 
             <div className="relative z-10 flex flex-col items-center text-center px-8 py-14 md:px-16 md:py-20">
               <AnimatePresence mode="wait">

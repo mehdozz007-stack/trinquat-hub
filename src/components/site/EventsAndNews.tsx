@@ -331,7 +331,7 @@ export function EventsAndNews() {
             <div className="py-16 mb-16 text-center bg-card/50 border border-border/70 rounded-3xl">
               <Calendar className="h-12 w-12 mx-auto text-muted-foreground/70 mb-4" />
               <h3 className="text-xl font-semibold text-foreground mb-2">Aucun événement à venir</h3>
-              <p className="text-muted-foreground">
+              <p className="px-6 md:px-12 lg:px-20 text-muted-foreground">
                 Revenez bientôt pour découvrir les prochains rendez-vous de Trinquat & Compagnie.
               </p>
             </div>

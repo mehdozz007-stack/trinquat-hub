@@ -45,9 +45,12 @@ export function Values() {
                 Trinquat & Compagnie s'appuie sur des valeurs simples mais essentielles, la solidarité, 
                 le respect de la nature et la convivialité. Nous croyons que chaque geste, 
                 même modeste, peut renforcer les liens entre voisins et embellir notre cadre de vie.
-                <br />
-                Ensemble, nous cultivons un esprit d'entraide, nous prenons soin de notre environnement, 
-                et nous créons des moments de partage où chacun trouve sa place.
+              </p>
+              </Reveal>
+              <Reveal delay={0.2}>
+              <p className="mt-4 text-base md:text-lg leading-relaxed text-muted-foreground">
+               Ensemble, nous cultivons un esprit d'entraide, nous prenons soin de notre environnement, 
+               et nous créons des moments de partage où chacun trouve sa place.
               </p>
             </Reveal>
           </div>
