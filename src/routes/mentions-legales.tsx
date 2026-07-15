@@ -4,8 +4,7 @@ import { Footer } from "@/components/site/Footer";
 import { MentionsLegales } from "@/components/site/MentionsLegales";
 import { PageHeader } from "@/components/site/PageHeader";
 
-// @ts-expect-error - Routes manuelles ne sont pas générées automatiquement par TanStack
-export const Route = createFileRoute("/mentions-legales" as const)({
+export const Route = createFileRoute("/mentions-legales")({
   head: () => ({
     meta: [
       { title: "Mentions légales — Trinquat & Compagnie" },

@@ -4,8 +4,7 @@ import { Footer } from "@/components/site/Footer";
 import { PolitiqueConfidentialite } from "@/components/site/PolitiqueConfidentialite";
 import { PageHeader } from "@/components/site/PageHeader";
 
-// @ts-expect-error - Routes manuelles ne sont pas générées automatiquement par TanStack
-export const Route = createFileRoute("/politique-confidentialite" as const)({
+export const Route = createFileRoute("/politique-confidentialite")({
   head: () => ({
     meta: [
       { title: "Politique de confidentialité — Trinquat & Compagnie" },

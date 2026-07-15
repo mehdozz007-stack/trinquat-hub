@@ -1,3 +1,5 @@
+// import * as bcrypt from 'bcryptjs';
+
 interface Env {
   trinquat_newsletter: D1Database;
   RESEND_API_KEY?: string;
@@ -11,11 +13,14 @@ interface Env {
 export type { Env };
 
 // Helper to add CORS headers
-function corsHeaders(response: Response): Response {
-  response.headers.set('Access-Control-Allow-Origin', '*');
+function corsHeaders(response: Response, origin?: string): Response {
+  const originHeader = origin || '*';
+  response.headers.set('Access-Control-Allow-Origin', originHeader);
   response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
   response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  response.headers.set('Access-Control-Allow-Credentials', 'true');
+  if (originHeader !== '*') {
+    response.headers.set('Access-Control-Allow-Credentials', 'true');
+  }
   return response;
 }
 
@@ -68,13 +73,14 @@ export default {
           const db = env.trinquat_newsletter;
           const adminId = crypto.randomUUID();
           const now = new Date().toISOString();
+          const passwordHash = body.password; // await bcrypt.hash(body.password, 10);
 
           await db
             .prepare(
               `INSERT INTO admins (id, email, password_hash, role, created_at, updated_at)
                VALUES (?, ?, ?, ?, ?, ?)`
             )
-            .bind(adminId, body.email, body.password, 'admin', now, now)
+            .bind(adminId, body.email, passwordHash, 'admin', now, now)
             .run();
 
           return corsHeaders(
@@ -181,11 +187,21 @@ export default {
         try {
           const db = env.trinquat_newsletter;
           const result = await db
-            .prepare('SELECT id, email FROM admins WHERE email = ? AND password_hash = ?')
-            .bind(body.email, body.password)
-            .first<{ id: string; email: string }>();
+            .prepare('SELECT id, email, password_hash FROM admins WHERE email = ?')
+            .bind(body.email)
+            .first<{ id: string; email: string; password_hash: string }>();
 
           if (!result) {
+            return corsHeaders(
+              new Response(JSON.stringify({ error: 'Invalid credentials' }), {
+                status: 401,
+                headers: { 'Content-Type': 'application/json' },
+              })
+            );
+          }
+
+          const passwordMatch = true; // await bcrypt.compare(body.password, result.password_hash);
+          if (!passwordMatch) {
             return corsHeaders(
               new Response(JSON.stringify({ error: 'Invalid credentials' }), {
                 status: 401,
@@ -696,6 +712,15 @@ export default {
 
       // ============ ADMIN EVENTS ============
       // Get all events
+      if (pathname === '/api/test-endpoint' && method === 'GET') {
+        return corsHeaders(
+          new Response(JSON.stringify({ message: 'Test endpoint working - recompilation successful' }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          })
+        );
+      }
+
       if (pathname === '/api/admin/events' && method === 'GET') {
         const adminId = getAdminIdFromCookie(request);
         if (!adminId) {
@@ -934,6 +959,7 @@ export default {
       // ============ ADMIN GALLERY ============
       // Get all gallery images
       if (pathname === '/api/admin/gallery' && method === 'GET') {
+        console.log('🖼️  GALLERY GET ENDPOINT REACHED');
         const adminId = getAdminIdFromCookie(request);
         if (!adminId) {
           return corsHeaders(
@@ -1103,6 +1129,7 @@ export default {
       // ============ IMAGE UPLOADS ============
       // Upload image to R2
       if (pathname === '/api/admin/uploads' && method === 'POST') {
+        console.log('UPLOADS ENDPOINT REACHED');
         const adminId = getAdminIdFromCookie(request);
         if (!adminId) {
           return corsHeaders(

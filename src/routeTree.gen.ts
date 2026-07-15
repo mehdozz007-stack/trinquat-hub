@@ -9,16 +9,30 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PolitiqueConfidentialiteRouteImport } from './routes/politique-confidentialite'
+import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as GalerieRouteImport } from './routes/galerie'
 import { Route as EvenementsRouteImport } from './routes/evenements'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AssociationRouteImport } from './routes/association'
-import { Route as ActualitesRouteImport } from './routes/actualites'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminNewsletterRouteImport } from './routes/admin.newsletter'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
 import { Route as AdminContentRouteImport } from './routes/admin.content'
 
+const PolitiqueConfidentialiteRoute =
+  PolitiqueConfidentialiteRouteImport.update({
+    id: '/politique-confidentialite',
+    path: '/politique-confidentialite',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
+  id: '/mentions-legales',
+  path: '/mentions-legales',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GalerieRoute = GalerieRouteImport.update({
   id: '/galerie',
   path: '/galerie',
@@ -39,14 +53,14 @@ const AssociationRoute = AssociationRouteImport.update({
   path: '/association',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ActualitesRoute = ActualitesRouteImport.update({
-  id: '/actualites',
-  path: '/actualites',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminNewsletterRoute = AdminNewsletterRouteImport.update({
@@ -59,142 +73,134 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminGalleryRoute = AdminGalleryRouteImport.update({
+  id: '/admin/gallery',
+  path: '/admin/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminContentRoute = AdminContentRouteImport.update({
   id: '/admin/content',
   path: '/admin/content',
   getParentRoute: () => rootRouteImport,
 } as any)
 
-// Export route tree without API routes (to avoid server import issues)
-export const routeTree = rootRouteImport.addChildren([
-  IndexRoute,
-  ActualitesRoute,
-  AssociationRoute,
-  ContactRoute,
-  EvenementsRoute,
-  GalerieRoute,
-  AdminNewsletterRoute,
-  AdminLoginRoute,
-  AdminContentRoute,
-]) as any
-
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/actualites': typeof ActualitesRoute
   '/association': typeof AssociationRoute
   '/contact': typeof ContactRoute
   '/evenements': typeof EvenementsRoute
   '/galerie': typeof GalerieRoute
-  '/admin/login': typeof AdminLoginRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
+  '/politique-confidentialite': typeof PolitiqueConfidentialiteRoute
+  '/admin/': typeof AdminIndexRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/gallery': typeof AdminGalleryRoute
   '/admin/content': typeof AdminContentRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/actualites': typeof ActualitesRoute
   '/association': typeof AssociationRoute
   '/contact': typeof ContactRoute
   '/evenements': typeof EvenementsRoute
   '/galerie': typeof GalerieRoute
-  '/admin/login': typeof AdminLoginRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
+  '/politique-confidentialite': typeof PolitiqueConfidentialiteRoute
+  '/admin': typeof AdminIndexRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/gallery': typeof AdminGalleryRoute
   '/admin/content': typeof AdminContentRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/actualites': typeof ActualitesRoute
   '/association': typeof AssociationRoute
   '/contact': typeof ContactRoute
   '/evenements': typeof EvenementsRoute
   '/galerie': typeof GalerieRoute
-  '/admin/login': typeof AdminLoginRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
+  '/politique-confidentialite': typeof PolitiqueConfidentialiteRoute
+  '/admin/': typeof AdminIndexRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/gallery': typeof AdminGalleryRoute
   '/admin/content': typeof AdminContentRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/actualites'
     | '/association'
     | '/contact'
     | '/evenements'
     | '/galerie'
-    | '/admin/login'
+    | '/mentions-legales'
+    | '/politique-confidentialite'
+    | '/admin/'
     | '/admin/newsletter'
+    | '/admin/login'
+    | '/admin/gallery'
     | '/admin/content'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/actualites'
     | '/association'
     | '/contact'
     | '/evenements'
     | '/galerie'
-    | '/admin/login'
+    | '/mentions-legales'
+    | '/politique-confidentialite'
+    | '/admin'
     | '/admin/newsletter'
+    | '/admin/login'
+    | '/admin/gallery'
     | '/admin/content'
   id:
     | '__root__'
     | '/'
-    | '/actualites'
     | '/association'
     | '/contact'
     | '/evenements'
     | '/galerie'
-    | '/admin/login'
+    | '/mentions-legales'
+    | '/politique-confidentialite'
+    | '/admin/'
     | '/admin/newsletter'
+    | '/admin/login'
+    | '/admin/gallery'
     | '/admin/content'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ActualitesRoute: typeof ActualitesRoute
   AssociationRoute: typeof AssociationRoute
   ContactRoute: typeof ContactRoute
   EvenementsRoute: typeof EvenementsRoute
   GalerieRoute: typeof GalerieRoute
-  AdminLoginRoute: typeof AdminLoginRoute
+  MentionsLegalesRoute: typeof MentionsLegalesRoute
+  PolitiqueConfidentialiteRoute: typeof PolitiqueConfidentialiteRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   AdminNewsletterRoute: typeof AdminNewsletterRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminGalleryRoute: typeof AdminGalleryRoute
   AdminContentRoute: typeof AdminContentRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/politique-confidentialite': {
+      id: '/politique-confidentialite'
+      path: '/politique-confidentialite'
+      fullPath: '/politique-confidentialite'
+      preLoaderRoute: typeof PolitiqueConfidentialiteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/actualites': {
-      id: '/actualites'
-      path: '/actualites'
-      fullPath: '/actualites'
-      preLoaderRoute: typeof ActualitesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/association': {
-      id: '/association'
-      path: '/association'
-      fullPath: '/association'
-      preLoaderRoute: typeof AssociationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/evenements': {
-      id: '/evenements'
-      path: '/evenements'
-      fullPath: '/evenements'
-      preLoaderRoute: typeof EvenementsRouteImport
+    '/mentions-legales': {
+      id: '/mentions-legales'
+      path: '/mentions-legales'
+      fullPath: '/mentions-legales'
+      preLoaderRoute: typeof MentionsLegalesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/galerie': {
@@ -204,11 +210,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GalerieRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/login': {
-      id: '/admin/login'
-      path: '/admin/login'
-      fullPath: '/admin/login'
-      preLoaderRoute: typeof AdminLoginRouteImport
+    '/evenements': {
+      id: '/evenements'
+      path: '/evenements'
+      fullPath: '/evenements'
+      preLoaderRoute: typeof EvenementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/association': {
+      id: '/association'
+      path: '/association'
+      fullPath: '/association'
+      preLoaderRoute: typeof AssociationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/newsletter': {
@@ -216,6 +250,20 @@ declare module '@tanstack/react-router' {
       path: '/admin/newsletter'
       fullPath: '/admin/newsletter'
       preLoaderRoute: typeof AdminNewsletterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/gallery': {
+      id: '/admin/gallery'
+      path: '/admin/gallery'
+      fullPath: '/admin/gallery'
+      preLoaderRoute: typeof AdminGalleryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/content': {
@@ -230,15 +278,18 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ActualitesRoute: ActualitesRoute,
   AssociationRoute: AssociationRoute,
   ContactRoute: ContactRoute,
   EvenementsRoute: EvenementsRoute,
   GalerieRoute: GalerieRoute,
-  AdminLoginRoute: AdminLoginRoute,
+  MentionsLegalesRoute: MentionsLegalesRoute,
+  PolitiqueConfidentialiteRoute: PolitiqueConfidentialiteRoute,
+  AdminIndexRoute: AdminIndexRoute,
   AdminNewsletterRoute: AdminNewsletterRoute,
+  AdminLoginRoute: AdminLoginRoute,
+  AdminGalleryRoute: AdminGalleryRoute,
   AdminContentRoute: AdminContentRoute,
 }
-declare module '@tanstack/react-router' {
-  interface FileRouteTypes extends FileRouteTypes {}
-}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
