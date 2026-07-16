@@ -148,8 +148,7 @@ function AdminContent() {
             </div>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2">
-            <Link to="/admin/newsletter" className="rounded-full border border-border/70 px-3 sm:px-4 py-2 text-xs sm:text-sm hover:bg-accent transition-colors">Newsletter</Link>
-            <Link to="/" className="rounded-full border border-border/70 px-3 sm:px-4 py-2 text-xs sm:text-sm hover:bg-accent transition-colors">Site</Link>
+              <Link to="/admin" className="rounded-full border border-border/70 px-3 sm:px-4 py-2 text-xs sm:text-sm hover:bg-accent transition-colors">Dashboard</Link>
             <button onClick={handleLogout} className="inline-flex items-center gap-1.5 rounded-full border border-border/70 px-3 sm:px-4 py-2 text-xs sm:text-sm hover:bg-accent transition-colors">
               <LogOut className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Déconnexion</span>
             </button>

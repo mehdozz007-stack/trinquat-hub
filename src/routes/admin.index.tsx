@@ -110,9 +110,9 @@ function AdminDashboard() {
               to={item.href}
               className="group rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-soft overflow-hidden hover:shadow-elegant transition-all hover:-translate-y-1"
             >
-              <div className={`h-24 bg-gradient-to-br ${item.color} opacity-10 group-hover:opacity-15 transition-opacity`} />
+              <div className={`h-24 bg-llinear-to-br ${item.color} opacity-10 group-hover:opacity-15 transition-opacity`} />
               <div className="p-6 sm:p-8">
-                <div className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${item.color} text-white shadow-soft mb-4`}>
+                <div className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br ${item.color} text-white shadow-soft mb-4`}>
                   {item.icon}
                 </div>
                 <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">{item.label}</h3>

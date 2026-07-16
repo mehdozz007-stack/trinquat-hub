@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { X, Plus, Trash2, LogOut, Upload } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -216,6 +216,7 @@ function AdminGallery() {
               <Plus className="h-4 w-4" />
               Ajouter une image
             </button>
+            <Link to="/admin" className="rounded-full border border-border/70 px-3 sm:px-4 py-2 text-xs sm:text-sm hover:bg-accent transition-colors">Dashboard</Link>
             <button
               onClick={handleLogout}
               className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium hover:bg-accent transition-colors"

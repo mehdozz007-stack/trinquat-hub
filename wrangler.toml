@@ -2,6 +2,7 @@ name = "trinquat-compagnie"
 compatibility_date = "2025-05-01"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "dist"
+vars = { MEDIA_PUBLIC_URL = "https://339cf8e38504b8743b4d07b2d2db97d6.r2.cloudflarestorage.com/trinquat-media" }
 
 [[d1_databases]]
 binding = "trinquat_newsletter"
@@ -9,12 +10,20 @@ database_name = "trinquat_newsletter"
 database_id = "db2895c7-7a16-4bf3-90b6-72485f80ea94"
 migrations_dir = "migrations"
 
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "trinquat-media"
+
 [env.production]
-vars = { ENVIRONMENT = "production" }
+vars = { ENVIRONMENT = "production", MEDIA_PUBLIC_URL = "https://339cf8e38504b8743b4d07b2d2db97d6.r2.cloudflarestorage.com/trinquat-media" }
 [[env.production.d1_databases]]
 binding = "trinquat_newsletter"
 database_name = "trinquat_newsletter"
 database_id = "db2895c7-7a16-4bf3-90b6-72485f80ea94"
+
+[[env.production.r2_buckets]]
+binding = "MEDIA"
+bucket_name = "trinquat-media"
 
 # Secrets for production (use: wrangler secret put KEY_NAME --env production)
 # wrangler secret put BREVO_API_KEY --env production

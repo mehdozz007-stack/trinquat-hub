@@ -28,7 +28,7 @@ function AdminLogin() {
     try {
       const session = localStorage.getItem("admin_session");
       if (session) {
-        navigate({ to: "/admin/newsletter" });
+        navigate({ to: "/admin" });
       }
     } catch (e) {
       // Pas de session, c'est normal
@@ -57,7 +57,7 @@ function AdminLogin() {
         return;
       }
 
-      navigate({ to: "/admin/newsletter" });
+      navigate({ to: "/admin" });
     } catch (err) {
       setError("Impossible de se connecter.");
       setLoading(false);
