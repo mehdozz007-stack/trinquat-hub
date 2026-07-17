@@ -1,14 +1,14 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import {
-  Calendar, FileText, Image as ImageIcon, LogOut, Plus, ShieldCheck, ShieldAlert,
-  Save, Send, Trash2, Pencil, Eye, EyeOff, X, MapPin, Tag, Upload, RefreshCw,
+  Calendar, Image as ImageIcon, LogOut, Plus, ShieldCheck, ShieldAlert,
+  Save, Send, Trash2, Pencil, Eye, EyeOff, X, MapPin, Upload, RefreshCw,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/content")({
   head: () => ({
     meta: [
-      { title: "Admin Contenu | Trinquat & Compagnie" },
+      { title: "Admin Événements | Trinquat & Compagnie" },
       { name: "robots", content: "noindex,nofollow" },
     ],
   }),
@@ -21,25 +21,16 @@ type EventRow = {
   badge: string | null; image_url: string | null; image_key: string | null;
   status: "draft" | "published"; published_at: string | null; created_at: string; updated_at: string;
 };
-type NewsRow = {
-  id: string; title: string; excerpt: string; tag: string | null; news_date: string;
-  image_url: string | null; image_key: string | null;
-  status: "draft" | "published"; published_at: string | null; created_at: string; updated_at: string;
-};
-type Tab = "events" | "news";
 
 function AdminContent() {
   const navigate = useNavigate();
   const [admin, setAdmin] = useState<AdminSession | null>(null);
   const [checking, setChecking] = useState(true);
-  const [tab, setTab] = useState<Tab>("events");
 
   const [events, setEvents] = useState<EventRow[]>([]);
-  const [news, setNews] = useState<NewsRow[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(false);
-  const [loadingNews, setLoadingNews] = useState(false);
 
-  const [editorOpen, setEditorOpen] = useState<null | { kind: Tab; row: EventRow | NewsRow | null }>(null);
+  const [editorOpen, setEditorOpen] = useState<EventRow | null>(null);
 
   // Session
   useEffect(() => {
@@ -71,40 +62,29 @@ function AdminContent() {
     } finally { setLoadingEvents(false); }
   }, []);
 
-  const loadNews = useCallback(async () => {
-    setLoadingNews(true);
-    try {
-      const res = await fetch("/api/admin/news", { credentials: "include" });
-      if (res.ok) {
-        const data = (await res.json()) as { news: NewsRow[] };
-        setNews(data.news || []);
-      }
-    } finally { setLoadingNews(false); }
-  }, []);
-
-  useEffect(() => { if (admin) { loadEvents(); loadNews(); } }, [admin, loadEvents, loadNews]);
+  useEffect(() => { if (admin) { loadEvents(); } }, [admin, loadEvents]);
 
   const handleLogout = async () => {
     try { await fetch("/api/admin/logout", { method: "POST", credentials: "include" }); } catch {}
     navigate({ to: "/admin/login" });
   };
 
-  const togglePublish = async (kind: Tab, row: EventRow | NewsRow) => {
+  const togglePublish = async (row: EventRow) => {
     const next = row.status === "published" ? "draft" : "published";
-    const res = await fetch(`/api/admin/${kind}/${row.id}`, {
+    const res = await fetch(`/api/admin/events/${row.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({ status: next }),
     });
-    if (res.ok) { kind === "events" ? loadEvents() : loadNews(); }
+    if (res.ok) { loadEvents(); }
     else alert("Échec de la mise à jour");
   };
 
-  const remove = async (kind: Tab, row: EventRow | NewsRow) => {
+  const remove = async (row: EventRow) => {
     if (!confirm(`Supprimer "${row.title}" ?`)) return;
-    const res = await fetch(`/api/admin/${kind}/${row.id}`, { method: "DELETE", credentials: "include" });
-    if (res.ok) { kind === "events" ? loadEvents() : loadNews(); }
+    const res = await fetch(`/api/admin/events/${row.id}`, { method: "DELETE", credentials: "include" });
+    if (res.ok) { loadEvents(); }
     else alert("Échec de la suppression");
   };
 
@@ -129,122 +109,71 @@ function AdminContent() {
   const eventsPub = events.filter((e) => e.status === "published").length;
   const today = new Date().toISOString().slice(0, 10);
   const eventsUpcoming = events.filter((e) => e.status === "published" && e.event_date >= today).length;
-  const newsDraft = news.filter((n) => n.status === "draft").length;
-  const newsPub = news.filter((n) => n.status === "published").length;
 
   return (
     <div className="min-h-screen bg-background relative">
       <div className="absolute inset-0 -z-10 bg-gradient-leaf opacity-[0.04]" />
 
       <header className="border-b border-border/40 bg-card/60 backdrop-blur-sm sticky top-0 z-20">
-        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-leaf text-primary-foreground shadow-soft">
-              <ShieldCheck className="h-5 w-5" />
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+            <div className="flex h-9 sm:h-10 w-9 sm:w-10 items-center justify-center rounded-lg sm:rounded-2xl bg-gradient-leaf text-primary-foreground shadow-soft shrink-0">
+              <ShieldCheck className="h-4 w-4 sm:h-5" />
             </div>
-            <div>
-              <h1 className="text-lg font-medium leading-tight">Admin Contenu</h1>
-              <p className="text-xs text-muted-foreground">{admin.email}</p>
+            <div className="min-w-0">
+              <h1 className="text-base sm:text-lg font-medium leading-tight truncate">Événements</h1>
+              <p className="text-xs text-muted-foreground truncate">{admin.email}</p>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 sm:gap-2">
-              <Link to="/admin" className="rounded-full border border-border/70 px-3 sm:px-4 py-2 text-xs sm:text-sm hover:bg-accent transition-colors">Dashboard</Link>
-            <button onClick={handleLogout} className="inline-flex items-center gap-1.5 rounded-full border border-border/70 px-3 sm:px-4 py-2 text-xs sm:text-sm hover:bg-accent transition-colors">
-              <LogOut className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Déconnexion</span>
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <Link to="/admin" className="rounded-full border border-border/70 px-2.5 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Dashboard">📊</Link>
+            <button onClick={handleLogout} className="inline-flex items-center justify-center gap-1 rounded-full border border-border/70 px-2 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Déconnexion">
+              <LogOut className="h-4 w-4" /> <span className="hidden sm:inline">Déconnexion</span>
             </button>
           </div>
         </div>
       </header>
 
       <main className="mx-auto max-w-6xl px-4 sm:px-6 py-6 sm:py-10">
-        {/* Tabs */}
-        <div className="overflow-x-auto mb-6 sm:mb-8">
-          <div className="inline-flex rounded-full border border-border/60 bg-card/70 backdrop-blur-sm p-1 shadow-soft">
-            <TabBtn active={tab === "events"} onClick={() => setTab("events")} icon={<Calendar className="h-4 w-4" />} label="Événements" />
-            <TabBtn active={tab === "news"} onClick={() => setTab("news")} icon={<FileText className="h-4 w-4" />} label="Actualités" />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <StatCard icon={<Calendar className="h-4 w-4" />} label="À venir (publiés)" value={eventsUpcoming} />
+          <StatCard icon={<Eye className="h-4 w-4" />} label="Publiés" value={eventsPub} />
+          <StatCard icon={<EyeOff className="h-4 w-4" />} label="Brouillons" value={eventsDraft} />
+        </div>
+
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-medium">Tous les événements</h2>
+          <div className="flex gap-2">
+            <button onClick={loadEvents} className="inline-flex items-center gap-1.5 rounded-full border border-border/70 px-3 py-2 text-xs hover:bg-accent">
+              <RefreshCw className="h-3.5 w-3.5" /> Actualiser
+            </button>
+            <button onClick={() => setEditorOpen(null)} className="inline-flex items-center gap-1.5 rounded-full bg-gradient-leaf px-4 py-2 text-xs font-semibold text-primary-foreground shadow-soft hover:shadow-glow">
+              <Plus className="h-3.5 w-3.5" /> Nouvel événement
+            </button>
           </div>
         </div>
 
-        {tab === "events" && (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
-              <StatCard icon={<Calendar className="h-4 w-4" />} label="À venir (publiés)" value={eventsUpcoming} />
-              <StatCard icon={<Eye className="h-4 w-4" />} label="Publiés" value={eventsPub} />
-              <StatCard icon={<EyeOff className="h-4 w-4" />} label="Brouillons" value={eventsDraft} />
-            </div>
-
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-medium">Tous les événements</h2>
-              <div className="flex gap-2">
-                <button onClick={loadEvents} className="inline-flex items-center gap-1.5 rounded-full border border-border/70 px-3 py-2 text-xs hover:bg-accent">
-                  <RefreshCw className="h-3.5 w-3.5" /> Actualiser
-                </button>
-                <button onClick={() => setEditorOpen({ kind: "events", row: null })} className="inline-flex items-center gap-1.5 rounded-full bg-gradient-leaf px-4 py-2 text-xs font-semibold text-primary-foreground shadow-soft hover:shadow-glow">
-                  <Plus className="h-3.5 w-3.5" /> Nouvel événement
-                </button>
-              </div>
-            </div>
-
-            {loadingEvents ? (
-              <div className="rounded-3xl border border-border/40 bg-card/70 p-16 text-center text-sm text-muted-foreground">Chargement...</div>
-            ) : events.length === 0 ? (
-              <EmptyState label="Aucun événement pour le moment." onCreate={() => setEditorOpen({ kind: "events", row: null })} />
-            ) : (
-              <ContentTable
-                rows={events.map((e) => ({
-                  id: e.id, title: e.title, date: e.event_date, meta: e.place || "", status: e.status, image_url: e.image_url,
-                }))}
-                onEdit={(id) => { const row = events.find((x) => x.id === id); if (row) setEditorOpen({ kind: "events", row }); }}
-                onToggle={(id) => { const row = events.find((x) => x.id === id); if (row) togglePublish("events", row); }}
-                onDelete={(id) => { const row = events.find((x) => x.id === id); if (row) remove("events", row); }}
-              />
-            )}
-          </>
-        )}
-
-        {tab === "news" && (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8">
-              <StatCard icon={<Eye className="h-4 w-4" />} label="Publiées" value={newsPub} />
-              <StatCard icon={<EyeOff className="h-4 w-4" />} label="Brouillons" value={newsDraft} />
-            </div>
-
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-medium">Toutes les actualités</h2>
-              <div className="flex gap-2">
-                <button onClick={loadNews} className="inline-flex items-center gap-1.5 rounded-full border border-border/70 px-3 py-2 text-xs hover:bg-accent">
-                  <RefreshCw className="h-3.5 w-3.5" /> Actualiser
-                </button>
-                <button onClick={() => setEditorOpen({ kind: "news", row: null })} className="inline-flex items-center gap-1.5 rounded-full bg-gradient-leaf px-4 py-2 text-xs font-semibold text-primary-foreground shadow-soft hover:shadow-glow">
-                  <Plus className="h-3.5 w-3.5" /> Nouvelle actualité
-                </button>
-              </div>
-            </div>
-
-            {loadingNews ? (
-              <div className="rounded-3xl border border-border/40 bg-card/70 p-16 text-center text-sm text-muted-foreground">Chargement...</div>
-            ) : news.length === 0 ? (
-              <EmptyState label="Aucune actualité pour le moment." onCreate={() => setEditorOpen({ kind: "news", row: null })} />
-            ) : (
-              <ContentTable
-                rows={news.map((n) => ({
-                  id: n.id, title: n.title, date: n.news_date, meta: n.tag || "", status: n.status, image_url: n.image_url,
-                }))}
-                onEdit={(id) => { const row = news.find((x) => x.id === id); if (row) setEditorOpen({ kind: "news", row }); }}
-                onToggle={(id) => { const row = news.find((x) => x.id === id); if (row) togglePublish("news", row); }}
-                onDelete={(id) => { const row = news.find((x) => x.id === id); if (row) remove("news", row); }}
-              />
-            )}
-          </>
+        {loadingEvents ? (
+          <div className="rounded-3xl border border-border/40 bg-card/70 p-16 text-center text-sm text-muted-foreground">Chargement...</div>
+        ) : events.length === 0 ? (
+          <EmptyState label="Aucun événement pour le moment." onCreate={() => setEditorOpen(null)} />
+        ) : (
+          <ContentTable
+            rows={events.map((e) => ({
+              id: e.id, title: e.title, date: e.event_date, meta: e.place || "", status: e.status, image_url: e.image_url,
+            }))}
+            onEdit={(row) => { const evt = events.find((x) => x.id === row.id); if (evt) setEditorOpen(evt); }}
+            onToggle={(row) => { const evt = events.find((x) => x.id === row.id); if (evt) togglePublish(evt); }}
+            onDelete={(row) => { const evt = events.find((x) => x.id === row.id); if (evt) remove(evt); }}
+          />
         )}
       </main>
 
-      {editorOpen && (
+      {editorOpen !== null && (
         <Editor
-          kind={editorOpen.kind}
-          row={editorOpen.row}
+          row={editorOpen}
           onClose={() => setEditorOpen(null)}
-          onSaved={() => { setEditorOpen(null); editorOpen.kind === "events" ? loadEvents() : loadNews(); }}
+          onSaved={() => { setEditorOpen(null); loadEvents(); }}
         />
       )}
     </div>
@@ -252,14 +181,6 @@ function AdminContent() {
 }
 
 /* ============ subcomponents ============ */
-
-function TabBtn({ active, onClick, icon, label }: { active: boolean; onClick: () => void; icon: React.ReactNode; label: string }) {
-  return (
-    <button onClick={onClick} className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${active ? "bg-gradient-leaf text-primary-foreground shadow-soft" : "text-muted-foreground hover:text-foreground"}`}>
-      {icon}{label}
-    </button>
-  );
-}
 
 function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: number }) {
   return (
@@ -284,7 +205,7 @@ function EmptyState({ label, onCreate }: { label: string; onCreate: () => void }
 type Row = { id: string; title: string; date: string; meta: string; status: "draft" | "published"; image_url: string | null };
 
 function ContentTable({ rows, onEdit, onToggle, onDelete }: {
-  rows: Row[]; onEdit: (id: string) => void; onToggle: (id: string) => void; onDelete: (id: string) => void;
+  rows: Row[]; onEdit: (row: Row) => void; onToggle: (row: Row) => void; onDelete: (row: Row) => void;
 }) {
   return (
     <div className="rounded-2xl sm:rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-elegant overflow-hidden">
@@ -294,7 +215,7 @@ function ContentTable({ rows, onEdit, onToggle, onDelete }: {
             <tr>
               <th className="text-left px-5 py-3 font-medium">Titre</th>
               <th className="text-left px-5 py-3 font-medium">Date</th>
-              <th className="text-left px-5 py-3 font-medium hidden md:table-cell">Info</th>
+              <th className="text-left px-5 py-3 font-medium hidden md:table-cell">Lieu</th>
               <th className="text-left px-5 py-3 font-medium">Statut</th>
               <th className="text-right px-5 py-3 font-medium">Actions</th>
             </tr>
@@ -323,15 +244,15 @@ function ContentTable({ rows, onEdit, onToggle, onDelete }: {
                 </td>
                 <td className="px-5 py-3 text-right">
                   <div className="inline-flex gap-1">
-                    <button onClick={() => onToggle(r.id)} title={r.status === "published" ? "Dépublier" : "Publier"}
+                    <button onClick={() => onToggle(r)} title={r.status === "published" ? "Dépublier" : "Publier"}
                       className="inline-flex items-center gap-1 rounded-full p-2 text-muted-foreground hover:bg-accent hover:text-foreground transition">
                       {r.status === "published" ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
-                    <button onClick={() => onEdit(r.id)} title="Éditer"
+                    <button onClick={() => onEdit(r)} title="Éditer"
                       className="inline-flex items-center gap-1 rounded-full p-2 text-muted-foreground hover:bg-accent hover:text-foreground transition">
                       <Pencil className="h-4 w-4" />
                     </button>
-                    <button onClick={() => onDelete(r.id)} title="Supprimer"
+                    <button onClick={() => onDelete(r)} title="Supprimer"
                       className="inline-flex items-center gap-1 rounded-full p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition">
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -348,17 +269,15 @@ function ContentTable({ rows, onEdit, onToggle, onDelete }: {
 
 /* ============ editor ============ */
 
-function Editor({ kind, row, onClose, onSaved }: {
-  kind: Tab; row: EventRow | NewsRow | null; onClose: () => void; onSaved: () => void;
+function Editor({ row, onClose, onSaved }: {
+  row: EventRow | null; onClose: () => void; onSaved: () => void;
 }) {
-  const isEvent = kind === "events";
   const initial = row as any;
   const [title, setTitle] = useState<string>(initial?.title ?? "");
-  const [description, setDescription] = useState<string>(isEvent ? (initial?.description ?? "") : (initial?.excerpt ?? ""));
-  const [date, setDate] = useState<string>(isEvent ? (initial?.event_date ?? "") : (initial?.news_date ?? ""));
+  const [description, setDescription] = useState<string>(initial?.description ?? "");
+  const [date, setDate] = useState<string>(initial?.event_date ?? "");
   const [place, setPlace] = useState<string>(initial?.place ?? "");
   const [badge, setBadge] = useState<string>(initial?.badge ?? "");
-  const [tag, setTag] = useState<string>(initial?.tag ?? "");
   const [imageUrl, setImageUrl] = useState<string | null>(initial?.image_url ?? null);
   const [imageKey, setImageKey] = useState<string | null>(initial?.image_key ?? null);
   const [uploading, setUploading] = useState(false);
@@ -397,19 +316,13 @@ function Editor({ kind, row, onClose, onSaved }: {
     try {
       const payload: any = {
         title: title.trim(),
+        description: description.trim(),
+        event_date: date,
+        place: place.trim() || null,
+        badge: badge.trim() || null,
         image_url: imageUrl, image_key: imageKey, status,
       };
-      if (isEvent) {
-        payload.description = description.trim();
-        payload.event_date = date;
-        payload.place = place.trim() || null;
-        payload.badge = badge.trim() || null;
-      } else {
-        payload.excerpt = description.trim();
-        payload.news_date = date;
-        payload.tag = tag.trim() || null;
-      }
-      const url = row ? `/api/admin/${kind}/${row.id}` : `/api/admin/${kind}`;
+      const url = row ? `/api/admin/events/${row.id}` : `/api/admin/events`;
       const method = row ? "PATCH" : "POST";
       const res = await fetch(url, {
         method, headers: { "Content-Type": "application/json" }, credentials: "include",
@@ -428,7 +341,7 @@ function Editor({ kind, row, onClose, onSaved }: {
       <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-card border border-border/40 shadow-elegant" onClick={(e) => e.stopPropagation()}>
         <div className="sticky top-0 bg-card border-b border-border/40 px-6 py-4 flex items-center justify-between rounded-t-3xl">
           <h3 className="text-lg font-medium">
-            {row ? "Modifier" : "Créer"} {isEvent ? "un événement" : "une actualité"}
+            {row ? "Modifier" : "Créer"} un événement
           </h3>
           <button onClick={onClose} className="rounded-full p-2 hover:bg-muted"><X className="h-4 w-4" /></button>
         </div>
@@ -439,7 +352,7 @@ function Editor({ kind, row, onClose, onSaved }: {
               className="w-full rounded-xl border border-border/60 bg-background px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40" />
           </Field>
 
-          <Field label={isEvent ? "Description" : "Extrait"}>
+          <Field label="Description">
             <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={5} maxLength={5000}
               className="w-full rounded-xl border border-border/60 bg-background px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40" />
           </Field>
@@ -449,27 +362,17 @@ function Editor({ kind, row, onClose, onSaved }: {
               <input type="date" value={date} onChange={(e) => setDate(e.target.value)}
                 className="w-full rounded-xl border border-border/60 bg-background px-4 py-2.5 text-sm" />
             </Field>
-            {isEvent ? (
-              <Field label="Lieu" icon={<MapPin className="h-3.5 w-3.5" />}>
-                <input value={place} onChange={(e) => setPlace(e.target.value)} maxLength={200}
-                  className="w-full rounded-xl border border-border/60 bg-background px-4 py-2.5 text-sm" />
-              </Field>
-            ) : (
-              <Field label="Catégorie / tag" icon={<Tag className="h-3.5 w-3.5" />}>
-                <input value={tag} onChange={(e) => setTag(e.target.value)} maxLength={60}
-                  placeholder="ex: Vie de quartier"
-                  className="w-full rounded-xl border border-border/60 bg-background px-4 py-2.5 text-sm" />
-              </Field>
-            )}
-          </div>
-
-          {isEvent && (
-            <Field label="Badge (optionnel)">
-              <input value={badge} onChange={(e) => setBadge(e.target.value)} maxLength={60}
-                placeholder="ex: À venir, Fête, Vie de quartier"
+            <Field label="Lieu" icon={<MapPin className="h-3.5 w-3.5" />}>
+              <input value={place} onChange={(e) => setPlace(e.target.value)} maxLength={200}
                 className="w-full rounded-xl border border-border/60 bg-background px-4 py-2.5 text-sm" />
             </Field>
-          )}
+          </div>
+
+          <Field label="Badge (optionnel)">
+            <input value={badge} onChange={(e) => setBadge(e.target.value)} maxLength={60}
+              placeholder="ex: À venir, Fête, Vie de quartier"
+              className="w-full rounded-xl border border-border/60 bg-background px-4 py-2.5 text-sm" />
+          </Field>
 
           <Field label="Image">
             {imageUrl ? (

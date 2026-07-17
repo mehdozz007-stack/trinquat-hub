@@ -203,23 +203,25 @@ function AdminGallery() {
 
       {/* Header */}
       <header className="border-b border-border/40 bg-card/60 backdrop-blur-sm sticky top-0 z-20">
-        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold">Galerie</h1>
-            <p className="text-sm text-muted-foreground mt-1">{images.length} image(s)</p>
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3 sm:gap-4">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-lg sm:text-2xl font-semibold truncate">Galerie</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1">{images.length} image(s)</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <button
               onClick={() => setEditorOpen(true)}
-              className="inline-flex items-center gap-2 rounded-full bg-gradient-leaf px-4 py-2 text-sm font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-all"
+              className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full bg-gradient-leaf px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-all whitespace-nowrap"
             >
-              <Plus className="h-4 w-4" />
-              Ajouter une image
+              <Plus className="h-4 w-4 shrink-0" />
+              <span className="hidden sm:inline">Ajouter une image</span>
+              <span className="sm:hidden">Ajouter</span>
             </button>
-            <Link to="/admin" className="rounded-full border border-border/70 px-3 sm:px-4 py-2 text-xs sm:text-sm hover:bg-accent transition-colors">Dashboard</Link>
+            <Link to="/admin" className="rounded-full border border-border/70 px-2.5 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Dashboard">📊</Link>
             <button
               onClick={handleLogout}
-              className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium hover:bg-accent transition-colors"
+              className="inline-flex items-center justify-center gap-1.5 rounded-full border border-border/70 px-2 sm:px-3 py-2 text-xs hover:bg-accent transition-colors"
+              title="Déconnexion"
             >
               <LogOut className="h-4 w-4" />
             </button>
@@ -229,7 +231,7 @@ function AdminGallery() {
 
       {/* Messages */}
       {message && (
-        <div className={`mx-6 mt-4 rounded-lg p-3 text-sm flex items-center gap-2 ${
+        <div className={`mx-4 sm:mx-6 mt-3 sm:mt-4 rounded-lg p-3 text-sm flex items-center gap-2 ${
           message.type === "success"
             ? "bg-primary/10 border border-primary/30 text-primary-deep"
             : "bg-destructive/10 border border-destructive/30 text-destructive"
@@ -239,7 +241,7 @@ function AdminGallery() {
       )}
 
       {/* Main */}
-      <main className="mx-auto max-w-6xl px-6 py-10">
+      <main className="mx-auto max-w-6xl px-4 sm:px-6 py-8 sm:py-10">
         {loading ? (
           <div className="text-center py-12 text-muted-foreground">Chargement des images...</div>
         ) : images.length === 0 ? (

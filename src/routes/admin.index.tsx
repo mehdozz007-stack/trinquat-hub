@@ -86,40 +86,52 @@ function AdminDashboard() {
 
       {/* Header */}
       <header className="border-b border-border/40 bg-card/60 backdrop-blur-sm sticky top-0 z-20">
-        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold">Tableau de bord</h1>
-            <p className="text-sm text-muted-foreground mt-1">Bienvenue, {admin.email}</p>
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-semibold truncate">Tableau de bord</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-1 truncate">Bienvenue, {admin.email}</p>
           </div>
           <button
             onClick={handleLogout}
-            className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium hover:bg-accent transition-colors"
+            className="inline-flex items-center gap-2 rounded-full border border-border px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium hover:bg-accent transition-colors whitespace-nowrap shrink-0"
+            title="Déconnexion"
           >
-            <LogOut className="h-4 w-4" />
-            Déconnexion
+            <LogOut className="h-4 w-4 shrink-0" />
+            <span className="hidden sm:inline">Déconnexion</span>
           </button>
         </div>
       </header>
 
-      {/* Main */}
-      <main className="mx-auto max-w-6xl px-6 py-12 sm:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <main className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           {dashboard.map((item) => (
             <Link
               key={item.href}
               to={item.href}
-              className="group rounded-3xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-soft overflow-hidden hover:shadow-elegant transition-all hover:-translate-y-1"
+              className="group relative rounded-3xl border border-border/40 bg-card/80 backdrop-blur-sm shadow-soft overflow-hidden hover:shadow-elegant transition-all duration-300 hover:-translate-y-2 hover:border-primary/20 min-h-64 sm:min-h-80 flex flex-col"
             >
-              <div className={`h-24 bg-llinear-to-br ${item.color} opacity-10 group-hover:opacity-15 transition-opacity`} />
-              <div className="p-6 sm:p-8">
-                <div className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br ${item.color} text-white shadow-soft mb-4`}>
+              {/* Background gradient overlay */}
+              <div className={`absolute inset-0 bg-linear-to-br ${item.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300 -z-10`} />
+              
+              {/* Top accent bar */}
+              <div className={`h-1 bg-linear-to-r ${item.color}`} />
+              
+              {/* Icon section - centered */}
+              <div className={`px-4 sm:px-8 pt-6 sm:pt-8 flex justify-center`}>
+                <div className={`inline-flex h-14 sm:h-16 w-14 sm:w-16 items-center justify-center rounded-xl sm:rounded-2xl bg-linear-to-br ${item.color} text-white shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110`}>
                   {item.icon}
                 </div>
-                <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">{item.label}</h3>
-                <p className="text-sm text-muted-foreground mb-4">{item.description}</p>
-                <div className="inline-flex items-center gap-2 text-sm font-medium text-primary group-hover:gap-3 transition-all">
-                  Accéder
-                  <span>→</span>
+              </div>
+              
+              {/* Content section - centered */}
+              <div className="px-4 sm:px-8 py-6 sm:py-8 flex flex-col justify-center flex-1">
+                <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2 sm:mb-3 text-center group-hover:text-primary transition-colors duration-200">{item.label}</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground mb-6 sm:mb-8 leading-relaxed text-center">{item.description}</p>
+                <div className="flex justify-center">
+                  <div className="inline-flex items-center gap-2 text-sm font-semibold text-primary group-hover:gap-4 transition-all duration-200">
+                    Accéder
+                    <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
+                  </div>
                 </div>
               </div>
             </Link>
