@@ -37,13 +37,13 @@ export function Values() {
                 Nos valeurs
               </span>
               <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1]">
-                Ce qui nous <span className="text-gradient">rassemble</span>
+                Ce qui nous <span className="text-gradient">unit</span>
               </h2>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-8 text-base md:text-lg leading-relaxed text-muted-foreground">
-                Trinquat & Compagnie s'appuie sur des valeurs simples mais essentielles, la solidarité, 
-                le respect de la nature et la convivialité. Nous croyons que chaque geste, 
+                Trinquat & Compagnie s'appuie sur des valeurs simples mais essentielles : <strong className="font-bold text-foreground">la solidarité, 
+                le respect de la nature et la convivialité.</strong> Nous croyons que chaque geste, 
                 même modeste, peut renforcer les liens entre voisins et embellir notre cadre de vie.
               </p>
               </Reveal>
