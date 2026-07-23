@@ -42,7 +42,7 @@ export function Values() {
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-8 text-base md:text-lg leading-relaxed text-muted-foreground">
-                Trinquat & Compagnie s'appuie sur des valeurs simples mais essentielles : <strong className="font-bold text-foreground">la solidarité, 
+                Trinquat & Compagnie s'appuie sur des valeurs simples mais essentielles: <strong className="italic font-semibold">la solidarité, 
                 le respect de la nature et la convivialité.</strong> Nous croyons que chaque geste, 
                 même modeste, peut renforcer les liens entre voisins et embellir notre cadre de vie.
               </p>

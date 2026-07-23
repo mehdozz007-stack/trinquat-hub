@@ -26,7 +26,7 @@ function AssociationPage() {
       <PageHeader
         eyebrow="Qui sommes-nous"
         title={<>Une <span className="text-gradient">grande famille</span> de voisins</>}
-        lead="Trinquat & Compagnie rassemble les habitants du quartier autour de moments simples, d'entraide et de partage."
+        lead="Les voisins deviennent une communauté, les rencontres deviennent des souvenirs, et chaque moment partagé fait grandir notre quartier."
       />
       <About />
       <Stats />
