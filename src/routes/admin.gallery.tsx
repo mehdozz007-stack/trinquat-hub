@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
-import { X, Plus, Trash2, LogOut, Upload } from "lucide-react";
+import { X, Plus, Trash2, LogOut, Upload, Globe } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const Route = createFileRoute("/admin/gallery")({
@@ -67,8 +67,8 @@ function AdminGallery() {
     try {
       const res = await fetch("/api/admin/gallery", { credentials: "include" });
       if (res.ok) {
-        const data = (await res.json()) as { gallery: GalleryImage[] };
-        setImages(data.gallery || []);
+        const data = (await res.json()) as { success: boolean; data: { items: GalleryImage[]; total: number; page: number; limit: number } };
+        setImages(data.data?.items || []);
       }
     } finally {
       setLoading(false);
@@ -114,9 +114,9 @@ function AdminGallery() {
 
       if (!res.ok) throw new Error("Upload failed");
 
-      const data = (await res.json()) as { url: string; key: string };
-      setImageUrl(data.url);
-      setImageKey(data.key);
+      const response = (await res.json()) as { success: boolean; data: { url: string; key: string } };
+      setImageUrl(response.data.url);
+      setImageKey(response.data.key);
       setMessage({ type: "success", text: "Image uploadée avec succès." });
     } catch (err) {
       setMessage({ type: "error", text: "Erreur lors de l'upload." });
@@ -217,6 +217,9 @@ function AdminGallery() {
               <span className="hidden sm:inline">Ajouter une image</span>
               <span className="sm:hidden">Ajouter</span>
             </button>
+            <Link to="/" className="rounded-full border border-border/70 px-2.5 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Voir le site">
+              <Globe className="h-4 w-4" />
+            </Link>
             <Link to="/admin" className="rounded-full border border-border/70 px-2.5 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Dashboard">📊</Link>
             <button
               onClick={handleLogout}

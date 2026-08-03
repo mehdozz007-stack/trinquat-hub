@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "./Reveal";
 import { Link } from "@tanstack/react-router";
@@ -8,6 +8,19 @@ import VideGrenier from "@/assets/vide-grenier1.jpg";
 import g7 from "@/assets/gallery-7.jpg";
 import g10 from "@/assets/gallery-10.jpg";
 import g1 from "@/assets/gallery-1.jpg";
+
+// Convert ISO date "2026-09-01" to French format "1 Septembre 2026"
+const formatToFrenchDate = (dateStr: string): string => {
+  try {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
+      .split(' ')
+      .map((part, i) => i === 1 ? part.charAt(0).toUpperCase() + part.slice(1) : part)
+      .join(' ');
+  } catch {
+    return dateStr;
+  }
+};
 
 // Parse French date format "31 Juillet 2026" to Date object
 const parseFrenchDate = (dateStr: string): Date => {
@@ -88,8 +101,42 @@ const news = [
 
 export function EventsAndNewsPreview() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [loadedEvents, setLoadedEvents] = useState<PreviewItem[]>([]);
 
-  const upcomingEvents = events.filter((e) => parseFrenchDate(e.date) >= new Date());
+  // Load events from API
+  useEffect(() => {
+    let mounted = true;
+    
+    fetch("/api/events")
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((data: any) => {
+        if (!mounted) return;
+        
+        if (Array.isArray(data?.events) && data.events.length > 0) {
+          const apiEvents = data.events.map((e: any) => ({
+            id: e.id,
+            type: "event" as const,
+            img: e.image_url || imgFete,
+            badge: e.badge || "À venir",
+            date: formatToFrenchDate(e.event_date),
+            title: e.title,
+            place: e.place,
+            desc: e.description || "",
+          }));
+          setLoadedEvents(apiEvents);
+        }
+      })
+      .catch(() => {
+        // If API fails, keep using static events
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const displayEvents = loadedEvents.length > 0 ? loadedEvents : events;
+  const upcomingEvents = displayEvents.filter((e) => parseFrenchDate(e.date) >= new Date());
   const allNews = news;
 
   return (

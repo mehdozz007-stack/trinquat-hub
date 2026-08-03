@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
   Download, Trash2, LogOut, Mail, Search, Users, ShieldCheck, ShieldAlert,
-  PenSquare, Send, Save, FileText, AlertCircle, Eye, Calendar, CheckCircle2, Clock, X,
+  PenSquare, Send, Save, FileText, AlertCircle, Eye, Calendar, CheckCircle2, Clock, X, Globe,
 } from "lucide-react";
 import logo from "@/assets/logo.png";
 
@@ -80,8 +80,8 @@ function AdminNewsletter() {
           credentials: "include",
         });
         if (res.ok) {
-          const data = await res.json() as { subscribers?: Subscriber[] };
-          if (mounted) setSubs(data.subscribers || []);
+          const data = await res.json() as { success: boolean; data: { items: Subscriber[]; total: number; page: number; limit: number } };
+          if (mounted) setSubs(data.data?.items || []);
         }
       } catch {
         if (mounted) setSubs(MOCK_SUBSCRIBERS);
@@ -103,8 +103,8 @@ function AdminNewsletter() {
           credentials: "include",
         });
         if (res.ok) {
-          const data = await res.json() as { drafts: Draft[] };
-          if (mounted) setDrafts(data.drafts);
+          const data = await res.json() as { success: boolean; data: { items: Draft[]; total: number; page: number; limit: number } };
+          if (mounted) setDrafts(data.data?.items || []);
         }
       } catch (err) {
         console.error("Erreur chargement brouillons:", err);
@@ -115,27 +115,28 @@ function AdminNewsletter() {
   }, [admin]);
 
   // Load sent newsletters from backend
-  useEffect(() => {
-    if (!admin) return;
-    let mounted = true;
+  // TODO: Implement sent newsletters endpoint
+  // useEffect(() => {
+  //   if (!admin) return;
+  //   let mounted = true;
 
-    (async () => {
-      try {
-        const res = await fetch("/api/admin/sent-newsletters", {
-          method: "GET",
-          credentials: "include",
-        });
-        if (res.ok) {
-          const data = await res.json() as { sent: SentNewsletter[] };
-          if (mounted) setSentNewsletters(data.sent);
-        }
-      } catch (err) {
-        console.error("Erreur chargement historique:", err);
-      }
-    })();
+  //   (async () => {
+  //     try {
+  //       const res = await fetch("/api/admin/sent-newsletters", {
+  //         method: "GET",
+  //         credentials: "include",
+  //       });
+  //       if (res.ok) {
+  //         const data = await res.json() as { sent: SentNewsletter[] };
+  //         if (mounted) setSentNewsletters(data.sent);
+  //       }
+  //     } catch (err) {
+  //       console.error("Erreur chargement historique:", err);
+  //     }
+  //   })();
 
-    return () => { mounted = false; };
-  }, [admin]);
+  //   return () => { mounted = false; };
+  // }, [admin]);
 
   useEffect(() => {
     if (checkingSession) return;
@@ -202,6 +203,9 @@ function AdminNewsletter() {
             </div>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <Link to="/" className="rounded-full border border-border/70 px-2.5 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Voir le site">
+              <Globe className="h-4 w-4" />
+            </Link>
             <Link to="/admin" className="rounded-full border border-border/70 px-2.5 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Dashboard">📊</Link>
             <button onClick={handleLogout} className="inline-flex items-center justify-center gap-1 rounded-full border border-border/70 px-2 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Déconnexion">
               <LogOut className="h-4 w-4" /> <span className="hidden sm:inline">Déconnexion</span>

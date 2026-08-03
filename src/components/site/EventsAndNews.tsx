@@ -121,16 +121,19 @@ export function EventsAndNews() {
       fetch("/api/events")
         .then((r) => (r.ok ? r.json() : Promise.reject()))
         .catch(() => ({ events: [] })),
+      fetch("/api/events/past")
+        .then((r) => (r.ok ? r.json() : Promise.reject()))
+        .catch(() => ({ events: [] })),
       fetch("/api/news")
         .then((r) => (r.ok ? r.json() : Promise.reject()))
         .catch(() => ({ news: [] })),
-    ]).then(([eventsData, newsData]: any[]) => {
+    ]).then(([upcomingData, pastData, newsData]: any[]) => {
       if (!mounted) return;
       const items: ContentItem[] = [];
 
-      // Add events
-      if (Array.isArray(eventsData?.events)) {
-        eventsData.events.forEach((e: any, i: number) => {
+      // Add upcoming events
+      if (Array.isArray(upcomingData?.events)) {
+        upcomingData.events.forEach((e: any, i: number) => {
           items.push({
             id: `event-${i}`,
             type: "event",
@@ -141,8 +144,31 @@ export function EventsAndNews() {
             place: e.place,
             desc: e.description || "",
             category: e.category || "Événement",
-            isPast: new Date(e.event_date) < new Date(),
+            isPast: false,
           });
+        });
+      }
+
+      // Add past events from API
+      if (Array.isArray(pastData?.events) && pastData.events.length > 0) {
+        pastData.events.forEach((e: any, i: number) => {
+          items.push({
+            id: `past-event-${i}`,
+            type: "event",
+            img: e.image_url || imgFete,
+            badge: e.badge || "Passé",
+            date: e.event_date,
+            title: e.title,
+            place: e.place,
+            desc: e.description || "",
+            category: e.category || "Événement",
+            isPast: true,
+          });
+        });
+      } else {
+        // If no past events from API, use static ones
+        staticContent.filter(item => item.isPast && item.type === "event").forEach(item => {
+          items.push(item);
         });
       }
 
@@ -164,7 +190,15 @@ export function EventsAndNews() {
         });
       }
 
+      // If we have items from API, use them; otherwise fall back to static content for past events
       if (items.length > 0) {
+        // Add any static news/past items not covered by API
+        const staticPastNews = staticContent.filter(item => item.isPast && item.type === "news");
+        staticPastNews.forEach(item => {
+          if (!items.find(i => i.id === item.id)) {
+            items.push(item);
+          }
+        });
         setContent(items);
       }
     });

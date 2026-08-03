@@ -3,7 +3,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import {
   Calendar, Image as ImageIcon, LogOut, Plus, ShieldCheck, ShieldAlert,
-  Save, Send, Trash2, Pencil, Eye, EyeOff, X, MapPin, Upload, RefreshCw,
+  Save, Send, Trash2, Pencil, Eye, EyeOff, X, MapPin, Upload, RefreshCw, Globe,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/content")({
@@ -57,8 +57,8 @@ function AdminContent() {
     try {
       const res = await fetch("/api/admin/events", { credentials: "include" });
       if (res.ok) {
-        const data = (await res.json()) as { events: EventRow[] };
-        setEvents(data.events || []);
+        const data = (await res.json()) as { success: boolean; data: { items: EventRow[]; total: number; page: number; limit: number } };
+        setEvents(data.data?.items || []);
       }
     } finally { setLoadingEvents(false); }
   }, []);
@@ -127,6 +127,9 @@ function AdminContent() {
             </div>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <Link to="/" className="rounded-full border border-border/70 px-2.5 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Voir le site">
+              <Globe className="h-4 w-4" />
+            </Link>
             <Link to="/admin" className="rounded-full border border-border/70 px-2.5 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Dashboard">📊</Link>
             <button onClick={handleLogout} className="inline-flex items-center justify-center gap-1 rounded-full border border-border/70 px-2 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Déconnexion">
               <LogOut className="h-4 w-4" /> <span className="hidden sm:inline">Déconnexion</span>
@@ -296,7 +299,7 @@ function Editor({ row, onClose, onSaved }: {
       if (!res.ok) throw new Error(data.error || "Échec de l'upload");
       // Delete previous image if any
       if (imageKey) { fetch(`/api/admin/uploads/${encodeURIComponent(imageKey)}`, { method: "DELETE", credentials: "include" }).catch(() => {}); }
-      setImageUrl(data.url); setImageKey(data.key);
+      setImageUrl(data.data.url); setImageKey(data.data.key);
     } catch (e: any) {
       setError(e.message || "Erreur d'upload");
     } finally { setUploading(false); }
@@ -323,8 +326,8 @@ function Editor({ row, onClose, onSaved }: {
         badge: badge.trim() || null,
         image_url: imageUrl, image_key: imageKey, status,
       };
-      const url = row ? `/api/admin/events/${row.id}` : `/api/admin/events`;
-      const method = row ? "PATCH" : "POST";
+      const url = row?.id ? `/api/admin/events/${row.id}` : `/api/admin/events`;
+      const method = row?.id ? "PATCH" : "POST";
       const res = await fetch(url, {
         method, headers: { "Content-Type": "application/json" }, credentials: "include",
         body: JSON.stringify(payload),
@@ -342,7 +345,7 @@ function Editor({ row, onClose, onSaved }: {
       <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-card border border-border/40 shadow-elegant" onClick={(e) => e.stopPropagation()}>
         <div className="sticky top-0 bg-card border-b border-border/40 px-6 py-4 flex items-center justify-between rounded-t-3xl">
           <h3 className="text-lg font-medium">
-            {row ? "Modifier" : "Créer"} un événement
+            {row?.id ? "Modifier" : "Créer"} un événement
           </h3>
           <button onClick={onClose} className="rounded-full p-2 hover:bg-muted"><X className="h-4 w-4" /></button>
         </div>
@@ -412,7 +415,7 @@ function Editor({ row, onClose, onSaved }: {
           </button>
           <button onClick={() => submit("published")} disabled={saving}
             className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-gradient-leaf px-5 py-2 text-xs font-semibold text-primary-foreground shadow-soft hover:shadow-glow disabled:opacity-50">
-            <Send className="h-3.5 w-3.5" /> {row?.status === "published" ? "Enregistrer" : "Publier"}
+            <Send className="h-3.5 w-3.5" /> {row?.id && row?.status === "published" ? "Enregistrer" : "Publier"}
           </button>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Reveal } from "./Reveal";
@@ -49,6 +49,36 @@ const photos = [
 
 export function Gallery() {
   const [open, setOpen] = useState<number | null>(null);
+  const [dynamicPhotos, setDynamicPhotos] = useState<Array<{ src: string; alt: string; h: string }>>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load images from API
+  useEffect(() => {
+    const loadGalleryImages = async () => {
+      try {
+        const res = await fetch("/api/gallery");
+        if (res.ok) {
+          const data = (await res.json()) as { items: Array<{ id: string; title?: string; image_url: string }> };
+          const apiPhotos = (data.items || []).map((item) => ({
+            src: item.image_url,
+            alt: item.title || "Galerie photo",
+            h: "",
+          }));
+          setDynamicPhotos(apiPhotos);
+        }
+      } catch (error) {
+        console.error("Failed to load gallery images:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadGalleryImages();
+  }, []);
+
+  // Combine static and dynamic photos
+  const allPhotos = [...dynamicPhotos, ...photos];
+
   return (
     <section id="gallery" className="py-12 md:py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -62,7 +92,7 @@ export function Gallery() {
         </Reveal>
 
         <div className="mt-14 grid grid-cols-2 md:grid-cols-3 auto-rows-45 md:auto-rows gap-4">
-          {photos.map((p, i) => (
+          {allPhotos.map((p, i) => (
             <Reveal key={i} delay={i * 0.05} className={p.h}>
               <button
                 onClick={() => setOpen(i)}
@@ -90,7 +120,7 @@ export function Gallery() {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                setOpen((open - 1 + photos.length) % photos.length);
+                setOpen((open - 1 + allPhotos.length) % allPhotos.length);
               }}
               className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 rounded-full bg-background/80 hover:bg-background p-3 text-foreground transition-all hover:scale-110 z-10"
               aria-label="Photo précédente"
@@ -103,7 +133,7 @@ export function Gallery() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              src={photos[open].src} alt={photos[open].alt}
+              src={allPhotos[open]?.src} alt={allPhotos[open]?.alt}
               className="max-h-[85vh] max-w-[90vw] rounded-2xl object-contain shadow-elegant"
             />
 
@@ -111,7 +141,7 @@ export function Gallery() {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                setOpen((open + 1) % photos.length);
+                setOpen((open + 1) % allPhotos.length);
               }}
               className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 rounded-full bg-background/80 hover:bg-background p-3 text-foreground transition-all hover:scale-110 z-10"
               aria-label="Photo suivante"
@@ -130,7 +160,7 @@ export function Gallery() {
 
             {/* Compteur photos */}
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full bg-background/80 text-sm text-foreground">
-              {open + 1} / {photos.length}
+              {open + 1} / {allPhotos.length}
             </div>
           </motion.div>
         )}

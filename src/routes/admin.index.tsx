@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { BarChart3, Image, Mail, LogOut } from "lucide-react";
+import { BarChart3, Image, Mail, LogOut, Globe } from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({
@@ -91,14 +91,19 @@ function AdminDashboard() {
             <h1 className="text-xl sm:text-2xl font-semibold truncate">Tableau de bord</h1>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1 truncate">Bienvenue, {admin.email}</p>
           </div>
-          <button
-            onClick={handleLogout}
-            className="inline-flex items-center gap-2 rounded-full border border-border px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium hover:bg-accent transition-colors whitespace-nowrap shrink-0"
-            title="Déconnexion"
-          >
-            <LogOut className="h-4 w-4 shrink-0" />
-            <span className="hidden sm:inline">Déconnexion</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <Link to="/" className="rounded-full border border-border/70 px-2.5 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Voir le site">
+              <Globe className="h-4 w-4" />
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="inline-flex items-center gap-2 rounded-full border border-border px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium hover:bg-accent transition-colors whitespace-nowrap shrink-0"
+              title="Déconnexion"
+            >
+              <LogOut className="h-4 w-4 shrink-0" />
+              <span className="hidden sm:inline">Déconnexion</span>
+            </button>
+          </div>
         </div>
       </header>
 

@@ -16,9 +16,25 @@ const db = new Database(dbPath);
 // Enable foreign keys
 db.pragma('foreign_keys = ON');
 
-// Read and execute migration
-const migrationFile = path.join(migrationsPath, '0001_init.sql');
-const migrationSQL = fs.readFileSync(migrationFile, 'utf-8');
+// Read and execute migrations in order
+const migrationFiles = [
+  '0001_init_schema.sql',
+  '0002_seed_test_data.sql',
+  '0003_content.sql',
+  '0004_gallery.sql',
+  '0006_add_contact_admin.sql',
+  '0007_add_past_events.sql',
+  '0008_add_vide_grenier.sql',
+];
+
+let migrationSQL = '';
+for (const file of migrationFiles) {
+  const migrationFile = path.join(migrationsPath, file);
+  if (fs.existsSync(migrationFile)) {
+    console.log(`📄 Loading ${file}...`);
+    migrationSQL += '\n' + fs.readFileSync(migrationFile, 'utf-8');
+  }
+}
 
 // Split by statements and execute
 const statements = migrationSQL.split(';').filter(s => s.trim());
