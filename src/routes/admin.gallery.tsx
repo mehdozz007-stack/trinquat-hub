@@ -217,7 +217,7 @@ function AdminGallery() {
               <span className="hidden sm:inline">Ajouter une image</span>
               <span className="sm:hidden">Ajouter</span>
             </button>
-            <Link to="/" className="rounded-full border border-border/70 px-2.5 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Voir le site">
+            <Link to="/galerie" className="rounded-full border border-border/70 px-2.5 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Voir le site">
               <Globe className="h-4 w-4" />
             </Link>
             <Link to="/admin" className="rounded-full border border-border/70 px-2.5 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Dashboard">📊</Link>

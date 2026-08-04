@@ -127,7 +127,7 @@ function AdminContent() {
             </div>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-            <Link to="/" className="rounded-full border border-border/70 px-2.5 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Voir le site">
+            <Link to="/evenements" className="rounded-full border border-border/70 px-2.5 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Voir le site">
               <Globe className="h-4 w-4" />
             </Link>
             <Link to="/admin" className="rounded-full border border-border/70 px-2.5 sm:px-3 py-2 text-xs hover:bg-accent transition-colors" title="Dashboard">📊</Link>
