@@ -566,7 +566,7 @@ export default {
        */
       const imageGetMatch = pathname.match(/^\/api\/admin\/image\/(.+)$/);
       if (imageGetMatch && method === "GET") {
-        const fileKey = imageGetMatch[1];
+        const fileKey = decodeURIComponent(imageGetMatch[1]);
         console.log(`[ROUTES] GET /api/admin/image/${fileKey}`);
         const response = await handleServeImage(request, fileKey, envProxy);
         return corsHeaders(response);
