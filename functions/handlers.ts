@@ -354,7 +354,7 @@ export async function handleUpload(
 
     return successResponse({
       key: result.key,
-      url: `/uploads/${encodeURIComponent(result.key)}`,
+      url: `/api/admin/image/${encodeURIComponent(result.key)}`,
       contentType: result.contentType,
       size: result.size,
     });

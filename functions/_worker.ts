@@ -561,6 +561,18 @@ export default {
       }
 
       /**
+       * GET /api/admin/image/:key
+       * Serve image files from R2
+       */
+      const imageGetMatch = pathname.match(/^\/api\/admin\/image\/(.+)$/);
+      if (imageGetMatch && method === "GET") {
+        const fileKey = imageGetMatch[1];
+        console.log(`[ROUTES] GET /api/admin/image/${fileKey}`);
+        const response = await handleServeImage(request, fileKey, envProxy);
+        return corsHeaders(response);
+      }
+
+      /**
        * DELETE /api/admin/uploads/:key
        * Delete file from R2
        */
