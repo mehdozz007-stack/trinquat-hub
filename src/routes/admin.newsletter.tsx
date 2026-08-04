@@ -199,7 +199,6 @@ function AdminNewsletter() {
             </div>
             <div>
               <h1 className="text-lg font-medium leading-tight">Admin Newsletter</h1>
-              <p className="text-xs text-muted-foreground">{admin.email}</p>
             </div>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">

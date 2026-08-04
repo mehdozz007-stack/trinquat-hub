@@ -122,8 +122,7 @@ function AdminContent() {
               <ShieldCheck className="h-4 w-4 sm:h-5" />
             </div>
             <div className="min-w-0">
-              <h1 className="text-base sm:text-lg font-medium leading-tight truncate">Événements</h1>
-              <p className="text-xs text-muted-foreground truncate">{admin.email}</p>
+              <h1 className="text-lg sm:text-lg font-medium leading-tight truncate">Événements</h1>
             </div>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
