@@ -206,7 +206,8 @@ function AdminGallery() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3 sm:gap-4">
           <div className="min-w-0 flex-1">
             <h1 className="text-lg sm:text-2xl font-semibold truncate">Galerie</h1>
-            <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1">{images.length} image(s)</p>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1">{images.length} image(s)
+            </p>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <button
