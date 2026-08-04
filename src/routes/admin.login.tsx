@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Lock, Mail } from "lucide-react";
+import { Lock, Mail, Eye, EyeOff, AlertCircle } from "lucide-react";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({
@@ -16,6 +16,7 @@ function AdminLogin() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -106,15 +107,27 @@ function AdminLogin() {
           <div className="relative">
             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               required
               minLength={8}
               placeholder="Mot de passe"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={loading}
-              className="w-full rounded-full border border-border/70 bg-background pl-11 pr-5 py-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:opacity-70"
+              className="w-full rounded-full border border-border/70 bg-background pl-11 pr-12 py-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:opacity-70"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              disabled={loading}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors disabled:opacity-70"
+            >
+              {showPassword ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
+            </button>
           </div>
           {error && <p className="text-sm text-destructive">{error}</p>}
           <button
@@ -124,6 +137,12 @@ function AdminLogin() {
           >
             {loading ? "Connexion..." : "Se connecter"}
           </button>
+          <div className="mt-6 rounded-xl border border-amber-500/30 bg-amber-500/5 p-4 flex gap-3">
+            <AlertCircle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+            <p className="text-xs text-amber-900">
+              <strong>Important :</strong> N'oubliez pas de vous déconnecter de l'espace admin une fois votre travail terminé pour des raisons de sécurité.
+            </p>
+          </div>
         </form>
       </div>
     </div>
