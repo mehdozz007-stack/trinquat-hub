@@ -1,5 +1,17 @@
 # 🚀 Trinquat Hub - Newsletter Platform
 
+**Status:** ✅ Production Ready | **Backend:** Fully refactored & documented
+
+## 📚 Complete Backend Documentation
+
+**→ [READ BACKEND_DOCUMENTATION.md](BACKEND_DOCUMENTATION.md)** for everything you need:
+- Architecture overview (5-layer system)
+- Testing guide (25+ endpoints)
+- Development guide (add new features)
+- Debugging tips & security best practices
+
+---
+
 ## Quick Start (30 secondes)
 
 ```bash
