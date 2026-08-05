@@ -411,7 +411,7 @@ export async function handleGetPastEvents(
   services: Services
 ): Promise<Response> {
   try {
-    const limit = 50;
+    const limit = 10000; // No practical limit - return all past events
     const events = await services.event.getPast(limit);
     return jsonResponse({ events });
   } catch (error) {

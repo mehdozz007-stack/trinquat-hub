@@ -1,0 +1,14 @@
+-- Add more past events to demonstrate unlimited display
+
+INSERT INTO events (id, title, description, event_date, place, badge, status, published_at, created_at, updated_at)
+VALUES
+  ('past-extra-1', 'Atelier Créatif : Peinture Murale', 'Rejoignez-nous pour transformer un mur gris en œuvre d''art communautaire.', '2025-10-05', 'Rue de la Paix', 'Initiatives', 'published', '2025-10-05T00:00:00Z', '2025-09-01T00:00:00Z', '2025-10-05T00:00:00Z'),
+  ('past-extra-2', 'Marché Local - Produits Frais', 'Marché fermier avec produits locaux, artisanats et dégustations.', '2025-09-20', 'Square Principal', 'Événement', 'published', '2025-09-20T00:00:00Z', '2025-08-01T00:00:00Z', '2025-09-20T00:00:00Z'),
+  ('past-extra-3', 'Conférence : Écologie Urbaine', 'Discussion sur les initiatives écologiques du quartier avec experts locaux.', '2025-08-12', 'Salle des Fêtes', 'Écologie', 'published', '2025-08-12T00:00:00Z', '2025-07-01T00:00:00Z', '2025-08-12T00:00:00Z'),
+  ('past-extra-4', 'Randonnée Guidée du Quartier', 'Découvrez les secrets et histoires cachées du quartier lors d''une randonnée guidée.', '2025-07-28', 'Départ Square des Aiguerelles', 'Vie de quartier', 'published', '2025-07-28T00:00:00Z', '2025-06-01T00:00:00Z', '2025-07-28T00:00:00Z'),
+  ('past-extra-5', 'Soirée Culturelle : Musique et Danse', 'Soirée festive avec performances musicales et danse locale.', '2025-06-14', 'Parc Central', 'Fête', 'published', '2025-06-14T00:00:00Z', '2025-05-01T00:00:00Z', '2025-06-14T00:00:00Z'),
+  ('past-extra-6', 'Atelier : Jardin Partagé', 'Apprentissez à cultiver vos propres légumes dans le jardin communautaire.', '2025-05-30', 'Jardin Partagé des Aiguerelles', 'Écologie', 'published', '2025-05-30T00:00:00Z', '2025-04-01T00:00:00Z', '2025-05-30T00:00:00Z'),
+  ('past-extra-7', 'Forum Citoyen Trimestriel', 'Débat ouvert sur l''avenir du quartier avec les habitants et élus.', '2025-04-25', 'Mairie Annexe', 'Vie de quartier', 'published', '2025-04-25T00:00:00Z', '2025-03-01T00:00:00Z', '2025-04-25T00:00:00Z'),
+  ('past-extra-8', 'Nettoyage Collectif du Quartier', 'Mobilisation citoyenne pour nettoyer et embellir nos espaces publics.', '2025-03-22', 'Tout le quartier', 'Initiatives', 'published', '2025-03-22T00:00:00Z', '2025-02-01T00:00:00Z', '2025-03-22T00:00:00Z'),
+  ('past-extra-9', 'Projections Cinéma en Plein Air', 'Soirée cinéma communautaire sous les étoiles avec popcorn gratuit.', '2024-09-15', 'Square des Aiguerelles', 'Événement', 'published', '2024-09-15T00:00:00Z', '2024-08-01T00:00:00Z', '2024-09-15T00:00:00Z'),
+  ('past-extra-10', 'Tournoi de Football Amical', 'Compétition amicale entre équipes du quartier avec barbecue d''après-match.', '2024-07-10', 'City Stade des Aiguerelles', 'Fête', 'published', '2024-07-10T00:00:00Z', '2024-06-01T00:00:00Z', '2024-07-10T00:00:00Z');

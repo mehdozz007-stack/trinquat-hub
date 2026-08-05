@@ -113,16 +113,25 @@ export function EventsAndNewsPreview() {
         if (!mounted) return;
         
         if (Array.isArray(data?.events) && data.events.length > 0) {
-          const apiEvents = data.events.map((e: any) => ({
-            id: e.id,
-            type: "event" as const,
-            img: e.image_url || imgFete,
-            badge: e.badge || "À venir",
-            date: formatToFrenchDate(e.event_date),
-            title: e.title,
-            place: e.place,
-            desc: e.description || "",
-          }));
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          
+          const apiEvents = data.events.map((e: any) => {
+            const eventDate = new Date(e.event_date);
+            eventDate.setHours(0, 0, 0, 0);
+            const isPast = eventDate < today;
+            
+            return {
+              id: e.id,
+              type: "event" as const,
+              img: e.image_url || imgFete,
+              badge: isPast ? "Passé" : (e.badge || "Événement"),
+              date: formatToFrenchDate(e.event_date),
+              title: e.title,
+              place: e.place,
+              desc: e.description || "",
+            };
+          });
           setLoadedEvents(apiEvents);
         }
       })

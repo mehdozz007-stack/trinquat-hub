@@ -153,7 +153,7 @@ export function EventsAndNews() {
             id: `event-${i}`,
             type: "event",
             img: e.image_url || imgFete,
-            badge: isPast ? "Passé" : (e.badge || "À venir"),
+            badge: isPast ? "Passé" : (e.badge || "Événement"),
             date: e.event_date,
             title: e.title,
             place: e.place,

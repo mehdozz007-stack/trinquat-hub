@@ -315,6 +315,15 @@ function Editor({ row, onClose, onSaved }: {
       setError("Titre, description et date sont requis.");
       return;
     }
+
+    // Check if event is past and force badge to "Passé"
+    const eventDate = new Date(date);
+    eventDate.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const isPast = eventDate < today;
+    const finalBadge = isPast ? "Passé" : (badge.trim() || null);
+
     setSaving(true);
     try {
       const payload: any = {
@@ -322,7 +331,7 @@ function Editor({ row, onClose, onSaved }: {
         description: description.trim(),
         event_date: date,
         place: place.trim() || null,
-        badge: badge.trim() || null,
+        badge: finalBadge,
         image_url: imageUrl, image_key: imageKey, status,
       };
       const url = row?.id ? `/api/admin/events/${row.id}` : `/api/admin/events`;
@@ -372,9 +381,15 @@ function Editor({ row, onClose, onSaved }: {
           </div>
 
           <Field label="Badge (optionnel)">
-            <input value={badge} onChange={(e) => setBadge(e.target.value)} maxLength={60}
-              placeholder="ex: À venir, Fête, Vie de quartier"
-              className="w-full rounded-xl border border-border/60 bg-background px-4 py-2.5 text-sm" />
+            <select value={badge} onChange={(e) => setBadge(e.target.value)}
+              className="w-full rounded-xl border border-border/60 bg-background px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+              <option value="">Sélectionner un badge...</option>
+              <option value="Fête">Fête</option>
+              <option value="Initiatives">Initiatives</option>
+              <option value="Vie de quartier">Vie de quartier</option>
+              <option value="Écologie">Écologie</option>
+              <option value="Événement">Événement</option>
+            </select>
           </Field>
 
           <Field label="Image">
