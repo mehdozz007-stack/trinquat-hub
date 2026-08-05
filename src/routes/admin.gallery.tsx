@@ -40,6 +40,7 @@ function AdminGallery() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
   // Check auth
   useEffect(() => {
@@ -266,15 +267,18 @@ function AdminGallery() {
                 key={img.id}
                 className="group rounded-2xl border border-border/40 bg-card/70 backdrop-blur-sm shadow-soft overflow-hidden hover:shadow-elegant transition-all"
               >
-                <div className="relative aspect-square overflow-hidden bg-muted">
+                <div className="relative aspect-square overflow-hidden bg-muted cursor-pointer group/image" onClick={() => setSelectedImage(img)}>
                   <img
                     src={img.image_url}
                     alt={img.title || "Gallery image"}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    className="w-full h-full object-cover group-hover/image:scale-105 transition-transform"
                   />
                   <button
-                    onClick={() => handleDelete(img)}
-                    className="absolute top-2 right-2 flex h-9 w-9 items-center justify-center rounded-lg bg-destructive/20 text-destructive opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive hover:text-destructive-foreground"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(img);
+                    }}
+                    className="absolute top-2 right-2 flex h-9 w-9 items-center justify-center rounded-lg bg-destructive/20 text-destructive sm:opacity-0 sm:group-hover/image:opacity-100 transition-opacity hover:bg-destructive hover:text-destructive-foreground"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -425,6 +429,52 @@ function AdminGallery() {
                   </button>
                 </div>
               </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full h-full max-w-4xl max-h-[85vh] flex flex-col items-center justify-center"
+            >
+              <img
+                src={selectedImage.image_url}
+                alt={selectedImage.title || "Image agrandie"}
+                className="w-full h-full object-contain rounded-2xl shadow-2xl"
+              />
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-4 right-4 p-2.5 md:p-3 bg-black/60 hover:bg-black/80 rounded-full text-white transition-all duration-200"
+              >
+                <X className="h-5 w-5 md:h-6 md:w-6" />
+              </button>
+              
+              {/* Image Info */}
+              {(selectedImage.title || selectedImage.description) && (
+                <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black via-black/60 to-transparent p-6 rounded-b-2xl">
+                  {selectedImage.title && (
+                    <h3 className="text-lg md:text-xl font-semibold text-white">{selectedImage.title}</h3>
+                  )}
+                  {selectedImage.description && (
+                    <p className="text-sm md:text-base text-gray-200 mt-2">{selectedImage.description}</p>
+                  )}
+                </div>
+              )}
             </motion.div>
           </motion.div>
         )}

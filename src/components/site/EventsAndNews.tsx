@@ -130,21 +130,36 @@ export function EventsAndNews() {
     ]).then(([upcomingData, pastData, newsData]: any[]) => {
       if (!mounted) return;
       const items: ContentItem[] = [];
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const todayStr = today.toISOString().slice(0, 10);
+
+      // Helper function to determine if event is past
+      const isPastEvent = (eventDate: string): boolean => {
+        try {
+          const eventDateObj = new Date(eventDate);
+          eventDateObj.setHours(0, 0, 0, 0);
+          return eventDateObj < today;
+        } catch {
+          return false;
+        }
+      };
 
       // Add upcoming events
       if (Array.isArray(upcomingData?.events)) {
         upcomingData.events.forEach((e: any, i: number) => {
+          const isPast = isPastEvent(e.event_date);
           items.push({
             id: `event-${i}`,
             type: "event",
             img: e.image_url || imgFete,
-            badge: e.badge || "Événement",
+            badge: isPast ? "Passé" : (e.badge || "À venir"),
             date: e.event_date,
             title: e.title,
             place: e.place,
             desc: e.description || "",
             category: e.category || "Événement",
-            isPast: false,
+            isPast: isPast,
           });
         });
       }
@@ -175,17 +190,18 @@ export function EventsAndNews() {
       // Add news
       if (Array.isArray(newsData?.news)) {
         newsData.news.forEach((n: any, i: number) => {
+          const isPast = isPastEvent(n.news_date);
           items.push({
             id: `news-${i}`,
             type: "news",
             img: n.image_url || VideGrenier,
-            badge: n.tag || "Actualité",
+            badge: isPast ? "Passé" : (n.tag || "Actualité"),
             date: n.news_date,
             title: n.title,
             desc: n.description || "",
             excerpt: n.excerpt || "",
             category: n.tag || "Actualité",
-            isPast: new Date(n.news_date) < new Date(),
+            isPast: isPast,
           });
         });
       }
@@ -352,16 +368,8 @@ export function EventsAndNews() {
 
         {/* Upcoming Section */}
         {upcomingItems.length > 0 ? (
-          <div>
-            <Reveal>
-              <h2 className="text-2xl md:text-3xl font-semibold mb-8 flex items-center gap-3">
-                <Calendar className="h-6 w-6 text-primary-deep" />
-                À venir
-              </h2>
-            </Reveal>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-16">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-16">
               {upcomingItems.map((item, i) => renderItem(item, i))}
-            </div>
           </div>
         ) : (
           <Reveal>
