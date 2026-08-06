@@ -9,6 +9,7 @@ export interface Event {
   event_date: string;
   place: string | null;
   badge: string | null;
+  category: string | null;
   image_url: string | null;
   image_key: string | null;
   status: "draft" | "published";
@@ -27,6 +28,7 @@ export interface CreateEventRequest {
   event_date: string;
   place?: string;
   badge?: string;
+  category?: string;
   image_url?: string;
   image_key?: string;
   status?: "draft" | "published";
@@ -38,6 +40,7 @@ export interface UpdateEventRequest {
   event_date?: string;
   place?: string;
   badge?: string;
+  category?: string;
   image_url?: string;
   image_key?: string;
   status?: "draft" | "published";

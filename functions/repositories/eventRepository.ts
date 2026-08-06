@@ -56,7 +56,7 @@ export class EventRepository {
     // Get paginated results
     const items = await this.db
       .prepare(
-        `SELECT id, title, description, event_date, place, badge, image_url, image_key, 
+        `SELECT id, title, description, event_date, place, badge, category, image_url, image_key, 
                 status, published_at, created_at, updated_at
          FROM events${whereSQL}
          ORDER BY event_date DESC, created_at DESC
@@ -80,7 +80,7 @@ export class EventRepository {
   async getById(id: string): Promise<Event | null> {
     return this.db
       .prepare(
-        `SELECT id, title, description, event_date, place, badge, image_url, image_key,
+        `SELECT id, title, description, event_date, place, badge, category, image_url, image_key,
                 status, published_at, created_at, updated_at
          FROM events WHERE id = ?`
       )
@@ -99,8 +99,8 @@ export class EventRepository {
     await this.db
       .prepare(
         `INSERT INTO events 
-         (id, title, description, event_date, place, badge, image_url, image_key, status, published_at, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+         (id, title, description, event_date, place, badge, category, image_url, image_key, status, published_at, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
       .bind(
         id,
@@ -109,6 +109,7 @@ export class EventRepository {
         data.event_date,
         data.place || null,
         data.badge || null,
+        data.category || null,
         data.image_url || null,
         data.image_key || null,
         status,
@@ -125,6 +126,7 @@ export class EventRepository {
       event_date: data.event_date,
       place: data.place || null,
       badge: data.badge || null,
+      category: data.category || null,
       image_url: data.image_url || null,
       image_key: data.image_key || null,
       status,
@@ -151,7 +153,7 @@ export class EventRepository {
     await this.db
       .prepare(
         `UPDATE events SET
-         title = ?, description = ?, event_date = ?, place = ?, badge = ?,
+         title = ?, description = ?, event_date = ?, place = ?, badge = ?, category = ?,
          image_url = ?, image_key = ?, status = ?, published_at = ?, updated_at = ?
          WHERE id = ?`
       )
@@ -161,6 +163,7 @@ export class EventRepository {
         updates.event_date || event.event_date,
         updates.place !== undefined ? updates.place : event.place,
         updates.badge !== undefined ? updates.badge : event.badge,
+        updates.category !== undefined ? updates.category : event.category,
         updates.image_url !== undefined ? updates.image_url : event.image_url,
         updates.image_key !== undefined ? updates.image_key : event.image_key,
         status,
@@ -202,7 +205,7 @@ export class EventRepository {
 
     const items = await this.db
       .prepare(
-        `SELECT id, title, description, event_date, place, badge, image_url, image_key,
+        `SELECT id, title, description, event_date, place, badge, category, image_url, image_key,
                 status, published_at, created_at, updated_at
          FROM events
          WHERE status = 'published' AND event_date >= ?
@@ -223,7 +226,7 @@ export class EventRepository {
 
     const items = await this.db
       .prepare(
-        `SELECT id, title, description, event_date, place, badge, image_url, image_key,
+        `SELECT id, title, description, event_date, place, badge, category, image_url, image_key,
                 status, published_at, created_at, updated_at
          FROM events
          WHERE status = 'published' AND event_date < ?
