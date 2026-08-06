@@ -24,73 +24,6 @@ type ContentItem = {
   isPast?: boolean;
 };
 
-const staticContent: ContentItem[] = [
-  // Past Events
-  {
-    id: "1",
-    type: "event",
-    img: imgFete,
-    badge: "Passé",
-    date: "2026-07-09",
-    title: "Rencontre",
-    place: "Square des Aiguerelles",
-    desc: "Une rencontre magique avec la communauté locale.",
-    category: "Événement",
-    isPast: true,
-  },
-  {
-    id: "3",
-    type: "news",
-    img: VideGrenier2,
-    badge: "Passé",
-    date: "2026-04-12",
-    place: "École Charles Dickens les Aiguerelles",
-    title: "Affiche Vide Grenier",
-    desc: "Un vide-grenier à ne pas manquer pour dénicher des trésors et rencontrer vos voisins.",
-    excerpt: "Un vide-grenier à ne pas manquer pour dénicher des trésors et rencontrer vos voisins.",
-    category: "Vie de quartier",
-    isPast: true,
-  },
-  {
-    id: "4",
-    type: "news",
-    img: g10,
-    badge: "Passé",
-    date: "2026-03-15",
-    place: "Tout le quartier",
-    title: "Affiche Marathon Photo : capturez l'essence du quartier !",
-    desc: "Rassemblez vos appareils photo et explorez le quartier à travers votre objectif.",
-    excerpt: "Rassemblez vos appareils photo et explorez le quartier à travers votre objectif.",
-    category: "Initiatives",
-    isPast: true,
-  },
-  {
-    id: "5",
-    type: "news",
-    img: g7,
-    badge: "Passé",
-    date: "2026-01-01",
-    place: "City Stade des Aiguerelles",
-    title: "Un nouveau composteur pour le quartier, à côté du city stade !",
-    desc: "Un composteur a été installé pour encourager le compostage et réduire les déchets organiques.",
-    excerpt: "Un composteur a été installé pour encourager le compostage et réduire les déchets organiques.",
-    category: "Écologie",
-    isPast: true,
-  },
-  {
-    id: "6",
-    type: "event",
-    img: g11,
-    badge: "Passé",
-    date: "2025-11-16",
-    place: "Square des Aiguerelles",
-    title: "Fête/faites de la soupe : un succès intergénérationnel !",
-    desc: "Les habitants se sont réunis pour partager des moments conviviaux autour de la soupe à cuisiner.",
-    category: "Fête",
-    isPast: true,
-  },
-];
-
 function formatFrDate(dateStr: string): string {
   try {
     const date = new Date(dateStr);
@@ -112,7 +45,7 @@ export function EventsAndNews() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [content, setContent] = useState<ContentItem[]>(staticContent);
+  const [content, setContent] = useState<ContentItem[]>([]);
 
   // Fetch from API if available
   useEffect(() => {
@@ -153,7 +86,7 @@ export function EventsAndNews() {
             id: `event-${i}`,
             type: "event",
             img: e.image_url || imgFete,
-            badge: isPast ? "Passé" : (e.badge || "Événement"),
+            badge: isPast ? "Passé" : "À venir",
             date: e.event_date,
             title: e.title,
             place: e.place,
@@ -171,7 +104,7 @@ export function EventsAndNews() {
             id: `past-event-${i}`,
             type: "event",
             img: e.image_url || imgFete,
-            badge: e.badge || "Passé",
+            badge: "Passé",
             date: e.event_date,
             title: e.title,
             place: e.place,
@@ -179,11 +112,6 @@ export function EventsAndNews() {
             category: e.category || "Événement",
             isPast: true,
           });
-        });
-      } else {
-        // If no past events from API, use static ones
-        staticContent.filter(item => item.isPast && item.type === "event").forEach(item => {
-          items.push(item);
         });
       }
 
@@ -206,15 +134,8 @@ export function EventsAndNews() {
         });
       }
 
-      // If we have items from API, use them; otherwise fall back to static content for past events
+      // If we have items from API, use them
       if (items.length > 0) {
-        // Add any static news/past items not covered by API
-        const staticPastNews = staticContent.filter(item => item.isPast && item.type === "news");
-        staticPastNews.forEach(item => {
-          if (!items.find(i => i.id === item.id)) {
-            items.push(item);
-          }
-        });
         setContent(items);
       }
     });

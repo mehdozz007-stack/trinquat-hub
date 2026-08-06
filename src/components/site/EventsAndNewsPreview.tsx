@@ -125,7 +125,7 @@ export function EventsAndNewsPreview() {
               id: e.id,
               type: "event" as const,
               img: e.image_url || imgFete,
-              badge: isPast ? "Passé" : (e.badge || "Événement"),
+              badge: isPast ? "Passé" : "À venir",
               date: formatToFrenchDate(e.event_date),
               title: e.title,
               place: e.place,
