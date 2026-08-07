@@ -130,7 +130,7 @@ function AdminDashboard() {
               
               {/* Content section - centered */}
               <div className="px-4 sm:px-8 py-6 sm:py-8 flex flex-col justify-center flex-1">
-                <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2 sm:mb-3 text-center group-hover:text-primary transition-colors duration-200">{item.label}</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-2 sm:mb-3 text-center group-hover:text-primary transition-colors duration-200">{item.label}</h3>
                 <p className="text-xs sm:text-sm text-muted-foreground mb-6 sm:mb-8 leading-relaxed text-center">{item.description}</p>
                 <div className="flex justify-center">
                   <div className="inline-flex items-center gap-2 text-sm font-semibold text-primary group-hover:gap-4 transition-all duration-200">

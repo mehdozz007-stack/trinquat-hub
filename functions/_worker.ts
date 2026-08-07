@@ -9,6 +9,7 @@ import {
   handleGetSubscribers,
   handleUpdateSubscriber,
   handleDeleteSubscriber,
+  handleExportSubscribers,
   handleGetEvents,
   handleGetEvent,
   handleCreateEvent,
@@ -396,6 +397,15 @@ export default {
        */
       if (pathname === "/api/admin/subscribers" && method === "GET") {
         const response = await handleGetSubscribers(request, services);
+        return corsHeaders(response);
+      }
+
+      /**
+       * GET /api/admin/subscribers/export
+       * Export all subscribers as CSV
+       */
+      if (pathname === "/api/admin/subscribers/export" && method === "GET") {
+        const response = await handleExportSubscribers(request, services);
         return corsHeaders(response);
       }
 

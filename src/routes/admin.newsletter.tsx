@@ -198,7 +198,7 @@ function AdminNewsletter() {
               <ShieldCheck className="h-5 w-5" />
             </div>
             <div>
-              <h1 className="text-lg font-medium leading-tight">Admin Newsletter</h1>
+              <h1 className="text-base sm:text-xl font-medium leading-tight">Admin Newsletter</h1>
             </div>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">

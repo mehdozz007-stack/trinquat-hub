@@ -254,7 +254,7 @@ function AdminGallery() {
 
       {/* Header */}
       <header className="border-b border-border/40 bg-card/60 backdrop-blur-sm sticky top-0 z-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3 sm:gap-4">
+        <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
           <div className="min-w-0 flex-1">
             <h1 className="text-lg sm:text-2xl font-semibold truncate">Galerie</h1>
             <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1">{images.length} image(s)

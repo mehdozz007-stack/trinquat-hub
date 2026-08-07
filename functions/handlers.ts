@@ -88,6 +88,41 @@ export async function handleDeleteSubscriber(
   }
 }
 
+export async function handleExportSubscribers(
+  request: Request,
+  services: Services
+): Promise<Response> {
+  try {
+    requireAuth(request);
+    
+    const result = await services.subscriber.getAll({
+      page: 1,
+      limit: 10000,
+      sort: "date",
+    });
+
+    // Build CSV
+    const lines = ['"Email","Actif","Date d\'inscription"'];
+    result.items.forEach((s) => {
+      const date = new Date(s.created_at).toLocaleDateString("fr-FR");
+      const status = s.is_active ? "Oui" : "Non";
+      lines.push(`"${s.email}","${status}","${date}"`);
+    });
+
+    const csv = lines.join("\n");
+
+    return new Response(csv, {
+      status: 200,
+      headers: {
+        "Content-Type": "text/csv; charset=utf-8",
+        "Content-Disposition": `attachment; filename="newsletter_${new Date().toISOString().slice(0, 10)}.csv"`,
+      },
+    });
+  } catch (error) {
+    return errorResponse(error as Error);
+  }
+}
+
 // ============ EVENTS ============
 
 export async function handleGetEvents(
