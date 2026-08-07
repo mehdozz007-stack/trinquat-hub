@@ -19,7 +19,7 @@ export const Route = createFileRoute("/admin/content")({
 type AdminSession = { id: string; email: string; role: string };
 type EventRow = {
   id: string; title: string; description: string; event_date: string; place: string | null;
-  badge: string | null; image_url: string | null; image_key: string | null;
+  badge: string | null; category: string | null; image_url: string | null; image_key: string | null;
   status: "draft" | "published"; published_at: string | null; created_at: string; updated_at: string;
 };
 
@@ -280,7 +280,7 @@ function Editor({ row, onClose, onSaved }: {
   const [description, setDescription] = useState<string>(initial?.description ?? "");
   const [date, setDate] = useState<string>(initial?.event_date ?? "");
   const [place, setPlace] = useState<string>(initial?.place ?? "");
-  const [badge, setBadge] = useState<string>(initial?.badge ?? "");
+  const [category, setCategory] = useState<string>(initial?.category ?? "");
   const [imageUrl, setImageUrl] = useState<string | null>(initial?.image_url ?? null);
   const [imageKey, setImageKey] = useState<string | null>(initial?.image_key ?? null);
   const [uploading, setUploading] = useState(false);
@@ -322,7 +322,6 @@ function Editor({ row, onClose, onSaved }: {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const isPast = eventDate < today;
-    const finalBadge = isPast ? "Passé" : (badge.trim() || null);
 
     setSaving(true);
     try {
@@ -331,7 +330,7 @@ function Editor({ row, onClose, onSaved }: {
         description: description.trim(),
         event_date: date,
         place: place.trim() || null,
-        badge: finalBadge,
+        category: category.trim() || null,
         image_url: imageUrl, image_key: imageKey, status,
       };
       const url = row?.id ? `/api/admin/events/${row.id}` : `/api/admin/events`;
@@ -380,10 +379,10 @@ function Editor({ row, onClose, onSaved }: {
             </Field>
           </div>
 
-          <Field label="Badge (optionnel)">
-            <select value={badge} onChange={(e) => setBadge(e.target.value)}
+          <Field label="Catégorie (optionnel)">
+            <select value={category} onChange={(e) => setCategory(e.target.value)}
               className="w-full rounded-xl border border-border/60 bg-background px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
-              <option value="">Sélectionner un badge...</option>
+              <option value="">Sélectionner une catégorie...</option>
               <option value="Fête">Fête</option>
               <option value="Initiatives">Initiatives</option>
               <option value="Vie de quartier">Vie de quartier</option>

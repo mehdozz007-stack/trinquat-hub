@@ -38,6 +38,7 @@ export class EventValidator {
     // Optional fields
     const place = body.place ? String(body.place).trim() : undefined;
     const badge = body.badge ? String(body.badge).trim() : undefined;
+    const category = body.category ? String(body.category).trim() : undefined;
     const image_url = body.image_url ? String(body.image_url) : undefined;
     const image_key = body.image_key ? String(body.image_key) : undefined;
     const status = body.status === "published" ? "published" : "draft";
@@ -50,12 +51,17 @@ export class EventValidator {
       throw ValidationError("Badge must not exceed 100 characters");
     }
 
+    if (category && category.length > 100) {
+      throw ValidationError("Category must not exceed 100 characters");
+    }
+
     return {
       title: title.trim(),
       description: description.trim(),
       event_date,
       place: place || undefined,
       badge: badge || undefined,
+      category: category || undefined,
       image_url,
       image_key,
       status,
@@ -105,6 +111,13 @@ export class EventValidator {
       result.badge = body.badge ? String(body.badge).trim() : null;
       if (result.badge && result.badge.length > 100) {
         throw ValidationError("Badge must not exceed 100 characters");
+      }
+    }
+
+    if (body.category !== undefined) {
+      result.category = body.category ? String(body.category).trim() : null;
+      if (result.category && result.category.length > 100) {
+        throw ValidationError("Category must not exceed 100 characters");
       }
     }
 
