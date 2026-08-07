@@ -329,9 +329,9 @@ export function EventsAndNews() {
             <Reveal>
              <div className="mb-12">
               <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">
-              Archives
-            </span>
-              <h2 className="text-4xl md:text-4xl mb-16 font-semibold  mt-6">
+                Archives
+              </span>
+              <h2 className="text-4xl md:text-5xl mb-16 mt-4 font-medium">
                 Événements <span className="text-gradient">passés</span>
               </h2>
             </div>
