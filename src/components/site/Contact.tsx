@@ -1,7 +1,7 @@
 import { useState, useRef, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "./Reveal";
-import { Check, Inbox, Mail, Send, Facebook, Instagram, Heart, FileSignature } from "lucide-react";
+import { Check, Inbox, Mail, MailOpen, Send, Facebook, Instagram, Heart, FileSignature } from "lucide-react";
 
 export function Contact() {
   const [sent, setSent] = useState(false);
@@ -148,7 +148,7 @@ export function Contact() {
                         transition={{ duration: 0.5 }}
                         className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-leaf text-primary-foreground shadow-soft shrink-0"
                       >
-                       <Inbox className="h-5 w-5" />
+                       <MailOpen className="h-5 w-5" />
                       </motion.div>
                       <h2 className="text-3xl sm:text-2xl md:text-3xl">Écrivez-nous</h2>
                     </div>
