@@ -116,7 +116,7 @@ function AdminGallery() {
   const loadGallery = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/admin/gallery", { credentials: "include" });
+      const res = await fetch("/api/admin/gallery?limit=1000", { credentials: "include" });
       if (res.ok) {
         const data = (await res.json()) as { success: boolean; data: { items: GalleryImage[]; total: number; page: number; limit: number } };
         setImages(data.data?.items || []);
