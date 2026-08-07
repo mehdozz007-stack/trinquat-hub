@@ -19,7 +19,7 @@ export const Route = createFileRoute("/admin/newsletter")({
 type Subscriber = { id: string; email: string; is_active: boolean; created_at: string };
 type AdminSession = { id: string; email: string; role: string };
 type Tab = "compose" | "history" | "subscribers";
-type Draft = { id: string; subject: string; content: string; savedAt: string };
+type Draft = { id: string; admin_id: string; subject: string; content: string; created_at: string; updated_at: string };
 type SentNewsletter = { id: string; subject: string; content: string; sentAt: string; recipientCount: number };
 
 // Mock data
@@ -483,7 +483,8 @@ function Composer({
       });
 
       if (res.ok) {
-        const data = await res.json() as Draft;
+        const response = await res.json() as { success: boolean; data: Draft };
+        const data = response.data;
         setDrafts((prev) => {
           const index = prev.findIndex((d) => d.id === data.id);
           if (index >= 0) {
@@ -733,7 +734,7 @@ function History({
                     <h3 className="font-semibold text-sm truncate">{draft.subject}</h3>
                     <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{draft.content}</p>
                     <p className="text-xs text-muted-foreground/60 mt-2">
-                      Enregistré le {new Date(draft.savedAt).toLocaleDateString("fr-FR", {
+                      Enregistré le {new Date(draft.updated_at).toLocaleDateString("fr-FR", {
                         day: "numeric",
                         month: "short",
                         year: "numeric",
