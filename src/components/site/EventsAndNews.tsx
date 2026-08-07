@@ -325,11 +325,16 @@ export function EventsAndNews() {
       {/* Past Section - Full Width Background */}
       {pastItems.length > 0 && (
         <div className="w-full bg-secondary/50">
-          <div className="mx-auto max-w-7xl px-6 lg:px-10 py-12 md:py-20">
+          <div className="mx-auto max-w-7xl px-6 lg:px-10 py-20 md:py-20">
             <Reveal>
-              <h2 className="text-3xl md:text-4xl mb-16 font-semibold">
-                Archives et <span className="text-gradient">événements passés</span>
+             <div className="mb-12">
+              <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">
+              Archives
+            </span>
+              <h2 className="text-4xl md:text-4xl mb-16 font-semibold  mt-6">
+                Événements <span className="text-gradient">passés</span>
               </h2>
+            </div>
             </Reveal>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {pastItems.map((item, i) => renderItem(item, upcomingItems.length + i))}
