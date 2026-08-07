@@ -2,54 +2,10 @@ import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Reveal } from "./Reveal";
-//import g1 from "@/assets/gallery-1.jpg";
-import g1 from "@/assets/gallery-1.jpg";
-import g8 from "@/assets/gallery-8.jpg";
-import g9 from "@/assets/gallery-9.jpg";
-import g10 from "@/assets/vide-grenier1.jpg";
-import g11 from "@/assets/Vide-grenier2.jpg";
-import photo1 from "@/assets/2025-01-25_029.jpg";
-import photo2 from "@/assets/2025-01-25_031.jpg";
-import photo3 from "@/assets/2025-11-16_024.jpg";
-import photo4 from "@/assets/2025-11-23_016.jpg";
-import photo5 from "@/assets/2026-03-08_006.jpg";
-import g7 from "@/assets/2025-01-25_062.jpg";
-import g12 from "@/assets/2025-01-25_039.jpg";
-import photo6 from "@/assets/2024-10-08_053.jpg";
-import photo7 from "@/assets/2024-10-09_001.jpg";
-import photo8 from "@/assets/2024-11-17_011.jpg";
-import communityImg from "@/assets/Triquat_CompagnieVoisins.jpg";
-import gallery6 from "@/assets/gallery-6.jpg";
-import photo9 from "@/assets/2024-11-17_051.jpg";
-import photo10 from "@/assets/2026-03-08_015.jpg"
-import g13 from "@/assets/2026-03-08_017.jpg";
-
-const photos = [
-  { src: gallery6, alt: "Trinquat & Compagnie - Moments en commun", h: "" },
-  { src: photo8, alt: "Événement du quartier - 17 Novembre 2024", h: "" },  
-  { src: g8, alt: "Voisins réunis sous un arbre", h: "" },
-  { src: photo3, alt: "Fête de la soupe - 16 Novembre 2025", h: "row-span-2" },
-  { src: photo9, alt: "Moments du quartier - 17 Novembre 2024", h: "" },
-  { src: g9, alt: "La fête intergénérationnelle de la soupe", h: "" },
-  { src: g10, alt: "Vide-grenier de printemps", h: "" },
-  { src: g11, alt: "Vide-grenier de printemps", h: "" },
-  { src: photo1, alt: "Moments partagés - 25 Janvier 2025", h: "" },
-  { src: g1, alt: "Composteur installé dans le quartier", h: "row-span-2" },
-  { src: photo2, alt: "Moments partagés - 25 Janvier 2025", h: "" },
-  { src: g7, alt: "Moments du quartier - 25 Janvier 2025", h: "" },
-  { src: g12, alt: "Moments du quartier - 25 Janvier 2025", h: "" },
-  { src: photo4, alt: "Moments du quartier - 23 Novembre 2025", h: "" },
-  { src: photo6, alt: "Événement du quartier - 8 Octobre 2024", h: "" },
-  { src: photo7, alt: "Événement du quartier - 9 Octobre 2024", h: "row-span-2" },
-  { src: photo5, alt: "Moments du quartier - 8 Mars 2026", h: "" },
-  { src: g13, alt: "Moments du quartier - 8 Mars 2026", h: "" },
-  { src: photo10, alt: "Moments du quartier - 8 Mars 2026", h: "" },
-  { src: communityImg, alt: "Trinquat & Compagnie - Notre communauté", h: "" },
-];
 
 export function Gallery() {
   const [open, setOpen] = useState<number | null>(null);
-  const [dynamicPhotos, setDynamicPhotos] = useState<Array<{ src: string; alt: string; h: string }>>([]);
+  const [allPhotos, setAllPhotos] = useState<Array<{ src: string; alt: string; h: string }>>([]);
   const [loading, setLoading] = useState(true);
 
   // Load images from API
@@ -64,7 +20,7 @@ export function Gallery() {
             alt: item.title || "Galerie photo",
             h: "",
           }));
-          setDynamicPhotos(apiPhotos);
+          setAllPhotos(apiPhotos);
         }
       } catch (error) {
         console.error("Failed to load gallery images:", error);
@@ -75,9 +31,6 @@ export function Gallery() {
 
     loadGalleryImages();
   }, []);
-
-  // Combine static and dynamic photos
-  const allPhotos = [...dynamicPhotos, ...photos];
 
   return (
     <section id="gallery" className="py-12 md:py-20">
