@@ -2,6 +2,51 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { X, Plus, Trash2, LogOut, Upload, Globe } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+// Static imports for image resolution
+import g1 from "@/assets/gallery-1.jpg";
+import g8 from "@/assets/gallery-8.jpg";
+import g9 from "@/assets/gallery-9.jpg";
+import g10 from "@/assets/vide-grenier1.jpg";
+import g11 from "@/assets/Vide-grenier2.jpg";
+import photo1 from "@/assets/2025-01-25_029.jpg";
+import photo2 from "@/assets/2025-01-25_031.jpg";
+import photo3 from "@/assets/2025-11-16_024.jpg";
+import photo4 from "@/assets/2025-11-23_016.jpg";
+import photo5 from "@/assets/2026-03-08_006.jpg";
+import g7 from "@/assets/2025-01-25_062.jpg";
+import g12 from "@/assets/2025-01-25_039.jpg";
+import photo6 from "@/assets/2024-10-08_053.jpg";
+import photo7 from "@/assets/2024-10-09_001.jpg";
+import photo8 from "@/assets/2024-11-17_011.jpg";
+import communityImg from "@/assets/Triquat_CompagnieVoisins.jpg";
+import gallery6 from "@/assets/gallery-6.jpg";
+import photo9 from "@/assets/2024-11-17_051.jpg";
+import photo10 from "@/assets/2026-03-08_015.jpg";
+import g13 from "@/assets/2026-03-08_017.jpg";
+
+// Map gallery IDs to imported images for admin display
+const staticGalleryMap: Record<string, string> = {
+  'gallery-1': gallery6,
+  'gallery-2': photo8,
+  'gallery-3': g8,
+  'gallery-4': photo3,
+  'gallery-5': photo9,
+  'gallery-6': g9,
+  'gallery-7': g10,
+  'gallery-8': g11,
+  'gallery-9': photo1,
+  'gallery-10': g1,
+  'gallery-11': photo2,
+  'gallery-12': g7,
+  'gallery-13': g12,
+  'gallery-14': photo4,
+  'gallery-15': photo6,
+  'gallery-16': photo7,
+  'gallery-17': photo5,
+  'gallery-18': g13,
+  'gallery-19': photo10,
+  'gallery-20': communityImg,
+};
 
 export const Route = createFileRoute("/admin/gallery")({
   head: () => ({
@@ -41,6 +86,11 @@ function AdminGallery() {
   const [description, setDescription] = useState("");
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
+
+  // Helper function to get the correct image URL
+  const getImageUrl = (imgId: string, imgUrlFromDb: string): string => {
+    return staticGalleryMap[imgId] || imgUrlFromDb;
+  };
 
   // Check auth
   useEffect(() => {
@@ -269,7 +319,7 @@ function AdminGallery() {
               >
                 <div className="relative aspect-square overflow-hidden bg-muted cursor-pointer group/image" onClick={() => setSelectedImage(img)}>
                   <img
-                    src={img.image_url}
+                    src={getImageUrl(img.id, img.image_url)}
                     alt={img.title || "Gallery image"}
                     className="w-full h-full object-cover group-hover/image:scale-105 transition-transform"
                   />
@@ -453,8 +503,8 @@ function AdminGallery() {
               className="relative w-full h-full max-w-4xl max-h-[85vh] flex flex-col items-center justify-center"
             >
               <img
-                src={selectedImage.image_url}
-                alt={selectedImage.title || "Image agrandie"}
+                src={selectedImage ? getImageUrl(selectedImage.id, selectedImage.image_url) : ''}
+                alt={selectedImage?.title || "Image agrandie"}
                 className="w-full h-full object-contain rounded-2xl shadow-2xl"
               />
               <button

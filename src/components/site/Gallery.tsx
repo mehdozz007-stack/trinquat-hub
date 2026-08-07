@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Reveal } from "./Reveal";
-//import g1 from "@/assets/gallery-1.jpg";
+// Static imports for Vite to resolve correctly
 import g1 from "@/assets/gallery-1.jpg";
 import g8 from "@/assets/gallery-8.jpg";
 import g9 from "@/assets/gallery-9.jpg";
@@ -21,50 +21,55 @@ import photo8 from "@/assets/2024-11-17_011.jpg";
 import communityImg from "@/assets/Triquat_CompagnieVoisins.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
 import photo9 from "@/assets/2024-11-17_051.jpg";
-import photo10 from "@/assets/2026-03-08_015.jpg"
+import photo10 from "@/assets/2026-03-08_015.jpg";
 import g13 from "@/assets/2026-03-08_017.jpg";
 
-const photos = [
-  { src: gallery6, alt: "Trinquat & Compagnie - Moments en commun", h: "" },
-  { src: photo8, alt: "Événement du quartier - 17 Novembre 2024", h: "" },  
-  { src: g8, alt: "Voisins réunis sous un arbre", h: "" },
-  { src: photo3, alt: "Fête de la soupe - 16 Novembre 2025", h: "row-span-2" },
-  { src: photo9, alt: "Moments du quartier - 17 Novembre 2024", h: "" },
-  { src: g9, alt: "La fête intergénérationnelle de la soupe", h: "" },
-  { src: g10, alt: "Vide-grenier de printemps", h: "" },
-  { src: g11, alt: "Vide-grenier de printemps", h: "" },
-  { src: photo1, alt: "Moments partagés - 25 Janvier 2025", h: "" },
-  { src: g1, alt: "Composteur installé dans le quartier", h: "row-span-2" },
-  { src: photo2, alt: "Moments partagés - 25 Janvier 2025", h: "" },
-  { src: g7, alt: "Moments du quartier - 25 Janvier 2025", h: "" },
-  { src: g12, alt: "Moments du quartier - 25 Janvier 2025", h: "" },
-  { src: photo4, alt: "Moments du quartier - 23 Novembre 2025", h: "" },
-  { src: photo6, alt: "Événement du quartier - 8 Octobre 2024", h: "" },
-  { src: photo7, alt: "Événement du quartier - 9 Octobre 2024", h: "row-span-2" },
-  { src: photo5, alt: "Moments du quartier - 8 Mars 2026", h: "" },
-  { src: g13, alt: "Moments du quartier - 8 Mars 2026", h: "" },
-  { src: photo10, alt: "Moments du quartier - 8 Mars 2026", h: "" },
-  { src: communityImg, alt: "Trinquat & Compagnie - Notre communauté", h: "" },
-];
+// Map gallery IDs to imported images
+const staticGalleryMap: Record<string, { src: string; alt: string }> = {
+  'gallery-1': { src: gallery6, alt: "Trinquat & Compagnie - Moments en commun" },
+  'gallery-2': { src: photo8, alt: "Événement du quartier - 17 Novembre 2024" },
+  'gallery-3': { src: g8, alt: "Voisins réunis sous un arbre" },
+  'gallery-4': { src: photo3, alt: "Fête de la soupe - 16 Novembre 2025" },
+  'gallery-5': { src: photo9, alt: "Moments du quartier - 17 Novembre 2024" },
+  'gallery-6': { src: g9, alt: "La fête intergénérationnelle de la soupe" },
+  'gallery-7': { src: g10, alt: "Vide-grenier de printemps" },
+  'gallery-8': { src: g11, alt: "Vide-grenier de printemps" },
+  'gallery-9': { src: photo1, alt: "Moments partagés - 25 Janvier 2025" },
+  'gallery-10': { src: g1, alt: "Composteur installé dans le quartier" },
+  'gallery-11': { src: photo2, alt: "Moments partagés - 25 Janvier 2025" },
+  'gallery-12': { src: g7, alt: "Moments du quartier - 25 Janvier 2025" },
+  'gallery-13': { src: g12, alt: "Moments du quartier - 25 Janvier 2025" },
+  'gallery-14': { src: photo4, alt: "Moments du quartier - 23 Novembre 2025" },
+  'gallery-15': { src: photo6, alt: "Événement du quartier - 8 Octobre 2024" },
+  'gallery-16': { src: photo7, alt: "Événement du quartier - 9 Octobre 2024" },
+  'gallery-17': { src: photo5, alt: "Moments du quartier - 8 Mars 2026" },
+  'gallery-18': { src: g13, alt: "Moments du quartier - 8 Mars 2026" },
+  'gallery-19': { src: photo10, alt: "Moments du quartier - 8 Mars 2026" },
+  'gallery-20': { src: communityImg, alt: "Trinquat & Compagnie - Notre communauté" },
+};
 
 export function Gallery() {
   const [open, setOpen] = useState<number | null>(null);
-  const [dynamicPhotos, setDynamicPhotos] = useState<Array<{ src: string; alt: string; h: string }>>([]);
+  const [photos, setPhotos] = useState<Array<{ src: string; alt: string; h: string }>>([]);
   const [loading, setLoading] = useState(true);
 
-  // Load images from API
+  // Load images from API and map to static imports
   useEffect(() => {
     const loadGalleryImages = async () => {
       try {
         const res = await fetch("/api/gallery");
         if (res.ok) {
           const data = (await res.json()) as { items: Array<{ id: string; title?: string; image_url: string }> };
-          const apiPhotos = (data.items || []).map((item) => ({
-            src: item.image_url,
-            alt: item.title || "Galerie photo",
-            h: "",
-          }));
-          setDynamicPhotos(apiPhotos);
+          const apiPhotos = (data.items || []).map((item) => {
+            // Use static import if available, otherwise fall back to API URL
+            const staticImg = staticGalleryMap[item.id];
+            return {
+              src: staticImg ? staticImg.src : item.image_url,
+              alt: item.title || (staticImg ? staticImg.alt : "Galerie photo"),
+              h: "",
+            };
+          });
+          setPhotos(apiPhotos);
         }
       } catch (error) {
         console.error("Failed to load gallery images:", error);
@@ -75,9 +80,6 @@ export function Gallery() {
 
     loadGalleryImages();
   }, []);
-
-  // Combine static and dynamic photos
-  const allPhotos = [...dynamicPhotos, ...photos];
 
   return (
     <section id="gallery" className="py-12 md:py-20">
@@ -92,7 +94,7 @@ export function Gallery() {
         </Reveal>
 
         <div className="mt-14 grid grid-cols-2 md:grid-cols-3 auto-rows-45 md:auto-rows gap-4">
-          {allPhotos.map((p, i) => (
+          {photos.map((p, i) => (
             <Reveal key={i} delay={i * 0.05} className={p.h}>
               <button
                 onClick={() => setOpen(i)}
@@ -120,7 +122,7 @@ export function Gallery() {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                setOpen((open - 1 + allPhotos.length) % allPhotos.length);
+                setOpen((open - 1 + photos.length) % photos.length);
               }}
               className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 rounded-full bg-background/80 hover:bg-background p-3 text-foreground transition-all hover:scale-110 z-10"
               aria-label="Photo précédente"
@@ -133,7 +135,7 @@ export function Gallery() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              src={allPhotos[open]?.src} alt={allPhotos[open]?.alt}
+              src={photos[open]?.src} alt={photos[open]?.alt}
               className="max-h-[85vh] max-w-[90vw] rounded-2xl object-contain shadow-elegant"
             />
 
@@ -141,7 +143,7 @@ export function Gallery() {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                setOpen((open + 1) % allPhotos.length);
+                setOpen((open + 1) % photos.length);
               }}
               className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 rounded-full bg-background/80 hover:bg-background p-3 text-foreground transition-all hover:scale-110 z-10"
               aria-label="Photo suivante"
@@ -160,7 +162,7 @@ export function Gallery() {
 
             {/* Compteur photos */}
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full bg-background/80 text-sm text-foreground">
-              {open + 1} / {allPhotos.length}
+              {open + 1} / {photos.length}
             </div>
           </motion.div>
         )}

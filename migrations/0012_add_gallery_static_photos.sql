@@ -1,0 +1,22 @@
+-- Insert all static gallery photos into the database
+INSERT INTO gallery (id, title, description, image_url, image_key, order_index, created_at, updated_at) VALUES
+('gallery-1', 'Trinquat & Compagnie - Moments en commun', NULL, '/assets/gallery-6.jpg', 'gallery/gallery-6.jpg', 0, datetime('now'), datetime('now')),
+('gallery-2', 'Événement du quartier - 17 Novembre 2024', NULL, '/assets/2024-11-17_011.jpg', 'gallery/2024-11-17_011.jpg', 1, datetime('now'), datetime('now')),
+('gallery-3', 'Voisins réunis sous un arbre', NULL, '/assets/gallery-8.jpg', 'gallery/gallery-8.jpg', 2, datetime('now'), datetime('now')),
+('gallery-4', 'Fête de la soupe - 16 Novembre 2025', NULL, '/assets/2025-11-16_024.jpg', 'gallery/2025-11-16_024.jpg', 3, datetime('now'), datetime('now')),
+('gallery-5', 'Moments du quartier - 17 Novembre 2024', NULL, '/assets/2024-11-17_051.jpg', 'gallery/2024-11-17_051.jpg', 4, datetime('now'), datetime('now')),
+('gallery-6', 'La fête intergénérationnelle de la soupe', NULL, '/assets/gallery-9.jpg', 'gallery/gallery-9.jpg', 5, datetime('now'), datetime('now')),
+('gallery-7', 'Vide-grenier de printemps', NULL, '/assets/vide-grenier1.jpg', 'gallery/vide-grenier1.jpg', 6, datetime('now'), datetime('now')),
+('gallery-8', 'Vide-grenier de printemps', NULL, '/assets/Vide-grenier2.jpg', 'gallery/Vide-grenier2.jpg', 7, datetime('now'), datetime('now')),
+('gallery-9', 'Moments partagés - 25 Janvier 2025', NULL, '/assets/2025-01-25_029.jpg', 'gallery/2025-01-25_029.jpg', 8, datetime('now'), datetime('now')),
+('gallery-10', 'Composteur installé dans le quartier', NULL, '/assets/gallery-1.jpg', 'gallery/gallery-1.jpg', 9, datetime('now'), datetime('now')),
+('gallery-11', 'Moments partagés - 25 Janvier 2025', NULL, '/assets/2025-01-25_031.jpg', 'gallery/2025-01-25_031.jpg', 10, datetime('now'), datetime('now')),
+('gallery-12', 'Moments du quartier - 25 Janvier 2025', NULL, '/assets/2025-01-25_062.jpg', 'gallery/2025-01-25_062.jpg', 11, datetime('now'), datetime('now')),
+('gallery-13', 'Moments du quartier - 25 Janvier 2025', NULL, '/assets/2025-01-25_039.jpg', 'gallery/2025-01-25_039.jpg', 12, datetime('now'), datetime('now')),
+('gallery-14', 'Moments du quartier - 23 Novembre 2025', NULL, '/assets/2025-11-23_016.jpg', 'gallery/2025-11-23_016.jpg', 13, datetime('now'), datetime('now')),
+('gallery-15', 'Événement du quartier - 8 Octobre 2024', NULL, '/assets/2024-10-08_053.jpg', 'gallery/2024-10-08_053.jpg', 14, datetime('now'), datetime('now')),
+('gallery-16', 'Événement du quartier - 9 Octobre 2024', NULL, '/assets/2024-10-09_001.jpg', 'gallery/2024-10-09_001.jpg', 15, datetime('now'), datetime('now')),
+('gallery-17', 'Moments du quartier - 8 Mars 2026', NULL, '/assets/2026-03-08_006.jpg', 'gallery/2026-03-08_006.jpg', 16, datetime('now'), datetime('now')),
+('gallery-18', 'Moments du quartier - 8 Mars 2026', NULL, '/assets/2026-03-08_017.jpg', 'gallery/2026-03-08_017.jpg', 17, datetime('now'), datetime('now')),
+('gallery-19', 'Moments du quartier - 8 Mars 2026', NULL, '/assets/2026-03-08_015.jpg', 'gallery/2026-03-08_015.jpg', 18, datetime('now'), datetime('now')),
+('gallery-20', 'Trinquat & Compagnie - Notre communauté', NULL, '/assets/Triquat_CompagnieVoisins.jpg', 'gallery/Triquat_CompagnieVoisins.jpg', 19, datetime('now'), datetime('now'));
