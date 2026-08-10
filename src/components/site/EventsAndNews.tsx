@@ -327,7 +327,7 @@ export function EventsAndNews() {
         <div className="w-full bg-secondary/50">
           <div className="mx-auto max-w-7xl px-6 lg:px-10 py-20 md:py-20">
             <Reveal>
-             <div className="mb-12">
+             <div className="mb-12 text-center">
               <span className="text-xs font-medium uppercase tracking-[0.25em] text-primary-deep">
                 Archives
               </span>
