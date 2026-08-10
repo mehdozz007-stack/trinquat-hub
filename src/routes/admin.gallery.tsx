@@ -85,6 +85,7 @@ function AdminGallery() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [modalMessage, setModalMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
   // Helper function to get the correct image URL
@@ -132,6 +133,14 @@ function AdminGallery() {
     }
   }, [admin, loadGallery]);
 
+  // Auto-clear success messages from modal
+  useEffect(() => {
+    if (modalMessage?.type === "success") {
+      const timer = setTimeout(() => setModalMessage(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [modalMessage]);
+
   const handleLogout = async () => {
     await fetch("/api/admin/logout", { method: "POST", credentials: "include" });
     navigate({ to: "/admin/login" });
@@ -149,7 +158,7 @@ function AdminGallery() {
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) {
-      setMessage({ type: "error", text: "Veuillez sélectionner une image." });
+      setModalMessage({ type: "error", text: "Veuillez sélectionner une image." });
       return;
     }
 
@@ -163,14 +172,52 @@ function AdminGallery() {
         body: formData,
       });
 
-      if (!res.ok) throw new Error("Upload failed");
+      if (!res.ok) {
+        let errorMessage = "Erreur lors de l'upload.";
+        
+        try {
+          const errorData = (await res.json()) as { error?: string; message?: string };
+          const serverError = errorData.error || errorData.message;
+          
+          if (serverError) {
+            // Parse server error message for better user experience
+            if (serverError.includes("exceeds") && serverError.includes("MB")) {
+              errorMessage = "Image trop grande. Taille maximale : 5 MB.";
+            } else if (serverError.includes("not allowed")) {
+              if (serverError.includes("File type")) {
+                errorMessage = "Format d'image non supporté. Formats acceptés : JPG, PNG, WebP, GIF.";
+              } else if (serverError.includes("extension")) {
+                errorMessage = "Extension de fichier non autorisée.";
+              }
+            } else if (serverError.includes("No file")) {
+              errorMessage = "Aucun fichier sélectionné.";
+            } else {
+              errorMessage = serverError;
+            }
+          }
+        } catch (parseError) {
+          // If response is not JSON, use status-based message
+          if (res.status === 401 || res.status === 403) {
+            errorMessage = "Accès non autorisé.";
+          } else if (res.status === 413) {
+            errorMessage = "Image trop grande. Taille maximale : 5 MB.";
+          } else if (res.status === 400) {
+            errorMessage = "Requête invalide.";
+          } else if (res.status >= 500) {
+            errorMessage = "Erreur serveur. Veuillez réessayer plus tard.";
+          }
+        }
+        
+        throw new Error(errorMessage);
+      }
 
       const response = (await res.json()) as { success: boolean; data: { url: string; key: string } };
       setImageUrl(response.data.url);
       setImageKey(response.data.key);
-      setMessage({ type: "success", text: "Image uploadée avec succès." });
+      setModalMessage({ type: "success", text: "Image uploadée avec succès." });
     } catch (err) {
-      setMessage({ type: "error", text: "Erreur lors de l'upload." });
+      const message = err instanceof Error ? err.message : "Erreur lors de l'upload.";
+      setModalMessage({ type: "error", text: message });
       console.error(err);
     } finally {
       setUploading(false);
@@ -180,7 +227,7 @@ function AdminGallery() {
   const handleAddImage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!imageUrl || !imageKey) {
-      setMessage({ type: "error", text: "Veuillez uploader une image." });
+      setModalMessage({ type: "error", text: "Veuillez uploader une image." });
       return;
     }
 
@@ -207,10 +254,11 @@ function AdminGallery() {
       setImageUrl(null);
       setImageKey(null);
       setEditorOpen(false);
+      setModalMessage(null);
       setMessage({ type: "success", text: "Image ajoutée à la galerie." });
       loadGallery();
     } catch (err) {
-      setMessage({ type: "error", text: "Erreur lors de l'ajout de l'image." });
+      setModalMessage({ type: "error", text: "Erreur lors de l'ajout de l'image." });
       console.error(err);
     } finally {
       setUploading(false);
@@ -355,7 +403,10 @@ function AdminGallery() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setEditorOpen(false)}
+            onClick={() => {
+              setEditorOpen(false);
+              setModalMessage(null);
+            }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
           >
             <motion.div
@@ -370,6 +421,7 @@ function AdminGallery() {
                 <button
                   onClick={() => {
                     setEditorOpen(false);
+                    setModalMessage(null);
                     setFile(null);
                     setPreviewUrl(null);
                     setImageUrl(null);
@@ -382,6 +434,17 @@ function AdminGallery() {
                   <X className="h-5 w-5" />
                 </button>
               </div>
+
+              {/* Modal Messages */}
+              {modalMessage && (
+                <div className={`mx-6 mt-4 rounded-lg p-3 text-sm flex items-center gap-2 ${
+                  modalMessage.type === "success"
+                    ? "bg-primary/10 border border-primary/30 text-primary-deep"
+                    : "bg-destructive/10 border border-destructive/30 text-destructive"
+                }`}>
+                  {modalMessage.text}
+                </div>
+              )}
 
               <form onSubmit={handleAddImage} className="p-6 space-y-4">
                 {/* File Upload */}
@@ -459,6 +522,7 @@ function AdminGallery() {
                     type="button"
                     onClick={() => {
                       setEditorOpen(false);
+                      setModalMessage(null);
                       setFile(null);
                       setPreviewUrl(null);
                       setImageUrl(null);
