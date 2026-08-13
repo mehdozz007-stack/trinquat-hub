@@ -82,11 +82,11 @@ export function Contact() {
                   <p className="text-sm font-semibold">Suivez-nous</p>
                 </div>
                 <div className="flex gap-3">
-                  <a href="https://www.facebook.com/Trinquatetcompagnie/" aria-label="Facebook" target="_blank" rel="noopener noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/30 bg-background/60 text-foreground transition-all hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground backdrop-blur">
-                    <Facebook className="h-4 w-4" />
-                  </a>
                   <a href="https://www.instagram.com/p/DQE1LeOgvRs/" aria-label="Instagram" target="_blank" rel="noopener noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/30 bg-background/60 text-foreground transition-all hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground backdrop-blur">
                     <Instagram className="h-4 w-4" />
+                  </a>
+                  <a href="https://www.facebook.com/Trinquatetcompagnie/" aria-label="Facebook" target="_blank" rel="noopener noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/30 bg-background/60 text-foreground transition-all hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground backdrop-blur">
+                    <Facebook className="h-4 w-4" />
                   </a>
                 </div>
               </li>
