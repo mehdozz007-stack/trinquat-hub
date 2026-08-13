@@ -21,17 +21,17 @@ const officialPartners = [
   },
   {
     id: 2,
-    name: "Les P'tits Trinquat",
-    logo: logoptitsTrinquat,
-    alt: "Logo Les P'tits Trinquat",
-    website: "https://www.lespetitstrinquat.fr/",
-  },
-  {
-    id: 3,
     name: "Mairie de Montpellier",
     logo: logoMairie,
     alt: "Logo Mairie de Montpellier",
     website: "https://www.montpellier.fr/",
+  },
+  {
+    id: 3,
+    name: "Les P'tits Trinquat",
+    logo: logoptitsTrinquat,
+    alt: "Logo Les P'tits Trinquat",
+    website: "https://www.lespetitstrinquat.fr/",
   },
 ];
 
@@ -43,8 +43,7 @@ export function Footer() {
           <div className="md:col-span-5">
             <img src={logo} alt="Trinquat & Compagnie" className="h-16 w-auto rounded-md" />
             <p className="mt-6 max-w-sm text-sm text-muted-foreground leading-relaxed">
-              Association d'habitants. Nous croyons qu'un quartier
-              vivant naît de petits gestes partagés.
+              Association d'habitants. Nous croyons qu'un quartier vivant naît de petits gestes partagés.
             </p>
             <div className="mt-6 flex gap-3">
               {socialLinks.map(({ Icon, href, label }) => (
