@@ -2,7 +2,7 @@ import logo from "@/assets/logo.png";
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Mail, Heart, MapPin } from "lucide-react";
 import logoBorisVian from "@/assets/partners/logo-boris-vian.jpg";
-import logoptitsTrinquat from "@/assets/partners/logoAsso.png";
+import logoptitsTrinquat from "@/assets/partners/logoptitstrinquat.png";
 import logoMairie from "@/assets/partners/logo-mairie-montpellier.png";
 
 const socialLinks = [
