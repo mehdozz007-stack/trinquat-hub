@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Leaf, Users, HandHeart, Sparkles, TreePine, Heart, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import communityImg from "@/assets/Triquat_CompagnieVoisins.jpg";
-import gallery6 from "@/assets/gallery-6.jpg";
+import gallery6 from "@/assets/2025-11-16_054.jpg";
 import photo1 from "@/assets/2026-03-08_006.jpg";
 import photo2 from "@/assets/2025-11-16_024.jpg";
 
@@ -17,8 +17,8 @@ const values = [
 ];
 
 const communityPhotos = [
-  { src: gallery6, alt: "Trinquat & Compagnie - Moments en commun" },
   { src: communityImg, alt: "Trinquat & Compagnie - Notre communauté" }, 
+  { src: gallery6, alt: "Trinquat & Compagnie - Moments en commun" },
   { src: photo1, alt: "Moments du quartier - 8 Mars 2026" },
   { src: photo2, alt: "Moments du quartier - 17 Mars 2026" },
 ];
