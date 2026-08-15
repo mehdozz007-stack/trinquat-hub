@@ -48,16 +48,6 @@ const staticGalleryMap: Record<string, string> = {
   'gallery-20': communityImg,
 };
 
-export const Route = createFileRoute("/admin/gallery")({
-  head: () => ({
-    meta: [
-      { title: "Admin Galerie | Trinquat & Compagnie" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
-  }),
-  component: AdminGallery,
-});
-
 type AdminSession = { id: string; email: string; role: string };
 type GalleryImage = {
   id: string;
@@ -596,3 +586,13 @@ function AdminGallery() {
     </div>
   );
 }
+
+export const Route = createFileRoute("/admin/gallery")({
+  head: () => ({
+    meta: [
+      { title: "Admin Galerie | Trinquat & Compagnie" },
+      { name: "robots", content: "noindex,nofollow" },
+    ],
+  }),
+  component: AdminGallery,
+});

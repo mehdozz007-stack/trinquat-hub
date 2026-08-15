@@ -2,16 +2,6 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Lock, Mail, Eye, EyeOff, AlertCircle } from "lucide-react";
 
-export const Route = createFileRoute("/admin/login")({
-  head: () => ({
-    meta: [
-      { title: "Admin — Connexion | Trinquat & Compagnie" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
-  }),
-  component: AdminLogin,
-});
-
 function AdminLogin() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -148,3 +138,13 @@ function AdminLogin() {
     </div>
   );
 }
+
+export const Route = createFileRoute("/admin/login")({
+  head: () => ({
+    meta: [
+      { title: "Admin — Connexion | Trinquat & Compagnie" },
+      { name: "robots", content: "noindex,nofollow" },
+    ],
+  }),
+  component: AdminLogin,
+});

@@ -1,20 +1,9 @@
-// @refresh reset
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import {
   Calendar, Image as ImageIcon, LogOut, Plus, ShieldCheck, ShieldAlert,
   Save, Send, Trash2, Pencil, Eye, EyeOff, X, MapPin, Upload, RefreshCw, Globe,
 } from "lucide-react";
-
-export const Route = createFileRoute("/admin/content")({
-  head: () => ({
-    meta: [
-      { title: "Admin Événements | Trinquat & Compagnie" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
-  }),
-  component: AdminContent,
-});
 
 type AdminSession = { id: string; email: string; role: string };
 type EventRow = {
@@ -448,3 +437,13 @@ function Field({ label, icon, children }: { label: string; icon?: React.ReactNod
     </div>
   );
 }
+
+export const Route = createFileRoute("/admin/content")({
+  head: () => ({
+    meta: [
+      { title: "Admin Événements | Trinquat & Compagnie" },
+      { name: "robots", content: "noindex,nofollow" },
+    ],
+  }),
+  component: AdminContent,
+});

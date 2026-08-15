@@ -6,16 +6,6 @@ import {
 } from "lucide-react";
 import logo from "@/assets/logo.png";
 
-export const Route = createFileRoute("/admin/newsletter")({
-  head: () => ({
-    meta: [
-      { title: "Admin Newsletter | Trinquat & Compagnie" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
-  }),
-  component: AdminNewsletter,
-});
-
 type Subscriber = { id: string; email: string; is_active: boolean; created_at: string };
 type AdminSession = { id: string; email: string; role: string };
 type Tab = "compose" | "history" | "subscribers";
@@ -818,3 +808,13 @@ function TabBtn({ active, onClick, icon, label }: { active: boolean; onClick: ()
     </button>
   );
 }
+
+export const Route = createFileRoute("/admin/newsletter")({
+  head: () => ({
+    meta: [
+      { title: "Admin Newsletter | Trinquat & Compagnie" },
+      { name: "robots", content: "noindex,nofollow" },
+    ],
+  }),
+  component: AdminNewsletter,
+});

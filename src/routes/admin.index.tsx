@@ -2,16 +2,6 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { BarChart3, Image, Mail, LogOut, Globe } from "lucide-react";
 
-export const Route = createFileRoute("/admin/")({
-  head: () => ({
-    meta: [
-      { title: "Admin Dashboard | Trinquat & Compagnie" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
-  }),
-  component: AdminDashboard,
-});
-
 type AdminSession = { id: string; email: string; role: string };
 
 function AdminDashboard() {
@@ -146,3 +136,13 @@ function AdminDashboard() {
     </div>
   );
 }
+
+export const Route = createFileRoute("/admin/")({
+  head: () => ({
+    meta: [
+      { title: "Admin Dashboard | Trinquat & Compagnie" },
+      { name: "robots", content: "noindex,nofollow" },
+    ],
+  }),
+  component: AdminDashboard,
+});
