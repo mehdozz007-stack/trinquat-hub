@@ -1,7 +1,7 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import { useRef } from "react";
-import { ArrowRight, Calendar, Facebook, Instagram, Mail } from "lucide-react";
+import { useRef, useState } from "react";
+import { ArrowRight, Calendar, Facebook, Instagram, Mail, X } from "lucide-react";
 import logo from "@/assets/logo.png";
 import hero from "@/assets/hero-bg.jpg";
 
@@ -13,6 +13,7 @@ const socialLinks = [
 
 export function Hero() {
   const ref = useRef<HTMLDivElement>(null);
+  const [showLightbox, setShowLightbox] = useState(false);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.9], [1, 0.4]);
@@ -63,11 +64,17 @@ export function Hero() {
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           className="mb-10 relative"
         >
-          <img
-            src={logo}
-            alt="Trinquat & Compagnie"
-            className="h-32 w-auto md:h-34 lg:h-42 rounded-xl drop-shadow-[0_10px_40px_rgba(103,176,33,0.25)]"
-          />
+          <button
+            onClick={() => setShowLightbox(true)}
+            className="cursor-pointer hover:opacity-90 transition-opacity"
+            aria-label="Agrandir le logo"
+          >
+            <img
+              src={logo}
+              alt="Trinquat & Compagnie"
+              className="h-32 w-auto md:h-34 lg:h-42 rounded-xl drop-shadow-[0_10px_40px_rgba(103,176,33,0.25)]"
+            />
+          </button>
           <div className="absolute -right-4 top-1/2 -translate-y-1/2 flex flex-col gap-3">
             {socialLinks.map(({ Icon, href, label }) => (
                 <a key={label} href={href} aria-label={label} target="_blank" rel="noopener noreferrer"
@@ -132,6 +139,41 @@ export function Hero() {
       </motion.div>
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-linear-to-b from-transparent to-background" />
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {showLightbox && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowLightbox(false)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-2xl w-full"
+            >
+              <img
+                src={logo}
+                alt="Trinquat & Compagnie"
+                className="w-full h-auto rounded-2xl shadow-2xl"
+              />
+              <button
+                onClick={() => setShowLightbox(false)}
+                className="absolute top-4 right-4 p-2.5 md:p-3 bg-black/60 hover:bg-black/80 rounded-full text-white transition-all duration-200"
+                aria-label="Fermer"
+              >
+                <X className="h-5 w-5 md:h-6 md:w-6" />
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

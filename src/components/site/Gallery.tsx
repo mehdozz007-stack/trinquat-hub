@@ -19,19 +19,16 @@ import photo6 from "@/assets/2024-10-08_053.jpg";
 import photo7 from "@/assets/2024-10-09_001.jpg";
 import photo8 from "@/assets/2024-11-17_011.jpg";
 import communityImg from "@/assets/Triquat_CompagnieVoisins.jpg";
-import gallery6 from "@/assets/gallery-6.jpg";
 import photo9 from "@/assets/2024-11-17_051.jpg";
 import photo10 from "@/assets/2026-03-08_015.jpg";
 import g13 from "@/assets/2026-03-08_017.jpg";
 
 // Map gallery IDs to imported images
 const staticGalleryMap: Record<string, { src: string; alt: string }> = {
-  'gallery-1': { src: gallery6, alt: "Trinquat & Compagnie - Moments en commun" },
   'gallery-2': { src: photo8, alt: "Événement du quartier - 17 Novembre 2024" },
   'gallery-3': { src: g8, alt: "Voisins réunis sous un arbre" },
   'gallery-4': { src: photo3, alt: "Fête de la soupe - 16 Novembre 2025" },
   'gallery-5': { src: photo9, alt: "Moments du quartier - 17 Novembre 2024" },
-  'gallery-6': { src: g9, alt: "La fête intergénérationnelle de la soupe" },
   'gallery-7': { src: g10, alt: "Vide-grenier de printemps" },
   'gallery-8': { src: g11, alt: "Vide-grenier de printemps" },
   'gallery-9': { src: photo1, alt: "Moments partagés - 25 Janvier 2025" },

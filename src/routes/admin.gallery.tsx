@@ -19,14 +19,14 @@ import photo6 from "@/assets/2024-10-08_053.jpg";
 import photo7 from "@/assets/2024-10-09_001.jpg";
 import photo8 from "@/assets/2024-11-17_011.jpg";
 import communityImg from "@/assets/Triquat_CompagnieVoisins.jpg";
-import gallery6 from "@/assets/gallery-6.jpg";
+import gallery6Fallback from "@/assets/gallery-7.jpg";
 import photo9 from "@/assets/2024-11-17_051.jpg";
 import photo10 from "@/assets/2026-03-08_015.jpg";
 import g13 from "@/assets/2026-03-08_017.jpg";
 
 // Map gallery IDs to imported images for admin display
 const staticGalleryMap: Record<string, string> = {
-  'gallery-1': gallery6,
+  'gallery-1': gallery6Fallback,
   'gallery-2': photo8,
   'gallery-3': g8,
   'gallery-4': photo3,
