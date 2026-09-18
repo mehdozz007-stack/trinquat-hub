@@ -5,6 +5,7 @@ import { About } from "@/components/site/About";
 import { Stats } from "@/components/site/Stats";
 import { PageHeader } from "@/components/site/PageHeader";
 import { JoinSection } from "@/components/site/JoinSection";
+import { TeamSection } from "@/components/site/TeamSection";
 
 export const Route = createFileRoute("/association")({
   head: () => ({
@@ -30,6 +31,7 @@ function AssociationPage() {
       />
       <About />
       <Stats />
+      {/*<TeamSection />*/}
       <JoinSection />
       <Footer />
     </main>
