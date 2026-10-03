@@ -7,15 +7,6 @@ import gallery6 from "@/assets/2025-11-16_054.jpg";
 import photo1 from "@/assets/2026-03-08_006.jpg";
 import photo2 from "@/assets/2025-11-16_024.jpg";
 
-const values = [
-  { icon: Users, title: "Voisinage", text: "Faire connaissance, tisser des liens durables entre habitants de tous âges." },
-  { icon: HandHeart, title: "Entraide", text: "Coup de main, prêt d'outils, garde d'enfants : une chaîne de solidarité." },
-  { icon: Sparkles, title: "Convivialité", text: "Des moments simples et chaleureux qui font la richesse du quartier." },
-  { icon: TreePine, title: "Nature", text: "Des plantations, et le respect du vivant qui nous entoure." },
-  { icon: Heart, title: "Famille", text: "Des activités pensées pour tous ! Les enfants, les parents et les aînés." },
-  { icon: Leaf, title: "Écologie", text: "Composteur collectif, troc, et initiatives pour un quartier plus durable." },
-];
-
 const communityPhotos = [
   { src: communityImg, alt: "Trinquat & Compagnie - Notre communauté" }, 
   { src: gallery6, alt: "Trinquat & Compagnie - Moments en commun" },
@@ -50,7 +41,7 @@ export function Values() {
               <Reveal delay={0.2}>
               <p className="mt-4 text-base md:text-lg leading-relaxed text-muted-foreground">
                Ensemble, nous cultivons un esprit d'entraide, nous prenons soin de notre environnement, 
-               de notre lieux de vie et nous créons des moments de partage où chacun trouve sa place.
+               de notre lieu de vie et nous créons des moments de partage où chacun trouve sa place.
               </p>
             </Reveal>
           </div>
