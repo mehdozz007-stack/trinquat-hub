@@ -7,7 +7,7 @@ const values = [
   { icon: HandHeart, title: "Entraide", text: "Coup de main, prêt d'outils, garde d'enfants : une chaîne de solidarité." },
   { icon: Sparkles, title: "Convivialité", text: "Des moments simples et chaleureux qui font la richesse du quartier." },
   { icon: TreePine, title: "Nature", text: "Un futur jardin partagé, des plantations, et le respect du vivant qui nous entoure." },
-  { icon: Heart, title: "Famille", text: "Des activités pensées pour les enfants, les parents et les aînés." },
+  { icon: Heart, title: "Famille", text: "Des activités pensées pour tous ! Les enfants, les parents et les aînés." },
   { icon: Leaf, title: "Écologie", text: "Composteur collectif, troc, et initiatives pour un quartier plus durable." },
 ];
 
@@ -31,9 +31,9 @@ export function About() {
               <p className="mt-8 text-base md:text-lg leading-relaxed text-muted-foreground">
                 Notre association Trinquat & Compagnie est née en 2020, de l'envie partagée de quelques voisins : 
                 <span className="italic font-semibold">dynamiser la vie du quartier des Aiguerelles à Montpellier 
-                et lui redonner son âme.</span> Depuis, nous créons du lien social et de la solidarité, améliorons 
+                et lui donner une authenticité.</span> Depuis, nous créons du lien social et de la solidarité, améliorons 
                 le cadre de vie en favorisant la présence de la nature et des mobilités douces, et organisons fêtes, 
-                ateliers, repas et chantiers participatifs, toujours avec simplicité et bonne humeur.
+                ateliers, repas participatifs, toujours avec simplicité et bonne humeur.
               </p>
             </Reveal>
             <Reveal delay={0.2}>

@@ -27,7 +27,7 @@ function AssociationPage() {
       <PageHeader
         eyebrow="Qui sommes-nous"
         title={<>Une <span className="text-gradient">grande famille</span> de voisins</>}
-        lead="Les voisins deviennent une communauté, les rencontres deviennent des souvenirs, et chaque moment partagé fait grandir notre quartier."
+        lead="Les voisins se rencontrent, les rencontres deviennent de véritables moments de partage qui font grandir notre quartier."
       />
       <About />
       <Stats />

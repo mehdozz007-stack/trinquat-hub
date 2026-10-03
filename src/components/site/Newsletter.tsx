@@ -122,7 +122,7 @@ export function Newsletter() {
                       animate="visible"
                       className="mt-6 text-3xl font-semibold"
                     >
-                      C'est <span className="text-gradient">confirmé</span>!
+                      C'est <span className="text-gradient">confirmé</span> !
                     </motion.h3>
                     <motion.p
                       variants={itemVariants}

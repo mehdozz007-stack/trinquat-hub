@@ -12,7 +12,7 @@ const values = [
   { icon: HandHeart, title: "Entraide", text: "Coup de main, prêt d'outils, garde d'enfants : une chaîne de solidarité." },
   { icon: Sparkles, title: "Convivialité", text: "Des moments simples et chaleureux qui font la richesse du quartier." },
   { icon: TreePine, title: "Nature", text: "Des plantations, et le respect du vivant qui nous entoure." },
-  { icon: Heart, title: "Famille", text: "Des activités pensées pour les enfants, les parents et les aînés." },
+  { icon: Heart, title: "Famille", text: "Des activités pensées pour tous ! Les enfants, les parents et les aînés." },
   { icon: Leaf, title: "Écologie", text: "Composteur collectif, troc, et initiatives pour un quartier plus durable." },
 ];
 
@@ -50,7 +50,7 @@ export function Values() {
               <Reveal delay={0.2}>
               <p className="mt-4 text-base md:text-lg leading-relaxed text-muted-foreground">
                Ensemble, nous cultivons un esprit d'entraide, nous prenons soin de notre environnement, 
-               et nous créons des moments de partage où chacun trouve sa place.
+               de notre lieux de vie et nous créons des moments de partage où chacun trouve sa place.
               </p>
             </Reveal>
           </div>

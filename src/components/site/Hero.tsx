@@ -111,8 +111,10 @@ export function Hero() {
           transition={{ delay: 0.5, duration: 0.8 }}
           className="mt-8 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed"
         >
-          Trinquat & Compagnie rassemble les familles et voisins autour d'événements,
-          d'entraide et de moments simples. Une communauté vivante, à l'ombre des grands arbres.
+          Trinquat & Compagnie rassemble des habitants du quartier des Aiguerelles autour d'événements 
+          et de moments simples. C'est une communauté vivante de voisins, qui se retrouve 
+          à l'ombre des grands arbres du parc du quartier ou tout le long de l'avenue Pont Trinquat.
+          
         </motion.p>
 
         <motion.div
